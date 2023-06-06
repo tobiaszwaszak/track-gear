@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 8px;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+  <table id="activityTable">
+    <tr>
+      <th>Name</th>
+      <th>Started At</th>
+      <th>Distance</th>
+    </tr>
+  </table>
+
+  <button id="authorizeButton">Authorize Strava</button>
+
+  <script>
+    fetch('http://localhost:4567/activites') // Replace with your actual endpoint URL
+      .then(response => response.json())
+      .then(data => {
+        const table = document.getElementById('activityTable');
+
+        data.forEach(activity => {
+          const row = document.createElement('tr');
+
+          const nameCell = document.createElement('td');
+          nameCell.textContent = activity.name;
+          row.appendChild(nameCell);
+
+          const startedAtCell = document.createElement('td');
+          startedAtCell.textContent = activity.started_at;
+          row.appendChild(startedAtCell);
+
+          const distanceCell = document.createElement('td');
+          distanceCell.textContent = activity.distance;
+          row.appendChild(distanceCell);
+
+          table.appendChild(row);
+        });
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+
+    const authorizeButton = document.getElementById('authorizeButton');
+    authorizeButton.addEventListener('click', () => {
+      window.location.href = 'http://localhost:4567/authorise';
+    });
+  </script>
+</body>
+</html>
