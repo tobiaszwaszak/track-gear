@@ -2,10 +2,11 @@
 
 source "https://rubygems.org"
 
-git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
+# gem "rails"
 
-gem "sinatra"
-gem 'rackup' 
-gem "dotenv"
-gem 'strava-ruby-client'
-gem 'rack-cors'
+gem "rack", "= 3.0.0"
+
+gem "rackup", "~> 2.1"
+
+gem "rspec"
+gem "rack-test"
