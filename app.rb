@@ -1,25 +1,20 @@
-require 'rack'
-require 'json'
-
+require "rack"
+require "json"
+require "./bikes/app"
 class MyApp
   def call(env)
     req = Rack::Request.new(env)
-
-    case req.path
-    when '/'
-      status = 200
-      headers = { 'content-type' => 'text/html' }
-      body = [File.read('frontend/index.html')]
-    when '/hello'
-      status = 200
-      headers = { 'content-type' => 'application/json' }
-      body = [{ message: 'Hello, World!' }.to_json]
+    if req.path.start_with?("/bikes")
+      Bikes::App.new.call(env)
     else
-      status = 404
-      headers = { 'content-type' => 'text/plain' }
-      body = ['Not Found']
+      case req.path
+      when "/"
+        [200, {"content-type" => "text/html"}, [File.read("frontend/index.html")]]
+      when "/hello"
+        [200, {"content-type" => "application/json"}, [{message: "Hello, World!"}.to_json]]
+      else
+        [404, {"content-type" => "text/plain"}, ["Not Found"]]
+      end
     end
-
-    [status, headers, body]
   end
 end

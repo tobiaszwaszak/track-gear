@@ -10,3 +10,5 @@ gem "rackup", "~> 2.1"
 
 gem "rspec"
 gem "rack-test"
+
+gem "byebug"
