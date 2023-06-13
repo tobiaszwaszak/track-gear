@@ -1,11 +1,15 @@
 require "rack"
 require "json"
 require "./bikes/app"
+require "./components/app"
+
 class MyApp
   def call(env)
     req = Rack::Request.new(env)
     if req.path.start_with?("/bikes")
       Bikes::App.new.call(env)
+    elsif req.path.start_with?("/components")
+      Components::App.new.call(env)
     else
       case req.path
       when "/"
