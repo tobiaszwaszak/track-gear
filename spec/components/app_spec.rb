@@ -10,7 +10,7 @@ RSpec.describe Components::App do
     Components::App.new
   end
 
-  let(:database_path) { "components.csv" }
+  let(:database_path) { "components_test.csv" }
 
   before(:each) do
     # Create a test database file

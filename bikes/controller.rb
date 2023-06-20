@@ -1,8 +1,12 @@
 require "csv"
+require "dotenv"
+
+Dotenv.load(".env.development") if ENV["RACK_ENV"] == "development"
+Dotenv.load(".env.test") if ENV["RACK_ENV"] == "test"
 module Bikes
   class Controller
     def initialize
-      @database = "bikes.csv"
+      @database = ENV["BIKES_FILE"]
     end
 
     def index(request)

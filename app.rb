@@ -14,8 +14,8 @@ class MyApp
       case req.path
       when "/"
         [200, {"content-type" => "text/html"}, [File.read("frontend/index.html")]]
-      when "/hello"
-        [200, {"content-type" => "application/json"}, [{message: "Hello, World!"}.to_json]]
+      when "/environment"
+        [200, {"content-type" => "text/plain"}, [ENV["RACK_ENV"]]]
       else
         [404, {"content-type" => "text/plain"}, ["Not Found"]]
       end
