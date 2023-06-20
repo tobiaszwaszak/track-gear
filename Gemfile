@@ -12,3 +12,4 @@ gem "rspec"
 gem "rack-test"
 
 gem "byebug"
+gem "dotenv"

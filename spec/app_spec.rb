@@ -25,12 +25,12 @@ RSpec.describe MyApp do
     end
   end
 
-  describe "GET /hello" do
-    it "returns JSON message" do
-      get "/hello"
+  describe "GET /environment" do
+    it "returns environment name" do
+      get "/environment"
       expect(last_response).to be_ok
-      expect(last_response.header["Content-Type"]).to eq("application/json")
-      expect(JSON.parse(last_response.body)).to eq({"message" => "Hello, World!"})
+      expect(last_response.header["Content-Type"]).to eq("text/plain")
+      expect(last_response.body).to eq("test")
     end
   end
 
