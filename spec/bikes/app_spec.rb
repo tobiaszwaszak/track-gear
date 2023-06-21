@@ -1,6 +1,5 @@
 require "rack/test"
 require "json"
-require "byebug"
 
 require_relative "./../../bikes/app"
 
@@ -12,10 +11,12 @@ RSpec.describe Bikes::App do
   end
 
   before do
-    bikes_data = [JSON.parse({"id" => 1, "name" => "Mountain Bike"}.to_json)]
-    CSV.open("bikes.csv", "w", write_headers: true, headers: bikes_data.first.keys) do |csv|
-      bikes_data.each { |bike| csv << bike.values }
-    end
+    ActiveRecord::Base.establish_connection(
+      adapter: "sqlite3",
+      database: ENV["BIKES_DB"]
+    )
+    bike_data = JSON.parse({"name" => "Mountain Bike"}.to_json)
+    Bikes::Bike.create(bike_data)
   end
 
   let(:bike_data) { {id: 1, name: "Mountain Bike"}.to_json }
@@ -31,7 +32,7 @@ RSpec.describe Bikes::App do
     get "/bikes/1"
 
     expect(last_response.status).to eq(200)
-    expect(last_response.body).to eq({id: "1", name: "Mountain Bike"}.to_json)
+    expect(last_response.body).to eq({id: 1, name: "Mountain Bike"}.to_json)
   end
 
   it "updates a bike with the given id" do
