@@ -15,8 +15,7 @@ RSpec.describe Bikes::App do
       adapter: "sqlite3",
       database: ENV["BIKES_DB"]
     )
-    bike_data = JSON.parse({"name" => "Mountain Bike"}.to_json)
-    Bikes::Bike.create(bike_data)
+    Db::Bike.create(name: "Mountain Bike")
   end
 
   let(:bike_data) { {id: 1, name: "Mountain Bike"}.to_json }

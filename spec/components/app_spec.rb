@@ -2,6 +2,8 @@ require "rack/test"
 require "json"
 
 require_relative "./../../components/app"
+require_relative "./../../db/bike"
+require_relative "./../../db/component"
 
 RSpec.describe Components::App do
   include Rack::Test::Methods
@@ -10,25 +12,21 @@ RSpec.describe Components::App do
     Components::App.new
   end
 
-  let(:database_path) { "components_test.csv" }
-
   before(:each) do
-    # Create a test database file
-    CSV.open(database_path, "w") do |csv|
-      csv << %w[id bike_id name description]
-      csv << [1, 1, "Component 1", "Description 1"]
-      csv << [2, 1, "Component 2", "Description 2"]
-    end
-  end
+    ActiveRecord::Base.establish_connection(
+      adapter: "sqlite3",
+      database: ENV["BIKES_DB"]
+    )
 
-  after(:each) do
-    # Remove the test database file
-    File.delete(database_path)
+    b1 = Db::Bike.create(name: "bike1")
+    b2 = Db::Bike.create(name: "bike2")
+    Db::Component.create(name: "Component 1", description: "Description 1", bike: b1)
+    Db::Component.create(name: "Component 2", description: "Description 2", bike: b2)
   end
 
   describe "POST /components" do
     it "creates a new component" do
-      component_data = {"bike_id" => 1, "name" => "New Component", "description" => "New Description"}.to_json
+      component_data = {"name" => "New Component", "description" => "New Description"}.to_json
 
       post "/components", component_data, "CONTENT_TYPE" => "application/json"
 
@@ -42,11 +40,11 @@ RSpec.describe Components::App do
       get "/components/1"
 
       expect(last_response.status).to eq(200)
-      expect(last_response.body).to eq({"id" => "1", "bike_id" => "1", "name" => "Component 1", "description" => "Description 1"}.to_json)
+      expect(JSON.parse(last_response.body)).to include({"id" => 1, "bike_id" => 1, "name" => "Component 1", "description" => "Description 1"})
     end
 
     it "returns 404 if the component is not found" do
-      get "/components/10"
+      get "/components/100"
 
       expect(last_response.status).to eq(404)
       expect(last_response.body).to eq("Not Found")
@@ -82,7 +80,7 @@ RSpec.describe Components::App do
     end
 
     it "returns 404 if the component is not found" do
-      delete "/components/10"
+      delete "/components/100"
 
       expect(last_response.status).to eq(404)
       expect(last_response.body).to eq("Not Found")
