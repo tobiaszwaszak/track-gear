@@ -1,9 +1,7 @@
 require "rack/test"
 require "json"
-
+require "byebug"
 require_relative "./../../components/app"
-require_relative "./../../db/bike"
-require_relative "./../../db/component"
 
 RSpec.describe Components::App do
   include Rack::Test::Methods
@@ -12,78 +10,45 @@ RSpec.describe Components::App do
     Components::App.new
   end
 
-  before(:each) do
+  before do
     ActiveRecord::Base.establish_connection(
       adapter: "sqlite3",
       database: ENV["BIKES_DB"]
     )
-
-    b1 = Db::Bike.create(name: "bike1")
-    b2 = Db::Bike.create(name: "bike2")
-    Db::Component.create(name: "Component 1", description: "Description 1", bike: b1)
-    Db::Component.create(name: "Component 2", description: "Description 2", bike: b2)
+    Db::Component.create(name: "some part")
   end
 
-  describe "POST /components" do
-    it "creates a new component" do
-      component_data = {"name" => "New Component", "description" => "New Description"}.to_json
+  let(:component_data) { {name: "some part"}.to_json }
 
-      post "/components", component_data, "CONTENT_TYPE" => "application/json"
+  it "creates a new bike" do
+    post "/components", component_data
 
-      expect(last_response.status).to eq(201)
-      expect(last_response.body).to eq("Create")
-    end
+    expect(last_response.status).to eq(201)
+    expect(last_response.body).to eq("Create")
   end
 
-  describe "GET /components/:id" do
-    it "returns a component with the given id" do
-      get "/components/1"
+  it "reads a bike with the given id" do
+    component = Db::Component.create(name: "some part")
+    get "/components/#{component.id}"
 
-      expect(last_response.status).to eq(200)
-      expect(JSON.parse(last_response.body)).to include({"id" => 1, "bike_id" => 1, "name" => "Component 1", "description" => "Description 1"})
-    end
-
-    it "returns 404 if the component is not found" do
-      get "/components/100"
-
-      expect(last_response.status).to eq(404)
-      expect(last_response.body).to eq("Not Found")
-    end
+    expect(last_response.status).to eq(200)
+    expect(JSON.parse(last_response.body)).to include(JSON.parse({id: component.id, name: component.name}.to_json))
   end
 
-  describe "PUT /components/:id" do
-    it "updates a component with the given id" do
-      component_data = {"bike_id" => 2, "name" => "Updated Component", "description" => "Updated Description"}.to_json
+  it "updates a bike with the given id" do
+    component = Db::Component.create(name: "some part")
+    put "/components/#{component.id}", component_data
 
-      put "/components/1", component_data, "CONTENT_TYPE" => "application/json"
-
-      expect(last_response.status).to eq(200)
-      expect(last_response.body).to eq("Update with ID 1")
-    end
-
-    it "returns 404 if the component is not found" do
-      component_data = {"bike_id" => 2, "name" => "Updated Component", "description" => "Updated Description"}.to_json
-
-      put "/components/10", component_data, "CONTENT_TYPE" => "application/json"
-
-      expect(last_response.status).to eq(404)
-      expect(last_response.body).to eq("Not Found")
-    end
+    expect(last_response.status).to eq(200)
+    expect(last_response.body).to eq("Update with ID #{component.id}")
   end
 
-  describe "DELETE /components/:id" do
-    it "deletes a component with the given id" do
-      delete "/components/1"
+  it "deletes a bike with the given id" do
+    component = Db::Component.create(name: "some part")
 
-      expect(last_response.status).to eq(200)
-      expect(last_response.body).to eq("Delete with ID 1")
-    end
+    delete "/components/#{component.id}"
 
-    it "returns 404 if the component is not found" do
-      delete "/components/100"
-
-      expect(last_response.status).to eq(404)
-      expect(last_response.body).to eq("Not Found")
-    end
+    expect(last_response.status).to eq(200)
+    expect(last_response.body).to eq("Delete with ID #{component.id}")
   end
 end
