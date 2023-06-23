@@ -1,6 +1,6 @@
 require "json"
 require "active_record"
-require_relative "../db/Bike"
+require_relative "../db/bike"
 
 module Bikes
   class Controller

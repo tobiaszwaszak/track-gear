@@ -1,5 +1,5 @@
 require 'active_record'
-require_relative "../db/Component"
+require_relative "../db/component"
 require 'yaml'
 
 module Components
