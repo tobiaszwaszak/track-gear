@@ -16,3 +16,5 @@ gem "dotenv"
 
 gem "sqlite3"
 gem 'activerecord'
+
+gem "rake"

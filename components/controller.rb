@@ -1,9 +1,7 @@
 require 'active_record'
-require "dotenv"
 require_relative "../db/Component"
+require 'yaml'
 
-Dotenv.load(".env.development") if ENV["RACK_ENV"] == "development"
-Dotenv.load(".env.test") if ENV["RACK_ENV"] == "test"
 module Components
   class Controller
     def initialize
@@ -80,10 +78,8 @@ module Components
     private
 
     def setup_database
-      ActiveRecord::Base.establish_connection(
-        adapter: "sqlite3",
-        database: ENV["BIKES_DB"]
-      )
+      ActiveRecord::Base.configurations = YAML.load_file('db/configuration.yml')
+      ActiveRecord::Base.establish_connection(ENV["RACK_ENV"].to_sym)
     end
   end
 end
