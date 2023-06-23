@@ -38,7 +38,7 @@ RSpec.describe Bikes::Controller do
     end
 
     it "returns 404 Not Found if the bike does not exist" do
-      allow(controller).to receive(:read_database).and_return([])
+      allow(Db::Bike).to receive(:find_by).and_return(nil)
 
       response = controller.read(nil, 1)
 
@@ -59,7 +59,7 @@ RSpec.describe Bikes::Controller do
     end
 
     it "returns 404 Not Found if the bike does not exist" do
-      allow(controller).to receive(:read_database).and_return([])
+      allow(Db::Bike).to receive(:find_by).and_return(nil)
 
       request = double("request", body: double("body", read: {name: "Road Bike"}.to_json))
 

@@ -30,7 +30,7 @@ RSpec.describe Bikes::App do
     get "/bikes/#{bike.id}"
 
     expect(last_response.status).to eq(200)
-    expect(last_response.body).to eq({id: bike.id, name: bike.name}.to_json)
+    expect(JSON.parse(last_response.body)).to include(JSON.parse({id: bike.id, name: bike.name}.to_json))
   end
 
   it "updates a bike with the given id" do

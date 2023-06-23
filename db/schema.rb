@@ -18,12 +18,12 @@ ActiveRecord::Schema[7.0].define(version: 2) do
   end
 
   create_table "components", force: :cascade do |t|
-    t.integer "bikes_id"
+    t.integer "bike_id"
     t.string "name"
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["bikes_id"], name: "index_components_on_bikes_id"
+    t.index ["bike_id"], name: "index_components_on_bike_id"
   end
 
 end
