@@ -21,6 +21,8 @@ jobs:
         run: bundle install
       - name: Run db migrations
         run: cd db && rake db:migrate
+      - name: Show db directory
+        run: cd db && ls
       - name: Run tests
         run: bundle exec rspec spec/*
   deploy:
