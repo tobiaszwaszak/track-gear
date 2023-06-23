@@ -19,8 +19,10 @@ jobs:
           ruby-version: '3.2.1'
       - name: Install dependencies
         run: bundle install
+      - name: Run db migrations
+        run: cd db && rake db:migrate && cd ..
       - name: Run tests
-        run: bundle exec rspec
+        run: bundle exec rspec spec
   deploy:
     name: Deploy app
     runs-on: ubuntu-latest
