@@ -35,10 +35,6 @@ COPY --from=build --chown=ruby:ruby /app /app
 # Copy application code
 COPY --chown=ruby:ruby . .
 
-# Handle migration
-ENV RACK_ENV=production
-RUN cd db && db:migrate
-
 # Start the server
 EXPOSE 8080
-CMD ["bundle", "exec", "rackup", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["/bin/bash", "-c", "cd db && rack db:migrate; bundle exec rackup --host 0.0.0.0 --port 8080"]
