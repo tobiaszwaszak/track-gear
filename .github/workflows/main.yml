@@ -20,11 +20,9 @@ jobs:
       - name: Install dependencies
         run: bundle install
       - name: Run db migrations
-        run: cd db && rake db:migrate
-      - name: Show db directory
-        run: cd db && ls
+        run: rake db:migrate
       - name: Run tests
-        run: bundle exec rspec spec/*
+        run: bundle exec rspec
   deploy:
     name: Deploy app
     runs-on: ubuntu-latest
