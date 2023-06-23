@@ -11,7 +11,7 @@ RSpec.describe Bikes::App do
   end
 
   before do
-    ActiveRecord::Base.configurations = YAML.load_file('db/configuration.yml')
+    ActiveRecord::Base.configurations = YAML.load_file("db/configuration.yml")
     ActiveRecord::Base.establish_connection(ENV["RACK_ENV"].to_sym)
   end
 

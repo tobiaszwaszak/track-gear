@@ -15,6 +15,6 @@ gem "byebug"
 gem "dotenv"
 
 gem "sqlite3"
-gem 'activerecord'
+gem "activerecord"
 
 gem "rake"

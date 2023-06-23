@@ -1,7 +1,7 @@
-require 'yaml'
-require 'logger'
-require 'active_record'
-require 'byebug'
+require "yaml"
+require "logger"
+require "active_record"
+require "byebug"
 
 include ActiveRecord::Tasks
 
@@ -16,13 +16,13 @@ class Seeder
   end
 end
 
-root = File.expand_path '..', __FILE__
-DatabaseTasks.env = ENV['RACK_ENV'] || 'development'
-DatabaseTasks.database_configuration = YAML.load(File.read(File.join(root, 'db/configuration.yml')))
-DatabaseTasks.db_dir = File.join root, 'db'
-DatabaseTasks.fixtures_path = File.join root, 'spec/fixtures'
-DatabaseTasks.migrations_paths = [File.join(root, 'db/migrations')]
-DatabaseTasks.seed_loader = Seeder.new File.join root, 'db/seeds.rb'
+root = File.expand_path "..", __FILE__
+DatabaseTasks.env = ENV["RACK_ENV"] || "development"
+DatabaseTasks.database_configuration = YAML.load(File.read(File.join(root, "db/configuration.yml")))
+DatabaseTasks.db_dir = File.join root, "db"
+DatabaseTasks.fixtures_path = File.join root, "spec/fixtures"
+DatabaseTasks.migrations_paths = [File.join(root, "db/migrations")]
+DatabaseTasks.seed_loader = Seeder.new File.join root, "db/seeds.rb"
 DatabaseTasks.root = root
 
 task :environment do
@@ -30,4 +30,4 @@ task :environment do
   ActiveRecord::Base.establish_connection DatabaseTasks.env.to_sym
 end
 
-load 'active_record/railties/databases.rake'
+load "active_record/railties/databases.rake"
