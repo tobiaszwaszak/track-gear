@@ -8,4 +8,4 @@ test:
 
 production:
   adapter: sqlite3
-  database: production.sqlite3
+  database: mnt/volume/production.sqlite3
