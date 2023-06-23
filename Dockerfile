@@ -37,4 +37,4 @@ COPY --chown=ruby:ruby . .
 
 # Start the server
 EXPOSE 8080
-CMD ["bundle", "exec", "rackup", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["/bin/bash", "-c", "cd db && rack db:migrate; cd && bundle exec rackup --host 0.0.0.0 --port 8080"]

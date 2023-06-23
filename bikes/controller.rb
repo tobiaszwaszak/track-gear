@@ -1,33 +1,31 @@
-require "csv"
-require "dotenv"
+require "json"
+require "active_record"
+require_relative "../db/bike"
+require "byebug"
 
-Dotenv.load(".env.development") if ENV["RACK_ENV"] == "development"
-Dotenv.load(".env.test") if ENV["RACK_ENV"] == "test"
 module Bikes
   class Controller
     def initialize
-      @database = ENV["BIKES_FILE"]
+      setup_database
     end
 
     def index(request)
-      bikes = read_database
-
+      bikes = Db::Bike.all
       [200, {"content-type" => "application/json"}, [bikes.to_json]]
     end
 
     def create(request)
       bike_data = JSON.parse(request.body.read)
-      bikes = read_database
-      bike_id = read_database.empty? ? 1 : read_database.map { |bike| bike["id"].to_i }.max + 1
-      bike_data["id"] = bike_id
-      bikes << bike_data
-      write_database(bikes)
-      [201, {"content-type" => "text/plain"}, ["Create"]]
+      bike = Db::Bike.create(bike_data)
+      if bike
+        [201, {"content-type" => "text/plain"}, ["Create"]]
+      else
+        [500, {"content-type" => "text/plain"}, ["Error creating bike"]]
+      end
     end
 
     def read(request, bike_id)
-      bikes = read_database
-      bike = bikes.find { |b| b["id"].to_i == bike_id }
+      bike = Db::Bike.find_by(id: bike_id)
       if bike
         [200, {"content-type" => "application/json"}, [bike.to_json]]
       else
@@ -37,24 +35,26 @@ module Bikes
 
     def update(request, bike_id)
       bike_data = JSON.parse(request.body.read)
-      bikes = read_database
-      index = bikes.find_index { |b| b["id"].to_i == bike_id }
-      if index
-        bikes[index] = bike_data
-        write_database(bikes)
-        [200, {"content-type" => "text/plain"}, ["Update with ID #{bike_id}"]]
+      bike = Db::Bike.find_by(id: bike_id)
+      if bike
+        if bike.update(bike_data)
+          [200, {"content-type" => "text/plain"}, ["Update with ID #{bike_id}"]]
+        else
+          [500, {"content-type" => "text/plain"}, ["Error updating bike"]]
+        end
       else
         [404, {"content-type" => "text/plain"}, ["Not Found"]]
       end
     end
 
     def delete(request, bike_id)
-      bikes = read_database
-      index = bikes.find_index { |b| b["id"].to_i == bike_id }
-      if index
-        bikes.delete_at(index)
-        write_database(bikes)
-        [200, {"content-type" => "text/plain"}, ["Delete with ID #{bike_id}"]]
+      bike = Db::Bike.find_by(id: bike_id)
+      if bike
+        if bike.destroy
+          [200, {"content-type" => "text/plain"}, ["Delete with ID #{bike_id}"]]
+        else
+          [500, {"content-type" => "text/plain"}, ["Error deleting bike"]]
+        end
       else
         [404, {"content-type" => "text/plain"}, ["Not Found"]]
       end
@@ -62,14 +62,9 @@ module Bikes
 
     private
 
-    def read_database
-      CSV.read(@database, headers: true, header_converters: :symbol).map(&:to_h).map { |array| array.map { |key, v| [key.to_s, v] }.to_h }
-    end
-
-    def write_database(data)
-      CSV.open(@database, "w", write_headers: true, headers: data.first&.keys) do |csv|
-        data.each { |row| csv << row.values }
-      end
+    def setup_database
+      ActiveRecord::Base.configurations = YAML.load_file("db/configuration.yml")
+      ActiveRecord::Base.establish_connection(ENV["RACK_ENV"].to_sym)
     end
   end
 end

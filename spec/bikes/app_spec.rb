@@ -1,6 +1,5 @@
 require "rack/test"
 require "json"
-require "byebug"
 
 require_relative "./../../bikes/app"
 
@@ -12,13 +11,11 @@ RSpec.describe Bikes::App do
   end
 
   before do
-    bikes_data = [JSON.parse({"id" => 1, "name" => "Mountain Bike"}.to_json)]
-    CSV.open("bikes.csv", "w", write_headers: true, headers: bikes_data.first.keys) do |csv|
-      bikes_data.each { |bike| csv << bike.values }
-    end
+    ActiveRecord::Base.configurations = YAML.load_file("db/configuration.yml")
+    ActiveRecord::Base.establish_connection(ENV["RACK_ENV"].to_sym)
   end
 
-  let(:bike_data) { {id: 1, name: "Mountain Bike"}.to_json }
+  let(:bike_data) { {name: "Mountain Bike"}.to_json }
 
   it "creates a new bike" do
     post "/bikes", bike_data
@@ -28,23 +25,29 @@ RSpec.describe Bikes::App do
   end
 
   it "reads a bike with the given id" do
-    get "/bikes/1"
+    bike = Db::Bike.create(name: "Mountain Bike")
+
+    get "/bikes/#{bike.id}"
 
     expect(last_response.status).to eq(200)
-    expect(last_response.body).to eq({id: "1", name: "Mountain Bike"}.to_json)
+    expect(JSON.parse(last_response.body)).to include(JSON.parse({id: bike.id, name: bike.name}.to_json))
   end
 
   it "updates a bike with the given id" do
-    put "/bikes/1", bike_data
+    bike = Db::Bike.create(name: "Mountain Bike")
+
+    put "/bikes/#{bike.id}", bike_data
 
     expect(last_response.status).to eq(200)
-    expect(last_response.body).to eq("Update with ID 1")
+    expect(last_response.body).to eq("Update with ID #{bike.id}")
   end
 
   it "deletes a bike with the given id" do
-    delete "/bikes/1"
+    bike = Db::Bike.create(name: "Mountain Bike")
+
+    delete "/bikes/#{bike.id}"
 
     expect(last_response.status).to eq(200)
-    expect(last_response.body).to eq("Delete with ID 1")
+    expect(last_response.body).to eq("Delete with ID #{bike.id}")
   end
 end

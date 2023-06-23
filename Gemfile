@@ -13,3 +13,8 @@ gem "rack-test"
 
 gem "byebug"
 gem "dotenv"
+
+gem "sqlite3"
+gem "activerecord"
+
+gem "rake"
