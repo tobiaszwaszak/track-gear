@@ -13,7 +13,7 @@ RSpec.describe Components::Repository do
 
   describe "#all_by" do
     it "returns components filtered by the given filters" do
-      filters = { bike_id: 1, name: "Handlebar" }
+      filters = {bike_id: 1, name: "Handlebar"}
       expect(Db::Records::Component).to receive(:where).with(filters)
       repository.all_by(filters)
     end
@@ -44,7 +44,7 @@ RSpec.describe Components::Repository do
   describe "#update" do
     it "updates a component with the given id and params" do
       id = 1
-      params = { name: "Saddle" }
+      params = {name: "Saddle"}
       record = double("record")
       allow(repository).to receive(:find).with(id: id).and_return(record)
       expect(record).to receive(:update).with(params)

@@ -39,7 +39,7 @@ module Bikes
     end
 
     def delete(request, bike_id)
-      if Bikes::Repository.new.delete(id: bike_id )
+      if Bikes::Repository.new.delete(id: bike_id)
         [200, {"content-type" => "text/plain"}, ["Delete with ID #{bike_id}"]]
       else
         [500, {"content-type" => "text/plain"}, ["Error deleting bike"]]

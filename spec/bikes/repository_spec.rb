@@ -30,7 +30,7 @@ RSpec.describe Bikes::Repository do
   describe "#update" do
     it "updates a bike with the given id and params" do
       id = 1
-      params = { name: "Road Bike" }
+      params = {name: "Road Bike"}
       record = double("record")
       allow(repository).to receive(:find).with(id: id).and_return(record)
       expect(record).to receive(:update).with(params)
