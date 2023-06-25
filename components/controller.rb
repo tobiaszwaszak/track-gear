@@ -1,6 +1,5 @@
 require "active_record"
 require_relative "./repository"
-require "yaml"
 
 module Components
   class Controller
@@ -58,13 +57,6 @@ module Components
       end
     rescue Components::RecordNotFound
       [404, {"content-type" => "text/plain"}, ["Not Found"]]
-    end
-
-    private
-
-    def setup_database
-      ActiveRecord::Base.configurations = YAML.load_file("db/configuration.yml")
-      ActiveRecord::Base.establish_connection(ENV["RACK_ENV"].to_sym)
     end
   end
 end
