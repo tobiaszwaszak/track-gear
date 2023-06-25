@@ -36,7 +36,7 @@ RSpec.describe Components::Repository do
   describe "#find" do
     it "finds a component by id" do
       id = 1
-      expect(Db::Records::Component).to receive(:find_by).with(id: id)
+      expect(Db::Records::Component).to receive(:find).with(id)
       repository.find(id: id)
     end
   end

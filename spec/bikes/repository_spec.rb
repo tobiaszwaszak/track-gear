@@ -22,7 +22,7 @@ RSpec.describe Bikes::Repository do
   describe "#find" do
     it "finds a bike by id" do
       id = 1
-      expect(Db::Records::Bike).to receive(:find_by).with(id: id)
+      expect(Db::Records::Bike).to receive(:find).with(id)
       repository.find(id: id)
     end
   end

@@ -16,8 +16,7 @@ module Bikes
     end
 
     def find(id:)
-      #poprawic
-      Db::Records::Bike.find_by(id: id)
+      Db::Records::Bike.find(id)
     end
 
     def update(id:, params:)

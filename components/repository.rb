@@ -24,7 +24,7 @@ module Components
     end
 
     def find(id:)
-      Db::Records::Component.find_by(id: id)
+      Db::Records::Component.find(id)
     end
 
     def update(id:, params:)
