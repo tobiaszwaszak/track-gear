@@ -1,5 +1,5 @@
 require "active_record"
-require_relative "../db/component"
+require_relative "../db/records/component"
 require "yaml"
 
 module Components
@@ -12,10 +12,10 @@ module Components
       bike_id = request.params["bike_id"]
 
       if bike_id
-        filtered_components = Db::Component.where(bike_id: bike_id)
+        filtered_components = Db::Records::Component.where(bike_id: bike_id)
         [200, {"content-type" => "application/json"}, [filtered_components.to_json]]
       else
-        components = Db::Component.all
+        components = Db::Records::Component.all
         [200, {"content-type" => "application/json"}, [components.to_json]]
       end
     end
@@ -23,7 +23,7 @@ module Components
     def create(request)
       component_data = JSON.parse(request.body.read)
 
-      component = Db::Component.create(
+      component = Db::Records::Component.create(
         bike_id: component_data["bike_id"],
         name: component_data["name"],
         description: component_data["description"]
@@ -37,7 +37,7 @@ module Components
     end
 
     def read(request, component_id)
-      component = Db::Component.find_by(id: component_id)
+      component = Db::Records::Component.find_by(id: component_id)
 
       if component
         [200, {"content-type" => "application/json"}, [component.to_json]]
@@ -48,7 +48,7 @@ module Components
 
     def update(request, component_id)
       component_data = JSON.parse(request.body.read)
-      component = Db::Component.find_by(id: component_id)
+      component = Db::Records::Component.find_by(id: component_id)
 
       if component
         if component.update(component_data)
@@ -62,7 +62,7 @@ module Components
     end
 
     def delete(request, component_id)
-      component = Db::Component.find_by(id: component_id)
+      component = Db::Records::Component.find_by(id: component_id)
 
       if component
         if component.destroy

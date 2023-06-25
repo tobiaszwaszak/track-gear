@@ -1,6 +1,6 @@
 require "json"
 require "active_record"
-require_relative "../db/bike"
+require_relative "../db/records/bike"
 require "byebug"
 
 module Bikes
@@ -10,13 +10,13 @@ module Bikes
     end
 
     def index(request)
-      bikes = Db::Bike.all
+      bikes = Db::Records::Bike.all
       [200, {"content-type" => "application/json"}, [bikes.to_json]]
     end
 
     def create(request)
       bike_data = JSON.parse(request.body.read)
-      bike = Db::Bike.create(bike_data)
+      bike = Db::Records::Bike.create(bike_data)
       if bike
         [201, {"content-type" => "text/plain"}, ["Create"]]
       else
@@ -25,7 +25,7 @@ module Bikes
     end
 
     def read(request, bike_id)
-      bike = Db::Bike.find_by(id: bike_id)
+      bike = Db::Records::Bike.find_by(id: bike_id)
       if bike
         [200, {"content-type" => "application/json"}, [bike.to_json]]
       else
@@ -35,7 +35,7 @@ module Bikes
 
     def update(request, bike_id)
       bike_data = JSON.parse(request.body.read)
-      bike = Db::Bike.find_by(id: bike_id)
+      bike = Db::Records::Bike.find_by(id: bike_id)
       if bike
         if bike.update(bike_data)
           [200, {"content-type" => "text/plain"}, ["Update with ID #{bike_id}"]]
@@ -48,7 +48,7 @@ module Bikes
     end
 
     def delete(request, bike_id)
-      bike = Db::Bike.find_by(id: bike_id)
+      bike = Db::Records::Bike.find_by(id: bike_id)
       if bike
         if bike.destroy
           [200, {"content-type" => "text/plain"}, ["Delete with ID #{bike_id}"]]
