@@ -2,9 +2,9 @@ require_relative "../db/records/bike"
 require "active_record"
 
 module Bikes
-
   class RecordNotFound < StandardError
   end
+
   class Repository
     def initialize
       setup_database

@@ -4,6 +4,7 @@ require "active_record"
 module Components
   class RecordNotFound < StandardError
   end
+
   class Repository
     def initialize
       setup_database
