@@ -37,7 +37,7 @@ RSpec.describe Bikes::Controller do
     end
 
     it "returns 404 Not Found if the bike does not exist" do
-      allow_any_instance_of(Bikes::Repository).to receive(:find).and_return(nil)
+      allow_any_instance_of(Bikes::Repository).to receive(:find).and_raise(ActiveRecord::RecordNotFound)
 
       response = controller.read(nil, 1)
 

@@ -21,11 +21,9 @@ module Bikes
 
     def read(request, bike_id)
       bike = Bikes::Repository.new.find(id: bike_id)
-      if bike
-        [200, {"content-type" => "application/json"}, [bike.to_json]]
-      else
-        [404, {"content-type" => "text/plain"}, ["Not Found"]]
-      end
+      [200, {"content-type" => "application/json"}, [bike.to_json]]
+    rescue ActiveRecord::RecordNotFound
+      [404, {"content-type" => "text/plain"}, ["Not Found"]]
     end
 
     def update(request, bike_id)

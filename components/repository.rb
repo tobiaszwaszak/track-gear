@@ -1,23 +1,30 @@
-require_relative "../db/records/bike"
+require_relative "../db/records/component"
 require "active_record"
 
-module Bikes
+module Components
   class Repository
     def initialize
       setup_database
     end
 
     def all
-      Db::Records::Bike.all
+      Db::Records::Component.all
     end
 
-    def create(name:)
-      Db::Records::Bike.create(name: name)
+    def all_by(filters)
+      Db::Records::Component.where(filters)
+    end
+
+    def create(bike_id:, name:, description:)
+      Db::Records::Component.create(
+        bike_id: bike_id,
+        name: name,
+        description: description
+      )
     end
 
     def find(id:)
-      #poprawic
-      Db::Records::Bike.find_by(id: id)
+      Db::Records::Component.find_by(id: id)
     end
 
     def update(id:, params:)
