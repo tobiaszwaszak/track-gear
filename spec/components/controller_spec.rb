@@ -39,7 +39,7 @@ RSpec.describe Components::Controller do
     end
 
     it "returns 404 Not Found if the component does not exist" do
-      allow_any_instance_of(Components::Repository).to receive(:find).and_raise(ActiveRecord::RecordNotFound)
+      allow_any_instance_of(Components::Repository).to receive(:find).and_raise(Components::RecordNotFound)
 
       response = controller.read(nil, 1)
 
@@ -59,7 +59,7 @@ RSpec.describe Components::Controller do
     end
 
     it "returns 404 Not Found if the component does not exist" do
-      allow_any_instance_of(Components::Repository).to receive(:update).and_raise(ActiveRecord::RecordNotFound)
+      allow_any_instance_of(Components::Repository).to receive(:update).and_raise(Components::RecordNotFound)
       request = double("request", body: double("body", read: {"bike_id" => 2, "name" => "Updated Component", "description" => "Updated Description"}.to_json))
 
       response = controller.update(request, 1)
@@ -78,7 +78,7 @@ RSpec.describe Components::Controller do
     end
 
     it "returns 404 Not Found if the component does not exist" do
-      allow_any_instance_of(Components::Repository).to receive(:delete).and_raise(ActiveRecord::RecordNotFound)
+      allow_any_instance_of(Components::Repository).to receive(:delete).and_raise(Components::RecordNotFound)
 
       response = controller.delete(nil, 1)
 

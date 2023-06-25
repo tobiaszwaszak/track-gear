@@ -2,6 +2,8 @@ require_relative "../db/records/component"
 require "active_record"
 
 module Components
+  class RecordNotFound < StandardError
+  end
   class Repository
     def initialize
       setup_database
@@ -25,6 +27,8 @@ module Components
 
     def find(id:)
       Db::Records::Component.find(id)
+    rescue ActiveRecord::RecordNotFound
+      raise RecordNotFound.new
     end
 
     def update(id:, params:)

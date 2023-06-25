@@ -37,7 +37,7 @@ RSpec.describe Bikes::Controller do
     end
 
     it "returns 404 Not Found if the bike does not exist" do
-      allow_any_instance_of(Bikes::Repository).to receive(:find).and_raise(ActiveRecord::RecordNotFound)
+      allow_any_instance_of(Bikes::Repository).to receive(:find).and_raise(Bikes::RecordNotFound)
 
       response = controller.read(nil, 1)
 
@@ -57,7 +57,7 @@ RSpec.describe Bikes::Controller do
     end
 
     it "returns 404 Not Found if the bike does not exist" do
-      allow_any_instance_of(Bikes::Repository).to receive(:update).and_raise(ActiveRecord::RecordNotFound)
+      allow_any_instance_of(Bikes::Repository).to receive(:update).and_raise(Bikes::RecordNotFound)
 
       request = double("request", body: double("body", read: {name: "Road Bike"}.to_json))
 
@@ -77,7 +77,7 @@ RSpec.describe Bikes::Controller do
     end
 
     it "returns 404 Not Found if the bike does not exist" do
-      allow_any_instance_of(Bikes::Repository).to receive(:delete).and_raise(ActiveRecord::RecordNotFound)
+      allow_any_instance_of(Bikes::Repository).to receive(:delete).and_raise(Bikes::RecordNotFound)
 
       response = controller.delete(nil, 1)
 

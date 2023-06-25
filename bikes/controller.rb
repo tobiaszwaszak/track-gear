@@ -22,7 +22,7 @@ module Bikes
     def read(request, bike_id)
       bike = Bikes::Repository.new.find(id: bike_id)
       [200, {"content-type" => "application/json"}, [bike.to_json]]
-    rescue ActiveRecord::RecordNotFound
+    rescue Bikes::RecordNotFound
       [404, {"content-type" => "text/plain"}, ["Not Found"]]
     end
 
@@ -34,7 +34,7 @@ module Bikes
       else
         [500, {"content-type" => "text/plain"}, ["Error updating bike"]]
       end
-    rescue ActiveRecord::RecordNotFound
+    rescue Bikes::RecordNotFound
       [404, {"content-type" => "text/plain"}, ["Not Found"]]
     end
 
@@ -44,7 +44,7 @@ module Bikes
       else
         [500, {"content-type" => "text/plain"}, ["Error deleting bike"]]
       end
-    rescue ActiveRecord::RecordNotFound
+    rescue Bikes::RecordNotFound
       [404, {"content-type" => "text/plain"}, ["Not Found"]]
     end
   end

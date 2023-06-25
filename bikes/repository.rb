@@ -2,6 +2,9 @@ require_relative "../db/records/bike"
 require "active_record"
 
 module Bikes
+
+  class RecordNotFound < StandardError
+  end
   class Repository
     def initialize
       setup_database
@@ -17,6 +20,8 @@ module Bikes
 
     def find(id:)
       Db::Records::Bike.find(id)
+    rescue ActiveRecord::RecordNotFound
+      raise RecordNotFound.new
     end
 
     def update(id:, params:)

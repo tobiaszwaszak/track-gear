@@ -34,7 +34,7 @@ module Components
     def read(request, component_id)
       component = Components::Repository.new.find(id: component_id)
       [200, {"content-type" => "application/json"}, [component.to_json]]
-    rescue ActiveRecord::RecordNotFound
+    rescue Components::RecordNotFound
       [404, {"content-type" => "text/plain"}, ["Not Found"]]
     end
 
@@ -46,7 +46,7 @@ module Components
       else
         [500, {"content-type" => "text/plain"}, ["Error updating component"]]
       end
-    rescue ActiveRecord::RecordNotFound
+    rescue Components::RecordNotFound
       [404, {"content-type" => "text/plain"}, ["Not Found"]]
     end
 
@@ -56,7 +56,7 @@ module Components
       else
         [500, {"content-type" => "text/plain"}, ["Error deleting component"]]
       end
-    rescue ActiveRecord::RecordNotFound
+    rescue Components::RecordNotFound
       [404, {"content-type" => "text/plain"}, ["Not Found"]]
     end
 
