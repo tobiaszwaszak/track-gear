@@ -25,7 +25,7 @@ RSpec.describe Bikes::App do
   end
 
   it "reads a bike with the given id" do
-    bike = Db::Bike.create(name: "Mountain Bike")
+    bike = Db::Records::Bike.create(name: "Mountain Bike")
 
     get "/bikes/#{bike.id}"
 
@@ -34,7 +34,7 @@ RSpec.describe Bikes::App do
   end
 
   it "updates a bike with the given id" do
-    bike = Db::Bike.create(name: "Mountain Bike")
+    bike = Db::Records::Bike.create(name: "Mountain Bike")
 
     put "/bikes/#{bike.id}", bike_data
 
@@ -43,7 +43,7 @@ RSpec.describe Bikes::App do
   end
 
   it "deletes a bike with the given id" do
-    bike = Db::Bike.create(name: "Mountain Bike")
+    bike = Db::Records::Bike.create(name: "Mountain Bike")
 
     delete "/bikes/#{bike.id}"
 

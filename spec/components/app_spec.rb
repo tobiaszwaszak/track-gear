@@ -13,7 +13,7 @@ RSpec.describe Components::App do
   before do
     ActiveRecord::Base.configurations = YAML.load_file("db/configuration.yml")
     ActiveRecord::Base.establish_connection(ENV["RACK_ENV"].to_sym)
-    Db::Component.create(name: "some part")
+    Db::Records::Component.create(name: "some part")
   end
 
   let(:component_data) { {name: "some part"}.to_json }
@@ -26,7 +26,7 @@ RSpec.describe Components::App do
   end
 
   it "reads a bike with the given id" do
-    component = Db::Component.create(name: "some part")
+    component = Db::Records::Component.create(name: "some part")
     get "/components/#{component.id}"
 
     expect(last_response.status).to eq(200)
@@ -34,7 +34,7 @@ RSpec.describe Components::App do
   end
 
   it "updates a bike with the given id" do
-    component = Db::Component.create(name: "some part")
+    component = Db::Records::Component.create(name: "some part")
     put "/components/#{component.id}", component_data
 
     expect(last_response.status).to eq(200)
@@ -42,7 +42,7 @@ RSpec.describe Components::App do
   end
 
   it "deletes a bike with the given id" do
-    component = Db::Component.create(name: "some part")
+    component = Db::Records::Component.create(name: "some part")
 
     delete "/components/#{component.id}"
 
