@@ -1,6 +1,7 @@
 require "json"
 require "byebug"
 require_relative "./repository"
+require_relative "./contract"
 
 module Bikes
   class Controller
@@ -10,12 +11,16 @@ module Bikes
     end
 
     def create(request)
-      bike_data = JSON.parse(request.body.read)
-      bike = Bikes::Repository.new.create(name: bike_data["name"])
-      if bike
-        [201, {"content-type" => "text/plain"}, ["Create"]]
-      else
+      bike_data = Bikes::Contract.new.call(JSON.parse(request.body.read))
+      if bike_data.errors.to_h.any?
         [500, {"content-type" => "text/plain"}, ["Error creating bike"]]
+      else
+        bike = Bikes::Repository.new.create(name: bike_data["name"])
+        if bike
+          [201, {"content-type" => "text/plain"}, ["Create"]]
+        else
+          [500, {"content-type" => "text/plain"}, ["Error creating bike"]]
+        end
       end
     end
 
@@ -27,9 +32,10 @@ module Bikes
     end
 
     def update(request, bike_id)
-      bike_data = JSON.parse(request.body.read)
-
-      if Bikes::Repository.new.update(id: bike_id, params: bike_data)
+      bike_data = Bikes::Contract.new.call(JSON.parse(request.body.read))
+      if bike_data.errors.to_h.any?
+        [500, {"content-type" => "text/plain"}, ["Error creating bike"]]
+      elsif Bikes::Repository.new.update(id: bike_id, params: bike_data.to_h)
         [200, {"content-type" => "text/plain"}, ["Update with ID #{bike_id}"]]
       else
         [500, {"content-type" => "text/plain"}, ["Error updating bike"]]
