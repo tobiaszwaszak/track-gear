@@ -18,3 +18,5 @@ gem "sqlite3"
 gem "activerecord"
 
 gem "rake"
+
+gem "dry-validation"
