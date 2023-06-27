@@ -1,5 +1,6 @@
 require "active_record"
 require_relative "./repository"
+require_relative "./contract"
 
 module Components
   class Controller
@@ -16,17 +17,20 @@ module Components
     end
 
     def create(request)
-      component_data = JSON.parse(request.body.read)
-
-      component = Components::Repository.new.create(
-        bike_id: component_data["bike_id"],
-        name: component_data["name"],
-        description: component_data["description"]
-      )
-      if component
-        [201, {"content-type" => "text/plain"}, ["Create"]]
-      else
+      component_data = Components::Contract.new.call(JSON.parse(request.body.read))
+      if component_data.errors.to_h.any?
         [500, {"content-type" => "text/plain"}, ["Error creating component"]]
+      else
+        component = Components::Repository.new.create(
+          bike_id: component_data["bike_id"],
+          name: component_data["name"],
+          description: component_data["description"]
+        )
+        if component
+          [201, {"content-type" => "text/plain"}, ["Create"]]
+        else
+          [500, {"content-type" => "text/plain"}, ["Error creating component"]]
+        end
       end
     end
 
@@ -38,9 +42,10 @@ module Components
     end
 
     def update(request, component_id)
-      component_data = JSON.parse(request.body.read)
-
-      if Components::Repository.new.update(id: component_id, params: component_data)
+      component_data = Components::Contract.new.call(JSON.parse(request.body.read))
+      if component_data.errors.to_h.any?
+        [500, {"content-type" => "text/plain"}, ["Error creating component"]]
+      elsif Components::Repository.new.update(id: component_id, params: component_data.to_h)
         [200, {"content-type" => "text/plain"}, ["Update with ID #{component_id}"]]
       else
         [500, {"content-type" => "text/plain"}, ["Error updating component"]]

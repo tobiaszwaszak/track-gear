@@ -16,7 +16,7 @@ RSpec.describe Components::App do
     Db::Records::Component.create(name: "some part")
   end
 
-  let(:component_data) { {name: "some part"}.to_json }
+  let(:component_data) { {name: "some part", description: "sample"}.to_json }
 
   it "creates a new bike" do
     post "/components", component_data

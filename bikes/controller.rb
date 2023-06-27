@@ -35,12 +35,10 @@ module Bikes
       bike_data = Bikes::Contract.new.call(JSON.parse(request.body.read))
       if bike_data.errors.to_h.any?
         [500, {"content-type" => "text/plain"}, ["Error creating bike"]]
+      elsif Bikes::Repository.new.update(id: bike_id, params: bike_data.to_h)
+        [200, {"content-type" => "text/plain"}, ["Update with ID #{bike_id}"]]
       else
-        if Bikes::Repository.new.update(id: bike_id, params: bike_data.to_h)
-          [200, {"content-type" => "text/plain"}, ["Update with ID #{bike_id}"]]
-        else
-          [500, {"content-type" => "text/plain"}, ["Error updating bike"]]
-        end
+        [500, {"content-type" => "text/plain"}, ["Error updating bike"]]
       end
     rescue Bikes::RecordNotFound
       [404, {"content-type" => "text/plain"}, ["Not Found"]]
