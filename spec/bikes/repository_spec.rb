@@ -46,7 +46,7 @@ RSpec.describe Bikes::Repository do
     it "updates a bike with the given id and params" do
       bike = Db::Records::Bike.create(name: "Mountain Bike")
 
-      updated_bike = repository.update(id: bike.id, params: { name: "Road Bike" })
+      updated_bike = repository.update(id: bike.id, params: {name: "Road Bike"})
 
       expect(updated_bike[:id]).to eq(bike.id)
       expect(updated_bike[:name]).to eq("Road Bike")
@@ -56,7 +56,7 @@ RSpec.describe Bikes::Repository do
     end
 
     it "raises Bikes::RecordNotFound when the bike is not found" do
-      expect { repository.update(id: 123, params: { name: "Road Bike" }) }.to raise_error(Bikes::RecordNotFound)
+      expect { repository.update(id: 123, params: {name: "Road Bike"}) }.to raise_error(Bikes::RecordNotFound)
     end
   end
 
