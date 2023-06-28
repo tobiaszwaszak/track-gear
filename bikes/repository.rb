@@ -1,7 +1,7 @@
 require_relative "../db/records/bike"
 require_relative "./model"
 require "active_record"
-require "byebug"
+
 module Bikes
   class RecordNotFound < StandardError
   end
