@@ -24,7 +24,10 @@ module Components
         component = Components::Repository.new.create(
           bike_id: component_data["bike_id"],
           name: component_data["name"],
-          description: component_data["description"]
+          brand: component_data["brand"],
+          model: component_data["model"],
+          weight: component_data["weight"],
+          notes: component_data["notes"]
         )
         if component
           [201, {"content-type" => "text/plain"}, ["Create"]]

@@ -15,7 +15,13 @@ module Bikes
       if bike_data.errors.to_h.any?
         [500, {"content-type" => "text/plain"}, ["Error creating bike"]]
       else
-        bike = Bikes::Repository.new.create(name: bike_data["name"])
+        bike = Bikes::Repository.new.create(
+          name: bike_data["name"],
+          brand: bike_data["brand"],
+          model: bike_data["model"],
+          weight: bike_data["weight"],
+          notes: bike_data["notes"]
+        )
         if bike
           [201, {"content-type" => "text/plain"}, ["Create"]]
         else
