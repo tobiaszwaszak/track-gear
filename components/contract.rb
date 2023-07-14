@@ -3,12 +3,12 @@ require "dry/validation"
 module Components
   class Contract < Dry::Validation::Contract
     params do
-      required(:name).filled(:string)
-      optional(:bike_id).filled(:integer)
-      optional(:brand).filled(:string)
-      optional(:model).filled(:string)
-      optional(:weight).filled(:float)
-      optional(:notes).filled(:string)
+      required(:name).value(:string)
+      optional(:bike_id).value(:integer)
+      optional(:brand).value(:string)
+      optional(:model).value(:string)
+      optional(:weight).value(:float)
+      optional(:notes).value(:string)
     end
   end
 end
