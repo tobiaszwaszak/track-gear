@@ -1,6 +1,7 @@
 require_relative "../db/records/component"
 require_relative "./model"
 require "active_record"
+require "date"
 
 module Components
   class RecordNotFound < StandardError
@@ -15,8 +16,17 @@ module Components
       Db::Records::Component.all.map { |record| to_model(record).to_h }
     end
 
-    def all_by(filters)
-      Db::Records::Component.where(filters).map { |record| to_model(record).to_h }
+    def all_by_bikes(bike_id:)
+      assignment_table = Db::Records::ComponentAssignment.arel_table
+
+      Db::Records::Component
+        .joins(:component_assignments)
+        .where(
+          Db::Records::ComponentAssignment.arel_table[:bike_id].eq(bike_id)
+            .and(assignment_table[:start_date].lteq(Date.today))
+            .and(assignment_table[:end_date].gteq(Date.today).or(assignment_table[:end_date].eq(nil)))
+        )
+        .map { |record| to_model(record).to_h }
     end
 
     def create(name:, brand:, model:, weight:, notes:)

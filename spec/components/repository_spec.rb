@@ -1,4 +1,7 @@
 require_relative "../../db/records/bike"
+require_relative "../../db/records/component"
+require_relative "../../db/records/component_assignment"
+
 require_relative "../../bikes/repository"
 
 RSpec.describe Components::Repository do
@@ -16,16 +19,46 @@ RSpec.describe Components::Repository do
     end
   end
 
-  describe "#all_by" do
-    it "returns components filtered by the given filters" do
-      component1 = Db::Records::Component.create(name: "Handlebar")
-      component2 = Db::Records::Component.create(name: "Saddle")
-      filters = {name: "Handlebar"}
+  describe "#all_by_bikes" do
+    let(:today) { Date.today }
 
-      result = repository.all_by(filters)
+    it "returns all components assigned to a specific bike and currently valid" do
+      bike = Db::Records::Bike.create(name: "Test Bike")
+      component1 = Db::Records::Component.create(name: "Component 1")
+      component2 = Db::Records::Component.create(name: "Component 2")
+      assignment1 = Db::Records::ComponentAssignment.create(bike: bike, component: component1, start_date: today - 2.days, end_date: today + 2.days)
+      assignment2 = Db::Records::ComponentAssignment.create(bike: bike, component: component2, start_date: today - 5.days, end_date: today - 3.days)
 
-      expect(result.map { |item| item[:id] }).to include(component1.id)
-      expect(result.map { |item| item[:id] }).to_not include(component2.id)
+      components = repository.all_by_bikes(bike_id: bike.id)
+
+      expect(components).to be_an(Array)
+      expect(components.length).to eq(1)
+
+      component = components.first
+      expect(component).to include(
+        id: component1.id,
+        name: component1.name,
+      )
+    end
+
+    it "returns an empty array when no components are assigned to the bike" do
+      bike = Db::Records::Bike.create(name: "Test Bike")
+
+      components = repository.all_by_bikes(bike_id: bike.id)
+
+      expect(components).to be_an(Array)
+      expect(components).to be_empty
+    end
+
+    it "returns an empty array when no valid assignments exist for the bike" do
+      bike = Db::Records::Bike.create(name: "Test Bike")
+      component1 = Db::Records::Component.create(name: "Component 1")
+      assignment1 = Db::Records::ComponentAssignment.create(bike: bike, component: component1, start_date: today - 5.days, end_date: today - 3.days)
+
+      components = repository.all_by_bikes(bike_id: bike.id)
+
+      expect(components).to be_an(Array)
+      expect(components).to be_empty
     end
   end
 

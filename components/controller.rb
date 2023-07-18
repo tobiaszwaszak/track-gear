@@ -8,7 +8,7 @@ module Components
       bike_id = request.params["bike_id"]
 
       if bike_id
-        filtered_components = Components::Repository.new.all_by(bike_id: bike_id)
+        filtered_components = Components::Repository.new.all_by_bikes(bike_id: bike_id)
         [200, {"content-type" => "application/json"}, [filtered_components.to_json]]
       else
         components = Components::Repository.new.all
