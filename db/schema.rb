@@ -10,19 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2) do
+ActiveRecord::Schema[7.0].define(version: 5) do
   create_table "bikes", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "brand"
+    t.string "model"
+    t.float "weight"
+    t.text "notes"
   end
 
   create_table "components", force: :cascade do |t|
     t.integer "bike_id"
     t.string "name"
-    t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "brand"
+    t.string "model"
+    t.float "weight"
+    t.text "notes"
     t.index ["bike_id"], name: "index_components_on_bike_id"
   end
 

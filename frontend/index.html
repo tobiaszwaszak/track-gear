@@ -25,6 +25,10 @@
               bikeItem.innerHTML = `
                 <p>ID: ${bike.id}</p>
                 <p>Name: ${bike.name}</p>
+                <p>Brand: ${bike.brand}</p>
+                <p>Model: ${bike.model}</p>
+                <p>Weight: ${bike.weight}</p>
+                <p>Notes: ${bike.notes}</p>
                 <button onclick="viewComponents(${bike.id})">View Components</button>
                 <button onclick="updateBike(${bike.id})">Update</button>
                 <button onclick="deleteBike(${bike.id})">Delete</button>
@@ -105,7 +109,11 @@
               componentItem.innerHTML = `
                 <p>ID: ${component.id}</p>
                 <p>Name: ${component.name}</p>
-                <p>Description: ${component.description}</p>
+                <p>Brand: ${component.brand}</p>
+                <p>Model: ${component.model}</p>
+                <p>Weight: ${component.weight}</p>
+                <p>Notes: ${component.notes}</p>
+
                 <button onclick="updateComponent(${component.id})">Update</button>
                 <button onclick="deleteComponent(${component.id})">Delete</button>
               `;
@@ -121,14 +129,25 @@
       // Create a new component for a bike
       window.createComponent = bikeId => {
         const componentName = prompt('Enter the name for the new component:');
-        const componentDescription = prompt('Enter the description for the new component:');
-        if (componentName && componentDescription) {
+        const componentBrand = prompt('Enter the brand for the new component:');
+        const componentModel = prompt('Enter the model for the new component:');
+        const componentWeight = prompt('Enter the weight for the new component:');
+        const componentNotes = prompt('Enter the notes for the new component:');
+
+        if (componentName) {
           fetch(`/components`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ bike_id: bikeId, name: componentName, description: componentDescription })
+            body: JSON.stringify({
+              bike_id: bikeId,
+              name: componentName,
+              brand: componentBrand,
+              model: componentModel,
+              weight: componentWeight,
+              notes: componentNotes,
+            })
           })
             .then(response => {
               if (response.ok) {
@@ -162,7 +181,10 @@
                 <p>ID: ${component.id}</p>
                 <p>Name: ${component.name}</p>
                 <p>Bike id: ${component.bike_id}</p>
-                <p>Description: ${component.description}</p>
+                <p>Brand: ${component.brand}</p>
+                <p>Model: ${component.model}</p>
+                <p>Weight: ${component.weight}</p>
+                <p>Notes: ${component.notes}</p>
               `;
               bikesList.appendChild(componentItem);
             });
@@ -176,13 +198,23 @@
       // Create a new bike
       window.createNewBike = () => {
         const bikeName = prompt('Enter the name for the new bike:');
+        const bikeBrand = prompt('Enter the brand for the new bike:');
+        const bikeModel = prompt('Enter the model for the new bike:');
+        const bikeWeight = prompt('Enter the weight for the new bike:');
+        const bikeNotes = prompt('Enter the notes for the new bike:');
         if (bikeName) {
           fetch('/bikes', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ name: bikeName })
+            body: JSON.stringify({
+              name: bikeName,
+              brand: bikeBrand,
+              model: bikeModel,
+              weight: bikeWeight,
+              notes: bikeNotes
+            })
           })
             .then(response => {
               if (response.ok) {

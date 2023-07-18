@@ -19,11 +19,14 @@ module Components
       Db::Records::Component.where(filters).map { |record| to_model(record).to_h }
     end
 
-    def create(bike_id:, name:, description:)
+    def create(bike_id:, name:, brand:, model:, weight:, notes:)
       record = Db::Records::Component.create(
         bike_id: bike_id,
         name: name,
-        description: description
+        brand: brand,
+        model: model,
+        weight: weight,
+        notes: notes
       )
       to_model(record).to_h
     end
@@ -58,7 +61,15 @@ module Components
     end
 
     def to_model(record)
-      Components::Model.new(id: record.id, name: record.name, description: record.description, bike_id: record.bike_id)
+      Components::Model.new(
+        id: record.id,
+        name: record.name,
+        bike_id: record.bike_id,
+        brand: record.brand,
+        model: record.model,
+        weight: record.weight,
+        notes: record.notes
+      )
     end
   end
 end

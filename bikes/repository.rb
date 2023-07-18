@@ -15,8 +15,8 @@ module Bikes
       Db::Records::Bike.all.map { |record| to_model(record).to_h }
     end
 
-    def create(name:)
-      record = Db::Records::Bike.create(name: name)
+    def create(name:, brand:, model:, weight:, notes:)
+      record = Db::Records::Bike.create(name: name, brand: brand, model: model, weight: weight, notes: notes)
       to_model(record).to_h
     end
 
@@ -50,7 +50,14 @@ module Bikes
     end
 
     def to_model(record)
-      Bikes::Model.new(id: record.id, name: record.name)
+      Bikes::Model.new(
+        id: record.id,
+        name: record.name,
+        brand: record.brand,
+        model: record.model,
+        weight: record.weight,
+        notes: record.notes
+      )
     end
   end
 end
