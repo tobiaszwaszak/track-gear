@@ -22,7 +22,6 @@ module Components
         [500, {"content-type" => "text/plain"}, ["Error creating component"]]
       else
         component = Components::Repository.new.create(
-          bike_id: component_data["bike_id"],
           name: component_data["name"],
           brand: component_data["brand"],
           model: component_data["model"],

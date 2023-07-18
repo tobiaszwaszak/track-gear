@@ -31,25 +31,22 @@ RSpec.describe Components::Repository do
 
   describe "#create" do
     it "creates a new component" do
-      bike_id = 1
       name = "Handlebar"
 
-      result = repository.create(bike_id: bike_id, name: name, brand: nil, model: nil, weight: nil, notes: nil)
+      result = repository.create(name: name, brand: nil, model: nil, weight: nil, notes: nil)
 
       expect(result[:id]).to be_a(Integer)
-      expect(result[:bike_id]).to eq(bike_id)
       expect(result[:name]).to eq(name)
     end
   end
 
   describe "#find" do
     it "finds a component by id" do
-      component = Db::Records::Component.create(bike_id: 1, name: "Handlebar")
+      component = Db::Records::Component.create(name: "Handlebar")
 
       result = repository.find(id: component.id)
 
       expect(result[:id]).to eq(component.id)
-      expect(result[:bike_id]).to eq(component.bike_id)
       expect(result[:name]).to eq(component.name)
     end
 
@@ -60,7 +57,7 @@ RSpec.describe Components::Repository do
 
   describe "#update" do
     it "updates a component with the given id and params" do
-      component = Db::Records::Component.create(bike_id: 1, name: "Handlebar")
+      component = Db::Records::Component.create(name: "Handlebar")
 
       id = component.id
       params = {name: "Saddle"}
@@ -68,7 +65,6 @@ RSpec.describe Components::Repository do
       result = repository.update(id: id, params: params)
 
       expect(result[:id]).to eq(id)
-      expect(result[:bike_id]).to eq(component.bike_id)
       expect(result[:name]).to eq(params[:name])
     end
 
@@ -79,7 +75,7 @@ RSpec.describe Components::Repository do
 
   describe "#delete" do
     it "deletes a component with the given id" do
-      component = Db::Records::Component.create(bike_id: 1, name: "Handlebar")
+      component = Db::Records::Component.create(name: "Handlebar")
 
       id = component.id
 

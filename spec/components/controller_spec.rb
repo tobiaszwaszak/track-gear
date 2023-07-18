@@ -7,13 +7,13 @@ RSpec.describe Components::Controller do
 
   describe "#index" do
     it "returns the list of components" do
-      allow_any_instance_of(Components::Repository).to receive(:all).and_return([{"id" => 1, "bike_id" => 1, "name" => "Component 1", "description" => "Description 1"}])
+      allow_any_instance_of(Components::Repository).to receive(:all).and_return([{"id" => 1, "name" => "Component 1", "description" => "Description 1"}])
 
       request = double("request", params: {})
 
       response = controller.index(request)
 
-      expect(response).to eq([200, {"content-type" => "application/json"}, [[{"id" => 1, "bike_id" => 1, "name" => "Component 1", "description" => "Description 1"}].to_json]])
+      expect(response).to eq([200, {"content-type" => "application/json"}, [[{"id" => 1, "name" => "Component 1", "description" => "Description 1"}].to_json]])
     end
   end
 
@@ -21,7 +21,7 @@ RSpec.describe Components::Controller do
     it "creates a new component" do
       allow_any_instance_of(Components::Repository).to receive(:create).and_return([{id: 1, name: "New Component", description: "New Description"}])
 
-      request = double("request", body: double("body", read: {"bike_id" => 1, "name" => "New Component", "description" => "New Description"}.to_json))
+      request = double("request", body: double("body", read: {"name" => "New Component", "description" => "New Description"}.to_json))
 
       response = controller.create(request)
 
@@ -31,11 +31,11 @@ RSpec.describe Components::Controller do
 
   describe "#read" do
     it "returns the component with the given id if it exists" do
-      allow_any_instance_of(Components::Repository).to receive(:find).and_return({"id" => 1, "bike_id" => 1, "name" => "Component 1", "description" => "Description 1"})
+      allow_any_instance_of(Components::Repository).to receive(:find).and_return({"id" => 1, "name" => "Component 1", "description" => "Description 1"})
 
       response = controller.read(nil, 1)
 
-      expect(response).to eq([200, {"content-type" => "application/json"}, [{"id" => 1, "bike_id" => 1, "name" => "Component 1", "description" => "Description 1"}.to_json]])
+      expect(response).to eq([200, {"content-type" => "application/json"}, [{"id" => 1, "name" => "Component 1", "description" => "Description 1"}.to_json]])
     end
 
     it "returns 404 Not Found if the component does not exist" do
@@ -51,7 +51,7 @@ RSpec.describe Components::Controller do
     it "updates the component with the given id if it exists" do
       allow_any_instance_of(Components::Repository).to receive(:update).and_return(true)
 
-      request = double("request", body: double("body", read: {"id" => 1, "bike_id" => 2, "name" => "Updated Component", "description" => "Updated Description"}.to_json))
+      request = double("request", body: double("body", read: {"id" => 1, "name" => "Updated Component", "description" => "Updated Description"}.to_json))
 
       response = controller.update(request, 1)
 
@@ -60,7 +60,7 @@ RSpec.describe Components::Controller do
 
     it "returns 404 Not Found if the component does not exist" do
       allow_any_instance_of(Components::Repository).to receive(:update).and_raise(Components::RecordNotFound)
-      request = double("request", body: double("body", read: {"bike_id" => 2, "name" => "Updated Component", "description" => "Updated Description"}.to_json))
+      request = double("request", body: double("body", read: {"name" => "Updated Component", "description" => "Updated Description"}.to_json))
 
       response = controller.update(request, 1)
 

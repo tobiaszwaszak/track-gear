@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 5) do
+ActiveRecord::Schema[7.0].define(version: 7) do
   create_table "bikes", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -21,8 +21,18 @@ ActiveRecord::Schema[7.0].define(version: 5) do
     t.text "notes"
   end
 
-  create_table "components", force: :cascade do |t|
+  create_table "component_assignments", force: :cascade do |t|
     t.integer "bike_id"
+    t.integer "component_id"
+    t.date "start_date"
+    t.date "end_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bike_id"], name: "index_component_assignments_on_bike_id"
+    t.index ["component_id"], name: "index_component_assignments_on_component_id"
+  end
+
+  create_table "components", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -30,7 +40,8 @@ ActiveRecord::Schema[7.0].define(version: 5) do
     t.string "model"
     t.float "weight"
     t.text "notes"
-    t.index ["bike_id"], name: "index_components_on_bike_id"
   end
 
+  add_foreign_key "component_assignments", "bikes"
+  add_foreign_key "component_assignments", "components"
 end
