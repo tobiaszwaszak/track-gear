@@ -3,7 +3,7 @@ require "dry/validation"
 module Bikes
   class Contract < Dry::Validation::Contract
     params do
-      required(:name).value(:string)
+      required(:name).filled(:string)
       optional(:brand).value(:string)
       optional(:model).value(:string)
       optional(:weight).value(:float)
