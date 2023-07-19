@@ -16,6 +16,13 @@ RSpec.describe MyApp do
     end
   end
 
+  describe "POST /component_assignments" do
+    it "calls ComponentAssignments::App" do
+      expect_any_instance_of(ComponentAssignments::App).to receive(:call).and_call_original
+      post "/component_assignments", {bike_id: 1, component_id: 1}.to_json
+    end
+  end
+
   describe "GET /" do
     it "returns index.html content" do
       get "/"

@@ -26,8 +26,8 @@ RSpec.describe Components::Repository do
       bike = Db::Records::Bike.create(name: "Test Bike")
       component1 = Db::Records::Component.create(name: "Component 1")
       component2 = Db::Records::Component.create(name: "Component 2")
-      assignment1 = Db::Records::ComponentAssignment.create(bike: bike, component: component1, start_date: today - 2.days, end_date: today + 2.days)
-      assignment2 = Db::Records::ComponentAssignment.create(bike: bike, component: component2, start_date: today - 5.days, end_date: today - 3.days)
+      Db::Records::ComponentAssignment.create(bike: bike, component: component1, start_date: today - 2.days, end_date: today + 2.days)
+      Db::Records::ComponentAssignment.create(bike: bike, component: component2, start_date: today - 5.days, end_date: today - 3.days)
 
       components = repository.all_by_bikes(bike_id: bike.id)
 
@@ -37,7 +37,7 @@ RSpec.describe Components::Repository do
       component = components.first
       expect(component).to include(
         id: component1.id,
-        name: component1.name,
+        name: component1.name
       )
     end
 
@@ -53,7 +53,7 @@ RSpec.describe Components::Repository do
     it "returns an empty array when no valid assignments exist for the bike" do
       bike = Db::Records::Bike.create(name: "Test Bike")
       component1 = Db::Records::Component.create(name: "Component 1")
-      assignment1 = Db::Records::ComponentAssignment.create(bike: bike, component: component1, start_date: today - 5.days, end_date: today - 3.days)
+      Db::Records::ComponentAssignment.create(bike: bike, component: component1, start_date: today - 5.days, end_date: today - 3.days)
 
       components = repository.all_by_bikes(bike_id: bike.id)
 
