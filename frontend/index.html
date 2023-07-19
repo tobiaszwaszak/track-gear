@@ -61,7 +61,9 @@
               const componentSelect = document.getElementById('componentSelect');
               componentSelect.innerHTML = '';
 
-              componentsData.forEach(component => {
+              const availableComponents = componentsData.filter(component => component.bike_id === null);
+
+              availableComponents.forEach(component => {
                 const option = document.createElement('option');
                 option.value = component.id;
                 option.textContent = component.name;

@@ -77,8 +77,12 @@ module Components
         model: record.model,
         weight: record.weight,
         notes: record.notes,
-        bike_id: record&.bikes&.last&.id
+        bike_id: last_bike_id(record)
       )
+    end
+
+    def last_bike_id(record)
+      record.component_assignments.where(end_date: nil).last&.bike&.id
     end
   end
 end
