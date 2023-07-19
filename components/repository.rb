@@ -76,7 +76,8 @@ module Components
         brand: record.brand,
         model: record.model,
         weight: record.weight,
-        notes: record.notes
+        notes: record.notes,
+        bike_id: record&.bikes&.last&.id
       )
     end
   end
