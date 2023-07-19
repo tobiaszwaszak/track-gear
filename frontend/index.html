@@ -9,6 +9,7 @@
   <hr>
   <button onclick="viewAllComponents()">View All Components</button>
   <button onclick="createNewBike()">Add new bike</button>
+  <button onclick="createComponent()">Add new component</button>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -98,9 +99,6 @@
             backButton.textContent = 'Back to Bikes';
             backButton.onclick = fetchBikes;
 
-            createButton.textContent = 'Create Component';
-            createButton.onclick = () => createComponent(bikeId);
-
             bikesList.appendChild(backButton);
             bikesList.appendChild(createButton);
 
@@ -127,11 +125,11 @@
       };
 
       // Create a new component for a bike
-      window.createComponent = bikeId => {
+      window.createComponent = () => {
         const componentName = prompt('Enter the name for the new component:');
         const componentBrand = prompt('Enter the brand for the new component:');
         const componentModel = prompt('Enter the model for the new component:');
-        const componentWeight = prompt('Enter the weight for the new component:');
+        const componentWeight = parseFloat(prompt('Enter the weight for the new component:'));
         const componentNotes = prompt('Enter the notes for the new component:');
 
         if (componentName) {
@@ -141,7 +139,6 @@
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-              bike_id: bikeId,
               name: componentName,
               brand: componentBrand,
               model: componentModel,
@@ -151,7 +148,7 @@
           })
             .then(response => {
               if (response.ok) {
-                viewComponents(bikeId);
+                viewAllComponents();
               } else {
                 throw new Error('Failed to create component.');
               }
@@ -185,6 +182,7 @@
                 <p>Model: ${component.model}</p>
                 <p>Weight: ${component.weight}</p>
                 <p>Notes: ${component.notes}</p>
+                <hr>
               `;
               bikesList.appendChild(componentItem);
             });
@@ -200,7 +198,7 @@
         const bikeName = prompt('Enter the name for the new bike:');
         const bikeBrand = prompt('Enter the brand for the new bike:');
         const bikeModel = prompt('Enter the model for the new bike:');
-        const bikeWeight = prompt('Enter the weight for the new bike:');
+        const bikeWeight = parseFloat(prompt('Enter the weight for the new bike:'));
         const bikeNotes = prompt('Enter the notes for the new bike:');
         if (bikeName) {
           fetch('/bikes', {
