@@ -12,7 +12,7 @@ module ComponentAssignments
     end
 
     def create(bike_id:, component_id:)
-      Db::Records::ComponentAssignment.new(bike_id: bike_id, component_id: component_id, start_date: Date.today)
+      Db::Records::ComponentAssignment.create(bike_id: bike_id, component_id: component_id, start_date: Date.today)
     end
 
     def delete(id:)
