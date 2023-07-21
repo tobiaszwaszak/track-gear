@@ -12,12 +12,12 @@ module ComponentAssignments
     end
 
     def create(bike_id:, component_id:)
-      Db::Records::ComponentAssignment.create(bike_id: bike_id, component_id: component_id, start_date: Date.today)
+      Db::Records::ComponentAssignment.create(bike_id: bike_id, component_id: component_id, start_date: Time.now)
     end
 
-    def delete(id:)
-      assignment = Db::Records::ComponentAssignment.find(id)
-      assignment.update(end_date: Date.today)
+    def delete(bike_id:, component_id:)
+      assignment = Db::Records::ComponentAssignment.find_by(bike_id:, component_id:, end_date: nil)
+      assignment.update(end_date: Time.now)
     rescue ActiveRecord::RecordNotFound
       raise RecordNotFound.new
     end

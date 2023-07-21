@@ -23,8 +23,8 @@ module Components
         .joins(:component_assignments)
         .where(
           Db::Records::ComponentAssignment.arel_table[:bike_id].eq(bike_id)
-            .and(assignment_table[:start_date].lteq(Date.today))
-            .and(assignment_table[:end_date].gteq(Date.today).or(assignment_table[:end_date].eq(nil)))
+            .and(assignment_table[:start_date].lteq(Time.now))
+            .and(assignment_table[:end_date].gteq(Time.now).or(assignment_table[:end_date].eq(nil)))
         )
         .map { |record| to_model(record).to_h }
     end

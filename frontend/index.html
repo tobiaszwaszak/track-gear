@@ -119,11 +119,19 @@
       }
 
       // Function to delete a component assignment
-      function deleteComponentAssignment() {
-        const assignmentId = parseInt(prompt('Enter the ID of the component assignment to delete:'));
-        if (assignmentId) {
-          fetch(`/component_assignments/${assignmentId}`, {
-            method: 'DELETE'
+      function deleteComponentAssignment(component_id, bike_id) {
+        const selectedBikeId = bike_id;
+        const selectedComponentId = component_id;
+        if (selectedBikeId && selectedComponentId) {
+          fetch(`/component_assignments`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              bike_id: parseInt(selectedBikeId),
+              component_id: parseInt(selectedComponentId)
+            })
           })
             .then(response => {
               if (response.ok) {
@@ -134,7 +142,7 @@
             })
             .catch(error => {
               console.error('Error:', error);
-              bikesList.textContent = 'Error deleting component assignment.';
+              bikesList.textContent = 'Error delete component assignment.';
             });
         }
       }
@@ -242,7 +250,7 @@
 
                 <button onclick="updateComponent(${component.id})">Update</button>
                 <button onclick="deleteComponent(${component.id})">Delete</button>
-                <button onclick="deleteComponentAssignment()">Delete Component Assignment</button>
+                <button onclick="deleteComponentAssignment(${component.id}, ${component.bike_id})">Delete Component Assignment</button>
 
               `;
               bikesList.appendChild(componentItem);

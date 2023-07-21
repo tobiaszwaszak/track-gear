@@ -3,10 +3,9 @@ require_relative "./../../component_assignments/controller"
 
 RSpec.describe ComponentAssignments::Controller do
   let(:controller) { ComponentAssignments::Controller.new }
+  let(:request) { instance_double("Rack::Request", body: StringIO.new) }
 
   describe "#create" do
-    let(:request) { instance_double("Rack::Request", body: StringIO.new) }
-
     it "creates a new component assignment" do
       request_body = {"bike_id" => 1, "component_id" => 1}
       allow(request.body).to receive(:read).and_return(request_body.to_json)
@@ -46,40 +45,54 @@ RSpec.describe ComponentAssignments::Controller do
   end
 
   describe "#delete" do
-    let(:request) { instance_double("Rack::Request") }
-    let(:assignment_id) { 1 }
+    it "deletes a component assignment" do
+      request_body = { "bike_id" => 1, "component_id" => 1 }
+      allow(request.body).to receive(:read).and_return(request_body.to_json)
 
-    it "deletes an existing component assignment" do
-      # Stub the Repository delete method to return true (success)
       allow_any_instance_of(ComponentAssignments::Repository).to receive(:delete).and_return(true)
 
-      response = controller.delete(request, assignment_id)
+      response = controller.delete(request)
 
-      expect(response[0]).to eq(200) # Status code 200 (OK)
+      expect(response[0]).to eq(200)
       expect(response[1]["content-type"]).to eq("text/plain")
-      expect(response[2]).to eq(["Delete with ID #{assignment_id}"])
+      expect(response[2]).to eq(["Delete assignment"])
     end
 
-    it "returns an error when Repository delete method raises RecordNotFound" do
-      # Stub the Repository delete method to raise RecordNotFound
+    it "returns 404 when the record is not found" do
+      request_body = { "bike_id" => 1, "component_id" => 1 }
+      allow(request.body).to receive(:read).and_return(request_body.to_json)
+
       allow_any_instance_of(ComponentAssignments::Repository).to receive(:delete).and_raise(ComponentAssignments::RecordNotFound)
 
-      response = controller.delete(request, assignment_id)
+      response = controller.delete(request)
 
-      expect(response[0]).to eq(404) # Status code 404 (Not Found)
+      expect(response[0]).to eq(404)
       expect(response[1]["content-type"]).to eq("text/plain")
       expect(response[2]).to eq(["Not Found"])
     end
 
     it "returns an error when Repository delete method fails" do
-      # Stub the Repository delete method to return false (failure)
+      request_body = { "bike_id" => 1, "component_id" => 1 }
+      allow(request.body).to receive(:read).and_return(request_body.to_json)
+
       allow_any_instance_of(ComponentAssignments::Repository).to receive(:delete).and_return(false)
 
-      response = controller.delete(request, assignment_id)
+      response = controller.delete(request)
 
-      expect(response[0]).to eq(500) # Status code 500 (Internal Server Error)
+      expect(response[0]).to eq(500)
       expect(response[1]["content-type"]).to eq("text/plain")
       expect(response[2]).to eq(["Error deleting component assignments"])
+    end
+
+    it "returns an error when contract validation fails" do
+      request_body = { "bike_id" => 1, "component_id" => nil }
+      allow(request.body).to receive(:read).and_return(request_body.to_json)
+
+      response = controller.delete(request)
+
+      expect(response[0]).to eq(500)
+      expect(response[1]["content-type"]).to eq("text/plain")
+      expect(response[2]).to eq(["Error creating component"])
     end
   end
 end

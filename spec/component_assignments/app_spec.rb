@@ -26,14 +26,14 @@ RSpec.describe ComponentAssignments::App do
     end
   end
 
-  describe "DELETE /component_assignments/:id" do
+  describe "DELETE /component_assignments" do
     it "deletes the specified component assignment" do
-      allow_any_instance_of(ComponentAssignments::Controller).to receive(:delete).and_return([200, {}, ["Delete with ID 1"]])
+      allow_any_instance_of(ComponentAssignments::Controller).to receive(:delete).and_return([200, {}, ["Delete assignment"]])
 
-      delete "/component_assignments/1"
+      delete "/component_assignments", {}.to_json, "CONTENT_TYPE" => "application/json"
 
       expect(last_response.status).to eq(200)
-      expect(last_response.body).to eq("Delete with ID 1")
+      expect(last_response.body).to eq("Delete assignment")
     end
   end
 

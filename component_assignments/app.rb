@@ -9,14 +9,8 @@ module ComponentAssignments
         case request.request_method
         when "POST"
           Controller.new.create(request)
-        else
-          [405, {"Content-Type" => "text/plain"}, ["Method Not Allowed"]]
-        end
-      when %r{/component_assignments/(\d+)}
-        assignment_id = $1.to_i
-        case request.request_method
         when "DELETE"
-          Controller.new.delete(request, assignment_id)
+          Controller.new.delete(request)
         else
           [405, {"Content-Type" => "text/plain"}, ["Method Not Allowed"]]
         end
