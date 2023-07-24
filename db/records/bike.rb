@@ -3,7 +3,8 @@ require "active_record"
 module Db
   module Records
     class Bike < ActiveRecord::Base
-      has_many :components
+      has_many :component_assignments, class_name: "Db::Records::ComponentAssignment"
+      has_many :components, through: :component_assignments
     end
   end
 end

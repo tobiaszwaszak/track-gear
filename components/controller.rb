@@ -8,7 +8,7 @@ module Components
       bike_id = request.params["bike_id"]
 
       if bike_id
-        filtered_components = Components::Repository.new.all_by(bike_id: bike_id)
+        filtered_components = Components::Repository.new.all_by_bikes(bike_id: bike_id)
         [200, {"content-type" => "application/json"}, [filtered_components.to_json]]
       else
         components = Components::Repository.new.all
@@ -22,7 +22,6 @@ module Components
         [500, {"content-type" => "text/plain"}, ["Error creating component"]]
       else
         component = Components::Repository.new.create(
-          bike_id: component_data["bike_id"],
           name: component_data["name"],
           brand: component_data["brand"],
           model: component_data["model"],

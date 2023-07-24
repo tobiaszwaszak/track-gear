@@ -25,8 +25,8 @@ RSpec.describe Components::Contract do
       end
     end
 
-    context "when optional attribute is not an integer" do
-      let(:invalid_attributes) { {name: "Pedal", description: "Premium pedal", bike_id: "ABC"} }
+    context "when optional attribute is not a float" do
+      let(:invalid_attributes) { {name: "Pedal", description: "Premium pedal", weight: "ABC"} }
 
       it "fails validation" do
         expect(contract.call(invalid_attributes)).to be_failure
@@ -34,7 +34,7 @@ RSpec.describe Components::Contract do
 
       it "includes an error message for the invalid attribute" do
         result = contract.call(invalid_attributes)
-        expect(result.errors.to_h).to include(bike_id: ["must be an integer"])
+        expect(result.errors.to_h).to include(weight: ["must be a float"])
       end
     end
   end

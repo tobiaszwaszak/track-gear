@@ -4,11 +4,10 @@ module Components
   class Contract < Dry::Validation::Contract
     params do
       required(:name).filled(:string)
-      optional(:bike_id).value(:integer)
-      optional(:brand).value(:string)
-      optional(:model).value(:string)
-      optional(:weight).value(:float)
-      optional(:notes).value(:string)
+      optional(:brand).maybe(:string)
+      optional(:model).maybe(:string)
+      optional(:weight).maybe(:float)
+      optional(:notes).maybe(:string)
     end
   end
 end

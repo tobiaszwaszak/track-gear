@@ -9,8 +9,145 @@
   <hr>
   <button onclick="viewAllComponents()">View All Components</button>
   <button onclick="createNewBike()">Add new bike</button>
+  <button onclick="createComponent()">Add new component</button>
+  <button onclick="toggleComponentAssignmentForm()">Manage Component Assignments</button>
+
+  <!-- Form for creating and deleting component assignments -->
+  <div id="componentAssignmentForm" style="display: none;">
+    <label for="bikeSelect">Select a Bike:</label>
+    <select id="bikeSelect">
+      <!-- The options will be dynamically added later -->
+    </select>
+
+    <label for="componentSelect">Select a Component:</label>
+    <select id="componentSelect">
+      <!-- The options will be dynamically added later -->
+    </select>
+
+    <button onclick="createComponentAssignment()">Create Component Assignment</button>
+  </div>
 
   <script>
+      function toggleComponentAssignmentForm() {
+        const componentAssignmentForm = document.getElementById('componentAssignmentForm');
+        if (componentAssignmentForm.style.display === 'none') {
+          showComponentAssignmentForm();
+        } else {
+          hideComponentAssignmentForm();
+        }
+      }
+
+      // Function to show the component assignment form
+      function showComponentAssignmentForm() {
+        Promise.all([fetch('/bikes'), fetch('/components')])
+          .then(responses => Promise.all(responses.map(response => response.json())))
+          .then(([bikesData, componentsData]) => {
+            if (bikesData.length === 0) {
+              alert('No bikes available. Please create a bike first.');
+            } else {
+              const componentAssignmentForm = document.getElementById('componentAssignmentForm');
+              componentAssignmentForm.style.display = 'block';
+
+              const bikeSelect = document.getElementById('bikeSelect');
+              bikeSelect.innerHTML = '';
+
+              bikesData.forEach(bike => {
+                const option = document.createElement('option');
+                option.value = bike.id;
+                option.textContent = bike.name;
+                bikeSelect.appendChild(option);
+              });
+
+              const componentSelect = document.getElementById('componentSelect');
+              componentSelect.innerHTML = '';
+
+              const availableComponents = componentsData.filter(component => component.bike_id === null);
+
+              availableComponents.forEach(component => {
+                const option = document.createElement('option');
+                option.value = component.id;
+                option.textContent = component.name;
+                componentSelect.appendChild(option);
+              });
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            bikesList.textContent = 'Error retrieving data.';
+          });
+      }
+
+      // Function to hide the component assignment form
+      function hideComponentAssignmentForm() {
+        const componentAssignmentForm = document.getElementById('componentAssignmentForm');
+        componentAssignmentForm.style.display = 'none';
+      }
+
+      // Function to create a new component assignment
+      function createComponentAssignment() {
+        const bikeSelect = document.getElementById('bikeSelect');
+        const componentSelect = document.getElementById('componentSelect');
+
+        const selectedBikeId = bikeSelect.value;
+        const selectedComponentId = componentSelect.value;
+
+        if (selectedBikeId && selectedComponentId) {
+          fetch(`/component_assignments`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              bike_id: parseInt(selectedBikeId),
+              component_id: parseInt(selectedComponentId)
+            })
+          })
+            .then(response => {
+              if (response.ok) {
+                viewAllComponents();
+              } else {
+                throw new Error('Failed to create component assignment.');
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error);
+              bikesList.textContent = 'Error creating component assignment.';
+            });
+        } else {
+          alert('Please select a bike and a component before creating the assignment.');
+        }
+      }
+
+      // Function to delete a component assignment
+      function deleteComponentAssignment(component_id, bike_id) {
+        const selectedBikeId = bike_id;
+        const selectedComponentId = component_id;
+        if (selectedBikeId && selectedComponentId) {
+          fetch(`/component_assignments`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              bike_id: parseInt(selectedBikeId),
+              component_id: parseInt(selectedComponentId)
+            })
+          })
+            .then(response => {
+              if (response.ok) {
+                viewAllComponents();
+              } else {
+                throw new Error('Failed to delete component assignment.');
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error);
+              bikesList.textContent = 'Error delete component assignment.';
+            });
+        }
+      }
+
+
     document.addEventListener('DOMContentLoaded', () => {
       const bikesList = document.getElementById('bikesList');
 
@@ -98,9 +235,6 @@
             backButton.textContent = 'Back to Bikes';
             backButton.onclick = fetchBikes;
 
-            createButton.textContent = 'Create Component';
-            createButton.onclick = () => createComponent(bikeId);
-
             bikesList.appendChild(backButton);
             bikesList.appendChild(createButton);
 
@@ -116,6 +250,8 @@
 
                 <button onclick="updateComponent(${component.id})">Update</button>
                 <button onclick="deleteComponent(${component.id})">Delete</button>
+                <button onclick="deleteComponentAssignment(${component.id}, ${component.bike_id})">Delete Component Assignment</button>
+
               `;
               bikesList.appendChild(componentItem);
             });
@@ -127,11 +263,11 @@
       };
 
       // Create a new component for a bike
-      window.createComponent = bikeId => {
+      window.createComponent = () => {
         const componentName = prompt('Enter the name for the new component:');
         const componentBrand = prompt('Enter the brand for the new component:');
         const componentModel = prompt('Enter the model for the new component:');
-        const componentWeight = prompt('Enter the weight for the new component:');
+        const componentWeight = parseFloat(prompt('Enter the weight for the new component:'));
         const componentNotes = prompt('Enter the notes for the new component:');
 
         if (componentName) {
@@ -141,7 +277,6 @@
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-              bike_id: bikeId,
               name: componentName,
               brand: componentBrand,
               model: componentModel,
@@ -151,7 +286,7 @@
           })
             .then(response => {
               if (response.ok) {
-                viewComponents(bikeId);
+                viewAllComponents();
               } else {
                 throw new Error('Failed to create component.');
               }
@@ -185,6 +320,7 @@
                 <p>Model: ${component.model}</p>
                 <p>Weight: ${component.weight}</p>
                 <p>Notes: ${component.notes}</p>
+                <hr>
               `;
               bikesList.appendChild(componentItem);
             });
@@ -200,7 +336,7 @@
         const bikeName = prompt('Enter the name for the new bike:');
         const bikeBrand = prompt('Enter the brand for the new bike:');
         const bikeModel = prompt('Enter the model for the new bike:');
-        const bikeWeight = prompt('Enter the weight for the new bike:');
+        const bikeWeight = parseFloat(prompt('Enter the weight for the new bike:'));
         const bikeNotes = prompt('Enter the notes for the new bike:');
         if (bikeName) {
           fetch('/bikes', {
