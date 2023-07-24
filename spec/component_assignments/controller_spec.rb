@@ -46,7 +46,7 @@ RSpec.describe ComponentAssignments::Controller do
 
   describe "#delete" do
     it "deletes a component assignment" do
-      request_body = { "bike_id" => 1, "component_id" => 1 }
+      request_body = {"bike_id" => 1, "component_id" => 1}
       allow(request.body).to receive(:read).and_return(request_body.to_json)
 
       allow_any_instance_of(ComponentAssignments::Repository).to receive(:delete).and_return(true)
@@ -59,7 +59,7 @@ RSpec.describe ComponentAssignments::Controller do
     end
 
     it "returns 404 when the record is not found" do
-      request_body = { "bike_id" => 1, "component_id" => 1 }
+      request_body = {"bike_id" => 1, "component_id" => 1}
       allow(request.body).to receive(:read).and_return(request_body.to_json)
 
       allow_any_instance_of(ComponentAssignments::Repository).to receive(:delete).and_raise(ComponentAssignments::RecordNotFound)
@@ -72,7 +72,7 @@ RSpec.describe ComponentAssignments::Controller do
     end
 
     it "returns an error when Repository delete method fails" do
-      request_body = { "bike_id" => 1, "component_id" => 1 }
+      request_body = {"bike_id" => 1, "component_id" => 1}
       allow(request.body).to receive(:read).and_return(request_body.to_json)
 
       allow_any_instance_of(ComponentAssignments::Repository).to receive(:delete).and_return(false)
@@ -85,7 +85,7 @@ RSpec.describe ComponentAssignments::Controller do
     end
 
     it "returns an error when contract validation fails" do
-      request_body = { "bike_id" => 1, "component_id" => nil }
+      request_body = {"bike_id" => 1, "component_id" => nil}
       allow(request.body).to receive(:read).and_return(request_body.to_json)
 
       response = controller.delete(request)
