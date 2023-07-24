@@ -23,8 +23,8 @@ module Components
         .joins(:component_assignments)
         .where(
           Db::Records::ComponentAssignment.arel_table[:bike_id].eq(bike_id)
-            .and(assignment_table[:start_date].lteq(Time.now))
-            .and(assignment_table[:end_date].gteq(Time.now).or(assignment_table[:end_date].eq(nil)))
+            .and(assignment_table[:started_at].lteq(Time.now))
+            .and(assignment_table[:ended_at].gteq(Time.now).or(assignment_table[:ended_at].eq(nil)))
         )
         .map { |record| to_model(record).to_h }
     end
@@ -82,7 +82,7 @@ module Components
     end
 
     def last_bike_id(record)
-      record.component_assignments.where(end_date: nil).last&.bike&.id
+      record.component_assignments.where(ended_at: nil).last&.bike&.id
     end
   end
 end

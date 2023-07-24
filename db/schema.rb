@@ -24,8 +24,8 @@ ActiveRecord::Schema[7.0].define(version: 7) do
   create_table "component_assignments", force: :cascade do |t|
     t.integer "bike_id"
     t.integer "component_id"
-    t.datetime "start_date", precision: nil
-    t.datetime "end_date", precision: nil
+    t.datetime "started_at", precision: nil
+    t.datetime "ended_at", precision: nil
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["bike_id"], name: "index_component_assignments_on_bike_id"

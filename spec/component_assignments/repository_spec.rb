@@ -10,24 +10,24 @@ RSpec.describe ComponentAssignments::Repository do
 
       expect(assignment.bike_id).to eq(1)
       expect(assignment.component_id).to eq(2)
-      expect(assignment.start_date).to eq(Date.today)
-      expect(assignment.end_date).to be_nil
+      expect(assignment.started_at.strftime("%F")).to eq(Time.now.strftime("%F"))
+      expect(assignment.ended_at).to be_nil
     end
   end
 
   describe "#delete" do
     it "deletes an existing component assignment" do
-      assignment = Db::Records::ComponentAssignment.create(bike_id: 1, component_id: 1, start_date: Date.today)
+      Db::Records::ComponentAssignment.delete_all
+      assignment = Db::Records::ComponentAssignment.create(bike_id: 1, component_id: 1)
 
-      repository.delete(id: assignment.id)
+      repository.delete(bike_id: 1, component_id: 1)
 
       assignment.reload
-      expect(assignment.end_date).to eq(Date.today)
+      expect(assignment.ended_at.strftime("%F")).to eq(Time.now.strftime("%F"))
     end
 
     it "raises RecordNotFound error when trying to delete non-existing assignment" do
-      non_existing_id = 999
-      expect { repository.delete(id: non_existing_id) }.to raise_error(ComponentAssignments::RecordNotFound)
+      expect { repository.delete(bike_id: 999, component_id: 999) }.to raise_error(ComponentAssignments::RecordNotFound)
     end
   end
 end
