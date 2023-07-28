@@ -3,6 +3,7 @@ require "json"
 require "./bikes/app"
 require "./components/app"
 require "./component_assignments/app"
+require "./accounts/app"
 
 class MyApp
   def call(env)
@@ -13,6 +14,8 @@ class MyApp
       Components::App.new.call(env)
     elsif req.path.start_with?("/component_assignments")
       ComponentAssignments::App.new.call(env)
+    elsif req.path.start_with?("/accounts")
+      Accounts::App.new.call(env)
     else
       case req.path
       when "/"
