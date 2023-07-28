@@ -12,7 +12,7 @@ RSpec.describe MyApp do
   describe "GET /bikes" do
     it "calls Bikes::App" do
       expect_any_instance_of(Bikes::App).to receive(:call).and_call_original
-      get "/bikes"
+      get "/bikes", {}
     end
   end
 
@@ -53,7 +53,7 @@ RSpec.describe MyApp do
 
   describe "GET unknown path" do
     it "returns 404 Not Found" do
-      get "/unknown"
+      get "/unknown", {}
       expect(last_response.status).to eq(404)
       expect(last_response.header["Content-Type"]).to eq("text/plain")
       expect(last_response.body).to eq("Not Found")
