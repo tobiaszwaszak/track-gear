@@ -4,7 +4,7 @@ require "./bikes/app"
 require "./components/app"
 require "./component_assignments/app"
 require "./accounts/app"
-
+require "./auth/app"
 class MyApp
   def call(env)
     req = Rack::Request.new(env)
@@ -16,6 +16,8 @@ class MyApp
       ComponentAssignments::App.new.call(env)
     elsif req.path.start_with?("/accounts")
       Accounts::App.new.call(env)
+    elsif req.path.start_with?("/auth")
+      Auth::App.new.call(env)
     else
       case req.path
       when "/"

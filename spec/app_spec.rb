@@ -9,20 +9,33 @@ RSpec.describe MyApp do
     MyApp.new
   end
 
+  def generate_token(account_id)
+    payload = { account_id: account_id }
+    Auth::JsonWebToken.encode(payload)
+  end
+  let(:account_id) { 1234 }
+
+  before do
+    allow_any_instance_of(Auth::VerifyAndSetAccount).to receive(:call).and_return(account_id)
+  end
+
   describe "GET /bikes" do
     it "calls Bikes::App" do
+      token = generate_token(account_id)
+
       expect_any_instance_of(Bikes::App).to receive(:call).and_call_original
-      get "/bikes"
+      get "/bikes", {}, { "HTTP_AUTHORIZATION" => "Bearer #{token}" }
     end
   end
 
   describe "POST /component_assignments" do
     it "calls ComponentAssignments::App" do
+      token = generate_token(account_id)
       bike = Db::Records::Bike.create(name: "foo")
       component = Db::Records::Component.create(name: "bar")
 
       expect_any_instance_of(ComponentAssignments::App).to receive(:call).and_call_original
-      post "/component_assignments", {bike_id: bike.id, component_id: component.id}.to_json
+      post "/component_assignments", {bike_id: bike.id, component_id: component.id}.to_json, { "HTTP_AUTHORIZATION" => "Bearer #{token}" }
     end
   end
 
@@ -53,7 +66,9 @@ RSpec.describe MyApp do
 
   describe "GET unknown path" do
     it "returns 404 Not Found" do
-      get "/unknown"
+      token = generate_token(account_id)
+
+      get "/unknown", {}, { "HTTP_AUTHORIZATION" => "Bearer #{token}" }
       expect(last_response.status).to eq(404)
       expect(last_response.header["Content-Type"]).to eq("text/plain")
       expect(last_response.body).to eq("Not Found")
