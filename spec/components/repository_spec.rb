@@ -3,6 +3,7 @@ require_relative "../../db/records/component"
 require_relative "../../db/records/component_assignment"
 
 require_relative "../../bikes/repository"
+require_relative "../../components/repository"
 
 RSpec.describe Components::Repository do
   let(:repository) { Components::Repository.new }

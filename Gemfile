@@ -22,4 +22,4 @@ gem "rake"
 gem "dry-validation"
 
 gem "bcrypt"
-gem 'jwt'
+gem "jwt"

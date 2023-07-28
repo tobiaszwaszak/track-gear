@@ -7,10 +7,6 @@ module Bikes
   end
 
   class Repository
-    def initialize
-      setup_database
-    end
-
     def all
       Db::Records::Bike.all.map { |record| to_model(record).to_h }
     end
@@ -43,11 +39,6 @@ module Bikes
     end
 
     private
-
-    def setup_database
-      ActiveRecord::Base.configurations = YAML.load_file("db/configuration.yml")
-      ActiveRecord::Base.establish_connection(ENV["RACK_ENV"].to_sym)
-    end
 
     def to_model(record)
       Bikes::Model.new(

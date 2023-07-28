@@ -11,7 +11,7 @@ module Auth
         time = Time.now + 86400
         response = {
           token: token,
-          exp: time.strftime("%m-%d-%Y %H:%M"),
+          exp: time.strftime("%m-%d-%Y %H:%M")
         }
         [201, {"content-type" => "text/plain"}, [response.to_json]]
       else

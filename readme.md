@@ -8,13 +8,14 @@ With the track-gear, you can easily log and monitor the status of your bike's co
 # Tech stack
 - Ruby 3.2.2
 - Rack 3.0
-- sqlite 3.x
+- sqlite 3.x (with multitenancy)
 - plain HTML and JS for frontend part
 
 # Installation and Usage Instructions
 - Clone the repository to your local machine.
 - Install the required dependencies using `bundle install`.
 - Setup database with `rake db:create` & `rake db:migrate`
+- Run tenant's migrations `RACK_ENV=development ruby ./db/run_tenants_migrations.rb`
 - Start the application with the command `rackup`.
 - Open your web browser and visit http://localhost:9292 to access the app.
 
@@ -29,4 +30,4 @@ This command will trigger the execution of both unit tests and integration tests
 The track-gear is released under the MIT License. Please review the license file for more information.
 
 # Contact Information:
-For any questions, feedback, or support, feel free to reach out to our team at tobiaszwaszak@gmail.com.
+For any questions, feedback, or support, feel free to reach out at tobiaszwaszak@gmail.com.
