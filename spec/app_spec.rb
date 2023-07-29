@@ -26,6 +26,13 @@ RSpec.describe MyApp do
     end
   end
 
+  describe "GET /accounts/1" do
+    it "calls Accounts::App" do
+      expect_any_instance_of(Accounts::App).to receive(:call).and_call_original
+      get "/accounts/1"
+    end
+  end
+
   describe "GET /" do
     it "returns index.html content" do
       get "/"
