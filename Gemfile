@@ -20,3 +20,5 @@ gem "activerecord"
 gem "rake"
 
 gem "dry-validation"
+
+gem "bcrypt"
