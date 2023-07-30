@@ -1,7 +1,10 @@
 require_relative "app"
+require_relative "auth_middleware"
+
 require "dotenv"
 
-Dotenv.load(".env.development") if ENV["RACKUP_ENV"] == "development"
-Dotenv.load(".env.test") if ENV["RACKUP_ENV"] == "test"
+Dotenv.load(".env.development") if ENV["RACK_ENV"] == "development"
+Dotenv.load(".env.test") if ENV["RACK_ENV"] == "test"
 
+use AuthMiddleware
 run MyApp.new
