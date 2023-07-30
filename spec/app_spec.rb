@@ -9,6 +9,15 @@ RSpec.describe MyApp do
     MyApp.new
   end
 
+  before(:all) do
+    ActiveRecord::Base.configurations = YAML.load_file("db/configuration.yml")
+    ActiveRecord::Base.establish_connection(ENV["RACK_ENV"].to_sym)
+  end
+
+  after(:all) do
+    ActiveRecord::Base.remove_connection
+  end
+
   describe "GET /bikes" do
     it "calls Bikes::App" do
       expect_any_instance_of(Bikes::App).to receive(:call).and_call_original

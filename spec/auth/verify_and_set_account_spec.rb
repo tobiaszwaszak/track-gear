@@ -14,13 +14,13 @@ RSpec.describe Auth::VerifyAndSetAccount do
     ActiveRecord::Base.remove_connection
   end
 
-  let(:account) { Db::Records::Account.create(email: "foo@bar.dev", password: "password")}
+  let(:account) { Db::Records::Account.create(email: "foo@bar.dev", password: "password") }
   let(:valid_token) { Auth::JsonWebToken.encode(account_id: account.id) }
   let(:invalid_token) { "invalid_token" }
 
   describe "#call" do
     context "with a valid authorization header" do
-      let(:env) { { "HTTP_AUTHORIZATION" => "Bearer #{valid_token}" } }
+      let(:env) { {"HTTP_AUTHORIZATION" => "Bearer #{valid_token}"} }
 
       it "verifies and sets the account_id in the env" do
         expect_any_instance_of(Auth::Repository).to receive(:find).with(id: account.id)
@@ -30,7 +30,7 @@ RSpec.describe Auth::VerifyAndSetAccount do
     end
 
     context "with an invalid authorization header" do
-      let(:env) { { "HTTP_AUTHORIZATION" => "Bearer #{invalid_token}" } }
+      let(:env) { {"HTTP_AUTHORIZATION" => "Bearer #{invalid_token}"} }
 
       it "raises Auth::Unauthorized" do
         expect { subject.call(env) }.to raise_error(Auth::Unauthorized)
@@ -46,7 +46,7 @@ RSpec.describe Auth::VerifyAndSetAccount do
     end
 
     context "with JWT decode error" do
-      let(:env) { { "HTTP_AUTHORIZATION" => "Bearer invalid_token" } }
+      let(:env) { {"HTTP_AUTHORIZATION" => "Bearer invalid_token"} }
 
       before do
         allow(Auth::JsonWebToken).to receive(:decode).and_raise(JWT::DecodeError)
@@ -58,7 +58,7 @@ RSpec.describe Auth::VerifyAndSetAccount do
     end
 
     context "with Auth::RecordNotFound" do
-      let(:env) { { "HTTP_AUTHORIZATION" => "Bearer #{valid_token}" } }
+      let(:env) { {"HTTP_AUTHORIZATION" => "Bearer #{valid_token}"} }
 
       before do
         allow_any_instance_of(Auth::Repository).to receive(:find).and_raise(Auth::RecordNotFound)

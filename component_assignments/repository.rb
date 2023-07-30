@@ -6,10 +6,6 @@ module ComponentAssignments
   end
 
   class Repository
-    def initialize
-      setup_database
-    end
-
     def create(bike_id:, component_id:)
       Db::Records::ComponentAssignment.create(bike_id: bike_id, component_id: component_id, started_at: Time.now)
     end
@@ -19,13 +15,6 @@ module ComponentAssignments
       assignment.update(ended_at: Time.now)
     rescue ActiveRecord::RecordNotFound
       raise RecordNotFound.new
-    end
-
-    private
-
-    def setup_database
-      ActiveRecord::Base.configurations = YAML.load_file("db/configuration.yml")
-      ActiveRecord::Base.establish_connection(ENV["RACK_ENV"].to_sym)
     end
   end
 end

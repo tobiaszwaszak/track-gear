@@ -8,10 +8,6 @@ module Components
   end
 
   class Repository
-    def initialize
-      setup_database
-    end
-
     def all
       Db::Records::Component.all.map { |record| to_model(record).to_h }
     end
@@ -63,11 +59,6 @@ module Components
     end
 
     private
-
-    def setup_database
-      ActiveRecord::Base.configurations = YAML.load_file("db/configuration.yml")
-      ActiveRecord::Base.establish_connection(ENV["RACK_ENV"].to_sym)
-    end
 
     def to_model(record)
       Components::Model.new(

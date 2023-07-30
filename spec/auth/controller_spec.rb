@@ -10,7 +10,7 @@ RSpec.describe Auth::Controller do
 
     before do
       allow(Auth::Repository).to receive(:new).and_return(repository)
-      allow(Auth::JsonWebToken).to receive(:encode).with({ account_id: valid_account.id }).and_return(valid_token)
+      allow(Auth::JsonWebToken).to receive(:encode).with({account_id: valid_account.id}).and_return(valid_token)
     end
 
     context "when the account exists and authentication succeeds" do
@@ -22,8 +22,8 @@ RSpec.describe Auth::Controller do
 
         expect(response).to eq([
           201,
-          { "content-type" => "text/plain" },
-          [{ token: valid_token, exp: (Time.now + 86400).strftime("%m-%d-%Y %H:%M") }.to_json],
+          {"content-type" => "text/plain"},
+          [{token: valid_token, exp: (Time.now + 86400).strftime("%m-%d-%Y %H:%M")}.to_json]
         ])
       end
     end
@@ -35,7 +35,7 @@ RSpec.describe Auth::Controller do
       it "returns an unauthorized response" do
         response = subject.create(request)
 
-        expect(response).to eq([401, { "content-type" => "text/plain" }, ["Unauthorized"]])
+        expect(response).to eq([401, {"content-type" => "text/plain"}, ["Unauthorized"]])
       end
     end
 
@@ -50,7 +50,7 @@ RSpec.describe Auth::Controller do
       it "returns an unauthorized response" do
         response = subject.create(request)
 
-        expect(response).to eq([401, { "content-type" => "text/plain" }, ["Unauthorized"]])
+        expect(response).to eq([401, {"content-type" => "text/plain"}, ["Unauthorized"]])
       end
     end
   end

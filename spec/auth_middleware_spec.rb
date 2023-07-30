@@ -14,7 +14,7 @@ RSpec.describe AuthMiddleware do
   def app
     Rack::Builder.new do
       use AuthMiddleware
-      run ->(env) { [200, { "Content-Type" => "text/plain" }, ["Hello, World!"]] }
+      run ->(env) { [200, {"Content-Type" => "text/plain"}, ["Hello, World!"]] }
     end
   end
 
