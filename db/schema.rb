@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 8) do
+ActiveRecord::Schema[7.0].define(version: 9) do
   create_table "accounts", force: :cascade do |t|
     t.string "email", null: false
     t.string "password_digest", null: false
@@ -47,6 +47,13 @@ ActiveRecord::Schema[7.0].define(version: 8) do
     t.string "model"
     t.float "weight"
     t.text "notes"
+  end
+
+  create_table "strava_credentials", force: :cascade do |t|
+    t.string "access_token"
+    t.string "refresh_token"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_foreign_key "component_assignments", "bikes"

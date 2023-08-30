@@ -11,6 +11,7 @@ class AuthMiddleware
     return @app.call(env) if req.path == "/environment"
     return @app.call(env) if req.path.start_with?("/auth")
     return @app.call(env) if req.path.start_with?("/accounts") && req.request_method == "POST"
+    return @app.call(env) if req.path.start_with?("/strava_integration/callback")
 
     env["account_id"] = Auth::VerifyAndSetAccount.new.call(env)
 

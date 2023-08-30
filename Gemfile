@@ -23,3 +23,5 @@ gem "dry-validation"
 
 gem "bcrypt"
 gem "jwt"
+
+gem "strava-ruby-client"
