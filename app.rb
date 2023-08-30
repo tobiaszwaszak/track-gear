@@ -5,6 +5,7 @@ require "./components/app"
 require "./component_assignments/app"
 require "./accounts/app"
 require "./auth/app"
+require "./strava_integration/app"
 class MyApp
   def call(env)
     req = Rack::Request.new(env)
@@ -18,6 +19,8 @@ class MyApp
       Accounts::App.new.call(env)
     elsif req.path.start_with?("/auth")
       Auth::App.new.call(env)
+    elsif req.path.start_with?("/strava_integration")
+      StravaIntegration::App.new.call(env)
     else
       case req.path
       when "/"
