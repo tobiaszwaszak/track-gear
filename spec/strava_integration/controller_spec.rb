@@ -58,4 +58,27 @@ describe StravaIntegration::Controller do
       controller.send(:establish_db_connection, 123)
     end
   end
+
+  describe "#get_activities" do
+    it "returns an empty array when there are no activities" do
+      allow(controller).to receive(:update_tokens)
+      allow(controller).to receive(:fetch_all_activities).and_return([])
+
+      response = controller.get_activities({})
+
+      expect(response[0]).to eq(200)
+      expect(JSON.parse(response[2].first)).to eq([])
+    end
+
+    it "returns activities when there are activities" do
+      allow(controller).to receive(:update_tokens)
+      sample_activities = [{"id" => 1, "name" => "Activity 1"}, {"id" => 2, "name" => "Activity 2"}]
+      allow(controller).to receive(:fetch_all_activities).and_return(sample_activities)
+
+      response = controller.get_activities({})
+
+      expect(response[0]).to eq(200)
+      expect(JSON.parse(response[2].first)).to eq(sample_activities)
+    end
+  end
 end
