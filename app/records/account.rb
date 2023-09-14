@@ -1,8 +1,8 @@
 require "active_record"
-
-module Db
+require "bcrypt"
+module App
   module Records
-    class User < ActiveRecord::Base
+    class Account < ActiveRecord::Base
       has_secure_password
     end
   end

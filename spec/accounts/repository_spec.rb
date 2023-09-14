@@ -1,5 +1,5 @@
 require_relative "../../accounts/repository"
-require_relative "../../db/records/account"
+require_relative "../../app/records/account"
 require "active_record"
 
 RSpec.describe Accounts::Repository do
@@ -14,7 +14,7 @@ RSpec.describe Accounts::Repository do
     ActiveRecord::Base.remove_connection
   end
 
-  before { Db::Records::Account.delete_all }
+  before { ::App::Records::Account.delete_all }
 
   describe "#create" do
     it "creates a new account" do

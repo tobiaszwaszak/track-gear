@@ -2,7 +2,7 @@ require "rspec"
 require "strava-ruby-client"
 require "jwt"
 require "ostruct"
-require_relative "../../db/records/strava_credential"
+require_relative "../../app/records/strava_credential"
 
 class MockOAuthResponse
   attr_reader :access_token, :refresh_token
@@ -18,7 +18,7 @@ describe StravaIntegration::Controller do
 
   before do
     allow(::Strava::OAuth::Client).to receive(:new).and_return(double)
-    allow(Db::Records::StravaCredential).to receive(:create).and_return(double)
+    allow(::App::Records::StravaCredential).to receive(:create).and_return(double)
   end
 
   describe "#authorize" do

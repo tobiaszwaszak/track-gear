@@ -1,4 +1,4 @@
-require_relative "../db/records/account"
+require_relative "../app/records/account"
 require_relative "./json_web_token"
 require_relative "./repository"
 module Auth

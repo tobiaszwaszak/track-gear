@@ -27,8 +27,8 @@ RSpec.describe MyApp do
 
   describe "POST /component_assignments" do
     it "calls ComponentAssignments::App" do
-      bike = Db::Records::Bike.create(name: "foo")
-      component = Db::Records::Component.create(name: "bar")
+      bike = ::App::Records::Bike.create(name: "foo")
+      component = ::App::Records::Component.create(name: "bar")
 
       expect_any_instance_of(ComponentAssignments::App).to receive(:call).and_call_original
       post "/component_assignments", {bike_id: bike.id, component_id: component.id}.to_json

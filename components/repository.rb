@@ -1,4 +1,4 @@
-require_relative "../db/records/component"
+require_relative "../app/records/component"
 require_relative "./model"
 require "active_record"
 require "date"
@@ -9,16 +9,16 @@ module Components
 
   class Repository
     def all
-      Db::Records::Component.all.map { |record| to_model(record).to_h }
+      ::App::Records::Component.all.map { |record| to_model(record).to_h }
     end
 
     def all_by_bikes(bike_id:)
-      assignment_table = Db::Records::ComponentAssignment.arel_table
+      assignment_table = ::App::Records::ComponentAssignment.arel_table
 
-      Db::Records::Component
+      ::App::Records::Component
         .joins(:component_assignments)
         .where(
-          Db::Records::ComponentAssignment.arel_table[:bike_id].eq(bike_id)
+          ::App::Records::ComponentAssignment.arel_table[:bike_id].eq(bike_id)
             .and(assignment_table[:started_at].lteq(Time.now))
             .and(assignment_table[:ended_at].gteq(Time.now).or(assignment_table[:ended_at].eq(nil)))
         )
@@ -26,7 +26,7 @@ module Components
     end
 
     def create(name:, brand:, model:, weight:, notes:)
-      record = Db::Records::Component.create(
+      record = ::App::Records::Component.create(
         name: name,
         brand: brand,
         model: model,
@@ -37,14 +37,14 @@ module Components
     end
 
     def find(id:)
-      record = Db::Records::Component.find(id)
+      record = ::App::Records::Component.find(id)
       to_model(record).to_h
     rescue ActiveRecord::RecordNotFound
       raise RecordNotFound.new
     end
 
     def update(id:, params:)
-      record = Db::Records::Component.find(id)
+      record = ::App::Records::Component.find(id)
       record.update(params)
       to_model(record).to_h
     rescue ActiveRecord::RecordNotFound
@@ -52,7 +52,7 @@ module Components
     end
 
     def delete(id:)
-      record = Db::Records::Component.find(id)
+      record = ::App::Records::Component.find(id)
       record.destroy!
     rescue ActiveRecord::RecordNotFound
       raise RecordNotFound.new

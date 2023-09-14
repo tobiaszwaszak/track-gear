@@ -1,4 +1,4 @@
-require_relative "../../db/records/component_assignment"
+require_relative "../../app/records/component_assignment"
 require_relative "../../component_assignments/repository"
 
 RSpec.describe ComponentAssignments::Repository do
@@ -6,8 +6,8 @@ RSpec.describe ComponentAssignments::Repository do
 
   describe "#create" do
     it "creates a new component assignment" do
-      bike = Db::Records::Bike.create(name: "foo")
-      component = Db::Records::Component.create(name: "bar")
+      bike = ::App::Records::Bike.create(name: "foo")
+      component = ::App::Records::Component.create(name: "bar")
 
       assignment = repository.create(bike_id: bike.id, component_id: component.id)
 
@@ -20,9 +20,9 @@ RSpec.describe ComponentAssignments::Repository do
 
   describe "#delete" do
     it "deletes an existing component assignment" do
-      bike = Db::Records::Bike.create(name: "foo")
-      component = Db::Records::Component.create(name: "bar")
-      assignment = Db::Records::ComponentAssignment.create(bike_id: bike.id, component_id: component.id)
+      bike = ::App::Records::Bike.create(name: "foo")
+      component = ::App::Records::Component.create(name: "bar")
+      assignment = ::App::Records::ComponentAssignment.create(bike_id: bike.id, component_id: component.id)
 
       repository.delete(bike_id: bike.id, component_id: component.id)
 

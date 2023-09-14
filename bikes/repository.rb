@@ -1,4 +1,4 @@
-require_relative "../db/records/bike"
+require_relative "../app/records/bike"
 require_relative "./model"
 require "active_record"
 
@@ -8,23 +8,23 @@ module Bikes
 
   class Repository
     def all
-      Db::Records::Bike.all.map { |record| to_model(record).to_h }
+      ::App::Records::Bike.all.map { |record| to_model(record).to_h }
     end
 
     def create(name:, brand:, model:, weight:, notes:)
-      record = Db::Records::Bike.create(name: name, brand: brand, model: model, weight: weight, notes: notes)
+      record = ::App::Records::Bike.create(name: name, brand: brand, model: model, weight: weight, notes: notes)
       to_model(record).to_h
     end
 
     def find(id:)
-      record = Db::Records::Bike.find(id)
+      record = ::App::Records::Bike.find(id)
       to_model(record).to_h
     rescue ActiveRecord::RecordNotFound
       raise RecordNotFound.new
     end
 
     def update(id:, params:)
-      record = Db::Records::Bike.find(id)
+      record = ::App::Records::Bike.find(id)
       record.update(params)
       to_model(record).to_h
     rescue ActiveRecord::RecordNotFound
@@ -32,7 +32,7 @@ module Bikes
     end
 
     def delete(id:)
-      record = Db::Records::Bike.find(id)
+      record = ::App::Records::Bike.find(id)
       record.destroy!
     rescue ActiveRecord::RecordNotFound
       raise RecordNotFound.new

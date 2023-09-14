@@ -14,7 +14,7 @@ RSpec.describe Auth::VerifyAndSetAccount do
     ActiveRecord::Base.remove_connection
   end
 
-  let(:account) { Db::Records::Account.create(email: "foo@bar.dev", password: "password") }
+  let(:account) { ::App::Records::Account.create(email: "foo@bar.dev", password: "password") }
   let(:valid_token) { Auth::JsonWebToken.encode(account_id: account.id) }
   let(:invalid_token) { "invalid_token" }
 

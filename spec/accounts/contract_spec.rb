@@ -8,7 +8,7 @@ RSpec.describe Accounts::Contract do
 
   describe "validation" do
     before do
-      Db::Records::Account.destroy_all
+      ::App::Records::Account.destroy_all
     end
 
     it "is valid with valid attributes" do
@@ -29,7 +29,7 @@ RSpec.describe Accounts::Contract do
     end
 
     it "is invalid if email is not unique" do
-      Db::Records::Account.create(email: "account@example.com", password: "secure_password")
+      ::App::Records::Account.create(email: "account@example.com", password: "secure_password")
 
       params = {email: "account@example.com", password: "secure_password"}
       expect(contract.call(params)).to be_failure

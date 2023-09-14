@@ -1,6 +1,6 @@
 require "active_record"
 
-module Db
+module App
   module Records
     class ComponentAssignment < ActiveRecord::Base
       belongs_to :bike

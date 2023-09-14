@@ -16,7 +16,7 @@ RSpec.describe Auth::App do
   describe "POST /auth" do
     context "when creating a new authentication" do
       it "returns a success response" do
-        Db::Records::Account.create(email: "foo@bar.dev", password: "secure_password")
+        ::App::Records::Account.create(email: "foo@bar.dev", password: "secure_password")
 
         post "/auth", {email: "foo@bar.dev", password: "secure_password"}.to_json
 

@@ -1,5 +1,5 @@
 require_relative "../../auth/repository"
-require_relative "../../db/records/account"
+require_relative "../../app/records/account"
 require "active_record"
 
 RSpec.describe Auth::Repository do
@@ -17,7 +17,7 @@ RSpec.describe Auth::Repository do
   describe "#find" do
     context "when the account exists" do
       it "returns the account data" do
-        account = Db::Records::Account.create(email: "account@example.com", password: "secure_password")
+        account = ::App::Records::Account.create(email: "account@example.com", password: "secure_password")
 
         found_account = repository.find(id: account[:id])
 
@@ -39,7 +39,7 @@ RSpec.describe Auth::Repository do
       let(:email) { "account@example.com" }
 
       before do
-        Db::Records::Account.create(email: email, password: "password")
+        ::App::Records::Account.create(email: email, password: "password")
       end
 
       it "returns the account" do

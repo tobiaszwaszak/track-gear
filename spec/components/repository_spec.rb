@@ -1,6 +1,6 @@
-require_relative "../../db/records/bike"
-require_relative "../../db/records/component"
-require_relative "../../db/records/component_assignment"
+require_relative "../../app/records/bike"
+require_relative "../../app/records/component"
+require_relative "../../app/records/component_assignment"
 
 require_relative "../../bikes/repository"
 require_relative "../../components/repository"
@@ -10,8 +10,8 @@ RSpec.describe Components::Repository do
 
   describe "#all" do
     it "returns all components" do
-      component1 = Db::Records::Component.create(name: "Handlebar")
-      component2 = Db::Records::Component.create(name: "Saddle")
+      component1 = ::App::Records::Component.create(name: "Handlebar")
+      component2 = ::App::Records::Component.create(name: "Saddle")
 
       result = repository.all
 
@@ -24,11 +24,11 @@ RSpec.describe Components::Repository do
     let(:today) { Date.today }
 
     it "returns all components assigned to a specific bike and currently valid" do
-      bike = Db::Records::Bike.create(name: "Test Bike")
-      component1 = Db::Records::Component.create(name: "Component 1")
-      component2 = Db::Records::Component.create(name: "Component 2")
-      Db::Records::ComponentAssignment.create(bike: bike, component: component1, started_at: today - 2.days, ended_at: today + 2.days)
-      Db::Records::ComponentAssignment.create(bike: bike, component: component2, started_at: today - 5.days, ended_at: today - 3.days)
+      bike = ::App::Records::Bike.create(name: "Test Bike")
+      component1 = ::App::Records::Component.create(name: "Component 1")
+      component2 = ::App::Records::Component.create(name: "Component 2")
+      ::App::Records::ComponentAssignment.create(bike: bike, component: component1, started_at: today - 2.days, ended_at: today + 2.days)
+      ::App::Records::ComponentAssignment.create(bike: bike, component: component2, started_at: today - 5.days, ended_at: today - 3.days)
 
       components = repository.all_by_bikes(bike_id: bike.id)
 
@@ -43,7 +43,7 @@ RSpec.describe Components::Repository do
     end
 
     it "returns an empty array when no components are assigned to the bike" do
-      bike = Db::Records::Bike.create(name: "Test Bike")
+      bike = ::App::Records::Bike.create(name: "Test Bike")
 
       components = repository.all_by_bikes(bike_id: bike.id)
 
@@ -52,9 +52,9 @@ RSpec.describe Components::Repository do
     end
 
     it "returns an empty array when no valid assignments exist for the bike" do
-      bike = Db::Records::Bike.create(name: "Test Bike")
-      component1 = Db::Records::Component.create(name: "Component 1")
-      Db::Records::ComponentAssignment.create(bike: bike, component: component1, started_at: today - 5.days, ended_at: today - 3.days)
+      bike = ::App::Records::Bike.create(name: "Test Bike")
+      component1 = ::App::Records::Component.create(name: "Component 1")
+      ::App::Records::ComponentAssignment.create(bike: bike, component: component1, started_at: today - 5.days, ended_at: today - 3.days)
 
       components = repository.all_by_bikes(bike_id: bike.id)
 
@@ -76,7 +76,7 @@ RSpec.describe Components::Repository do
 
   describe "#find" do
     it "finds a component by id" do
-      component = Db::Records::Component.create(name: "Handlebar")
+      component = ::App::Records::Component.create(name: "Handlebar")
 
       result = repository.find(id: component.id)
 
@@ -91,7 +91,7 @@ RSpec.describe Components::Repository do
 
   describe "#update" do
     it "updates a component with the given id and params" do
-      component = Db::Records::Component.create(name: "Handlebar")
+      component = ::App::Records::Component.create(name: "Handlebar")
 
       id = component.id
       params = {name: "Saddle"}
@@ -109,13 +109,13 @@ RSpec.describe Components::Repository do
 
   describe "#delete" do
     it "deletes a component with the given id" do
-      component = Db::Records::Component.create(name: "Handlebar")
+      component = ::App::Records::Component.create(name: "Handlebar")
 
       id = component.id
 
       repository.delete(id: id)
 
-      expect { Db::Records::Component.find(id) }.to raise_error(ActiveRecord::RecordNotFound)
+      expect { ::App::Records::Component.find(id) }.to raise_error(ActiveRecord::RecordNotFound)
     end
 
     it "raises Components::RecordNotFound when the component is not found" do

@@ -12,7 +12,7 @@ RSpec.describe Accounts::App do
   before do
     ActiveRecord::Base.configurations = YAML.load_file("db/configuration.yml")
     ActiveRecord::Base.establish_connection(ENV["RACK_ENV"].to_sym)
-    Db::Records::Account.delete_all
+    ::App::Records::Account.delete_all
   end
 
   it "creates a new accounts" do
@@ -23,7 +23,7 @@ RSpec.describe Accounts::App do
   end
 
   it "reads a accounts with the given id" do
-    account = Db::Records::Account.create(email: "foo@bar.dev", password: "123456")
+    account = ::App::Records::Account.create(email: "foo@bar.dev", password: "123456")
     get "/accounts/#{account.id}"
 
     expect(last_response.status).to eq(200)
@@ -31,7 +31,7 @@ RSpec.describe Accounts::App do
   end
 
   it "updates a accounts with the given id" do
-    account = Db::Records::Account.create(email: "foo@bar.dev", password: "password")
+    account = ::App::Records::Account.create(email: "foo@bar.dev", password: "password")
     put "/accounts/#{account.id}", {email: "foofoo@bar.dev", password: "123456"}.to_json
 
     expect(last_response.status).to eq(200)

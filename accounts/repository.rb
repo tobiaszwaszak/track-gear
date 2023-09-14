@@ -1,4 +1,4 @@
-require_relative "../db/records/account"
+require_relative "../app/records/account"
 require_relative "./model"
 require "active_record"
 
@@ -12,24 +12,24 @@ module Accounts
     end
 
     def create(email:, password:)
-      record = Db::Records::Account.create(email: email, password: password)
+      record = ::App::Records::Account.create(email: email, password: password)
       to_model(record).to_h
     end
 
     def find(id:)
-      record = Db::Records::Account.find(id)
+      record = ::App::Records::Account.find(id)
       to_model(record).to_h
     rescue ActiveRecord::RecordNotFound
       raise RecordNotFound.new
     end
 
     def find_by_email(email)
-      record = Db::Records::Account.find_by(email: email)
+      record = ::App::Records::Account.find_by(email: email)
       to_model(record).to_h if record
     end
 
     def update(id:, params:)
-      record = Db::Records::Account.find(id)
+      record = ::App::Records::Account.find(id)
       record.update(params)
       to_model(record).to_h
     rescue ActiveRecord::RecordNotFound

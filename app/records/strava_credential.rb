@@ -1,6 +1,6 @@
 require "active_record"
 
-module Db
+module App
   module Records
     class StravaCredential < ActiveRecord::Base
     end
