@@ -1,7 +1,7 @@
 require "json"
 require "byebug"
 require_relative "../app/repositories/bikes"
-require_relative "./contract"
+require_relative "../app/contracts/bike"
 
 module Bikes
   class Controller
@@ -11,7 +11,7 @@ module Bikes
     end
 
     def create(request)
-      bike_data = Bikes::Contract.new.call(JSON.parse(request.body.read))
+      bike_data = ::App::Contracts::Bike.new.call(JSON.parse(request.body.read))
       if bike_data.errors.to_h.any?
         [500, {"content-type" => "text/plain"}, ["Error creating bike"]]
       else
@@ -38,7 +38,7 @@ module Bikes
     end
 
     def update(request, bike_id)
-      bike_data = Bikes::Contract.new.call(JSON.parse(request.body.read))
+      bike_data = ::App::Contracts::Bike.new.call(JSON.parse(request.body.read))
       if bike_data.errors.to_h.any?
         [500, {"content-type" => "text/plain"}, ["Error creating bike"]]
       elsif ::App::Repositories::Bikes.new.update(id: bike_id, params: bike_data.to_h)

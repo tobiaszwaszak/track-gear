@@ -1,6 +1,6 @@
 require "active_record"
 require_relative "../app/repositories/components"
-require_relative "./contract"
+require_relative "../app/contracts/component"
 
 module Components
   class Controller
@@ -17,7 +17,7 @@ module Components
     end
 
     def create(request)
-      component_data = Components::Contract.new.call(JSON.parse(request.body.read))
+      component_data = ::App::Contracts::Component.new.call(JSON.parse(request.body.read))
       if component_data.errors.to_h.any?
         [500, {"content-type" => "text/plain"}, ["Error creating component"]]
       else
@@ -44,7 +44,7 @@ module Components
     end
 
     def update(request, component_id)
-      component_data = Components::Contract.new.call(JSON.parse(request.body.read))
+      component_data = ::App::Contracts::Component.new.call(JSON.parse(request.body.read))
       if component_data.errors.to_h.any?
         [500, {"content-type" => "text/plain"}, ["Error creating component"]]
       elsif ::App::Repositories::Components.new.update(id: component_id, params: component_data.to_h)

@@ -1,10 +1,10 @@
 require_relative "../app/repositories/accounts"
-require_relative "./contract"
+require_relative "../app/contracts/account"
 
 module Accounts
   class Controller
     def create(request)
-      account_data = Accounts::Contract.new.call(JSON.parse(request.body.read))
+      account_data = ::App::Contracts::Account.new.call(JSON.parse(request.body.read))
       if account_data.errors.to_h.any?
         [500, {"content-type" => "text/plain"}, ["Error creating account"]]
       else
@@ -28,7 +28,7 @@ module Accounts
     end
 
     def update(request, account_id)
-      account_data = Accounts::Contract.new.call(JSON.parse(request.body.read))
+      account_data = ::App::Contracts::Account.new.call(JSON.parse(request.body.read))
       if account_data.errors.to_h.any?
         [500, {"content-type" => "text/plain"}, ["Error updating account"]]
       elsif ::App::Repositories::Accounts.new.update(id: account_id, params: account_data.to_h)

@@ -1,10 +1,10 @@
 require "active_record"
 require_relative "../app/repositories/component_assignments"
-require_relative "./contract"
+require_relative "../app/contracts/component_assignment"
 module ComponentAssignments
   class Controller
     def create(request)
-      component_data = ::ComponentAssignments::Contract.new.call(JSON.parse(request.body.read))
+      component_data = ::App::Contracts::ComponentAssignment.new.call(JSON.parse(request.body.read))
       if component_data.errors.to_h.any?
         [500, {"content-type" => "text/plain"}, ["Error creating component"]]
       else
@@ -21,7 +21,7 @@ module ComponentAssignments
     end
 
     def delete(request)
-      component_data = ::ComponentAssignments::Contract.new.call(JSON.parse(request.body.read))
+      component_data = ::App::Contracts::ComponentAssignment.new.call(JSON.parse(request.body.read))
       if component_data.errors.to_h.any?
         [500, {"content-type" => "text/plain"}, ["Error creating component"]]
       else

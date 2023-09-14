@@ -1,6 +1,6 @@
-require_relative "../../bikes/contract"
+require_relative "../../app/contracts/bike"
 
-RSpec.describe Bikes::Contract do
+RSpec.describe App::Contracts::Bike do
   subject(:contract) { described_class.new }
 
   describe "validation rules" do

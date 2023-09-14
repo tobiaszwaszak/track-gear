@@ -1,7 +1,7 @@
 require "dry/validation"
-
-module Components
-  class Contract < Dry::Validation::Contract
+module App
+module Contracts
+  class Bike < Dry::Validation::Contract
     params do
       required(:name).filled(:string)
       optional(:brand).maybe(:string)
@@ -10,4 +10,5 @@ module Components
       optional(:notes).maybe(:string)
     end
   end
+end
 end
