@@ -1,8 +1,8 @@
 require_relative "../../app/records/bike"
-require_relative "../../bikes/repository"
+require_relative "../../app/repositories/bikes"
 
-RSpec.describe Bikes::Repository do
-  let(:repository) { Bikes::Repository.new }
+RSpec.describe App::Repositories::Bikes do
+  let(:repository) { App::Repositories::Bikes.new }
 
   describe "#all" do
     it "returns all bikes" do
@@ -37,8 +37,8 @@ RSpec.describe Bikes::Repository do
       expect(result[:name]).to eq(bike.name)
     end
 
-    it "raises Bikes::RecordNotFound when the bike is not found" do
-      expect { repository.find(id: 123) }.to raise_error(Bikes::RecordNotFound)
+    it "raises ::App::Repositories::RecordNotFound when the bike is not found" do
+      expect { repository.find(id: 123) }.to raise_error(::App::Repositories::RecordNotFound)
     end
   end
 
@@ -55,8 +55,8 @@ RSpec.describe Bikes::Repository do
       expect(updated_record.name).to eq("Road Bike")
     end
 
-    it "raises Bikes::RecordNotFound when the bike is not found" do
-      expect { repository.update(id: 123, params: {name: "Road Bike"}) }.to raise_error(Bikes::RecordNotFound)
+    it "raises ::App::Repositories::RecordNotFound when the bike is not found" do
+      expect { repository.update(id: 123, params: {name: "Road Bike"}) }.to raise_error(::App::Repositories::RecordNotFound)
     end
   end
 
@@ -69,8 +69,8 @@ RSpec.describe Bikes::Repository do
       expect { ::App::Records::Bike.find(bike.id) }.to raise_error(ActiveRecord::RecordNotFound)
     end
 
-    it "raises Bikes::RecordNotFound when the bike is not found" do
-      expect { repository.delete(id: 123) }.to raise_error(Bikes::RecordNotFound)
+    it "raises ::App::Repositories::RecordNotFound when the bike is not found" do
+      expect { repository.delete(id: 123) }.to raise_error(::App::Repositories::RecordNotFound)
     end
   end
 end

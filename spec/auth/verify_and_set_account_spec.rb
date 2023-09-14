@@ -1,5 +1,5 @@
 require_relative "../../auth/verify_and_set_account"
-require_relative "../../auth/repository"
+require_relative "../../app/repositories/auth"
 require "dotenv"
 
 Dotenv.load(".env.test")
@@ -23,7 +23,7 @@ RSpec.describe Auth::VerifyAndSetAccount do
       let(:env) { {"HTTP_AUTHORIZATION" => "Bearer #{valid_token}"} }
 
       it "verifies and sets the account_id in the env" do
-        expect_any_instance_of(Auth::Repository).to receive(:find).with(id: account.id)
+        expect_any_instance_of(App::Repositories::Auth).to receive(:find).with(id: account.id)
         result = subject.call(env)
         expect(result).to eq(account.id)
       end
@@ -57,11 +57,11 @@ RSpec.describe Auth::VerifyAndSetAccount do
       end
     end
 
-    context "with Auth::RecordNotFound" do
+    context "with ::App::Repositories::RecordNotFound" do
       let(:env) { {"HTTP_AUTHORIZATION" => "Bearer #{valid_token}"} }
 
       before do
-        allow_any_instance_of(Auth::Repository).to receive(:find).and_raise(Auth::RecordNotFound)
+        allow_any_instance_of(App::Repositories::Auth).to receive(:find).and_raise(::App::Repositories::RecordNotFound)
       end
 
       it "raises Auth::Unauthorized" do

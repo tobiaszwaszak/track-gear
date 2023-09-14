@@ -1,8 +1,8 @@
 require_relative "../../app/records/component_assignment"
-require_relative "../../component_assignments/repository"
+require_relative "../../app/repositories/component_assignments"
 
-RSpec.describe ComponentAssignments::Repository do
-  let(:repository) { ComponentAssignments::Repository.new }
+RSpec.describe App::Repositories::ComponentAssignments do
+  let(:repository) { App::Repositories::ComponentAssignments.new }
 
   describe "#create" do
     it "creates a new component assignment" do
@@ -31,7 +31,7 @@ RSpec.describe ComponentAssignments::Repository do
     end
 
     it "raises RecordNotFound error when trying to delete non-existing assignment" do
-      expect { repository.delete(bike_id: 999, component_id: 999) }.to raise_error(ComponentAssignments::RecordNotFound)
+      expect { repository.delete(bike_id: 999, component_id: 999) }.to raise_error(::App::Repositories::RecordNotFound)
     end
   end
 end

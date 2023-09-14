@@ -7,7 +7,7 @@ RSpec.describe Components::Controller do
 
   describe "#index" do
     it "returns the list of components" do
-      allow_any_instance_of(Components::Repository).to receive(:all).and_return([{"id" => 1, "name" => "Component 1", "description" => "Description 1"}])
+      allow_any_instance_of(App::Repositories::Components).to receive(:all).and_return([{"id" => 1, "name" => "Component 1", "description" => "Description 1"}])
 
       request = double("request", params: {})
 
@@ -19,7 +19,7 @@ RSpec.describe Components::Controller do
 
   describe "#create" do
     it "creates a new component" do
-      allow_any_instance_of(Components::Repository).to receive(:create).and_return([{id: 1, name: "New Component", description: "New Description"}])
+      allow_any_instance_of(App::Repositories::Components).to receive(:create).and_return([{id: 1, name: "New Component", description: "New Description"}])
 
       request = double("request", body: double("body", read: {"name" => "New Component", "description" => "New Description"}.to_json))
 
@@ -31,7 +31,7 @@ RSpec.describe Components::Controller do
 
   describe "#read" do
     it "returns the component with the given id if it exists" do
-      allow_any_instance_of(Components::Repository).to receive(:find).and_return({"id" => 1, "name" => "Component 1", "description" => "Description 1"})
+      allow_any_instance_of(App::Repositories::Components).to receive(:find).and_return({"id" => 1, "name" => "Component 1", "description" => "Description 1"})
 
       response = controller.read(nil, 1)
 
@@ -39,7 +39,7 @@ RSpec.describe Components::Controller do
     end
 
     it "returns 404 Not Found if the component does not exist" do
-      allow_any_instance_of(Components::Repository).to receive(:find).and_raise(Components::RecordNotFound)
+      allow_any_instance_of(App::Repositories::Components).to receive(:find).and_raise(::App::Repositories::RecordNotFound)
 
       response = controller.read(nil, 1)
 
@@ -49,7 +49,7 @@ RSpec.describe Components::Controller do
 
   describe "#update" do
     it "updates the component with the given id if it exists" do
-      allow_any_instance_of(Components::Repository).to receive(:update).and_return(true)
+      allow_any_instance_of(App::Repositories::Components).to receive(:update).and_return(true)
 
       request = double("request", body: double("body", read: {"id" => 1, "name" => "Updated Component", "description" => "Updated Description"}.to_json))
 
@@ -59,7 +59,7 @@ RSpec.describe Components::Controller do
     end
 
     it "returns 404 Not Found if the component does not exist" do
-      allow_any_instance_of(Components::Repository).to receive(:update).and_raise(Components::RecordNotFound)
+      allow_any_instance_of(App::Repositories::Components).to receive(:update).and_raise(::App::Repositories::RecordNotFound)
       request = double("request", body: double("body", read: {"name" => "Updated Component", "description" => "Updated Description"}.to_json))
 
       response = controller.update(request, 1)
@@ -70,7 +70,7 @@ RSpec.describe Components::Controller do
 
   describe "#delete" do
     it "deletes the component with the given id if it exists" do
-      allow_any_instance_of(Components::Repository).to receive(:delete).and_return(true)
+      allow_any_instance_of(App::Repositories::Components).to receive(:delete).and_return(true)
 
       response = controller.delete(nil, 1)
 
@@ -78,7 +78,7 @@ RSpec.describe Components::Controller do
     end
 
     it "returns 404 Not Found if the component does not exist" do
-      allow_any_instance_of(Components::Repository).to receive(:delete).and_raise(Components::RecordNotFound)
+      allow_any_instance_of(App::Repositories::Components).to receive(:delete).and_raise(::App::Repositories::RecordNotFound)
 
       response = controller.delete(nil, 1)
 

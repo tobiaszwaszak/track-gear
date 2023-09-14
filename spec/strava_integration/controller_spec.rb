@@ -3,6 +3,7 @@ require "strava-ruby-client"
 require "jwt"
 require "ostruct"
 require_relative "../../app/records/strava_credential"
+require_relative "../../strava_integration/controller"
 
 class MockOAuthResponse
   attr_reader :access_token, :refresh_token

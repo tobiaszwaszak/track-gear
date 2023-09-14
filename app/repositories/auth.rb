@@ -1,23 +1,24 @@
-require_relative "../app/records/account"
+require_relative "../records/account"
 require "active_record"
 
-module Auth
+module App
+module Repositories
   class RecordNotFound < StandardError
   end
 
-  class Repository
+  class Auth
     def initialize
       setup_database
     end
 
     def find(id:)
-      ::App::Records::Account.find(id)
+      Records::Account.find(id)
     rescue ActiveRecord::RecordNotFound
       raise RecordNotFound.new
     end
 
     def find_by_email!(email)
-      ::App::Records::Account.find_by!(email: email)
+      Records::Account.find_by!(email: email)
     rescue ActiveRecord::RecordNotFound
       raise RecordNotFound.new
     end
@@ -29,4 +30,5 @@ module Auth
       ActiveRecord::Base.establish_connection(ENV["RACK_ENV"].to_sym)
     end
   end
+end
 end

@@ -1,8 +1,8 @@
-require_relative "../../auth/repository"
+require_relative "../../app/repositories/auth"
 require_relative "../../app/records/account"
 require "active_record"
 
-RSpec.describe Auth::Repository do
+RSpec.describe App::Repositories::Auth do
   before(:all) do
     ActiveRecord::Base.configurations = YAML.load_file("db/configuration.yml")
     ActiveRecord::Base.establish_connection(ENV["RACK_ENV"].to_sym)
@@ -12,7 +12,7 @@ RSpec.describe Auth::Repository do
     ActiveRecord::Base.remove_connection
   end
 
-  let(:repository) { Auth::Repository.new }
+  let(:repository) { App::Repositories::Auth.new }
 
   describe "#find" do
     context "when the account exists" do
@@ -29,7 +29,7 @@ RSpec.describe Auth::Repository do
       it "raises a RecordNotFound error" do
         non_existent_account_id = 12345
 
-        expect { repository.find(id: non_existent_account_id) }.to raise_error(Auth::RecordNotFound)
+        expect { repository.find(id: non_existent_account_id) }.to raise_error(::App::Repositories::RecordNotFound)
       end
     end
   end
@@ -52,7 +52,7 @@ RSpec.describe Auth::Repository do
       let(:email) { "nonexistent@example.com" }
 
       it "raises a RecordNotFound error" do
-        expect { repository.find_by_email!(email) }.to raise_error(Auth::RecordNotFound)
+        expect { repository.find_by_email!(email) }.to raise_error(::App::Repositories::RecordNotFound)
       end
     end
   end

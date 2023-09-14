@@ -2,11 +2,11 @@ require_relative "../../app/records/bike"
 require_relative "../../app/records/component"
 require_relative "../../app/records/component_assignment"
 
-require_relative "../../bikes/repository"
-require_relative "../../components/repository"
+require_relative "../../app/repositories/bikes"
+require_relative "../../app/repositories/components"
 
-RSpec.describe Components::Repository do
-  let(:repository) { Components::Repository.new }
+RSpec.describe App::Repositories::Components do
+  let(:repository) { App::Repositories::Components.new }
 
   describe "#all" do
     it "returns all components" do
@@ -84,8 +84,8 @@ RSpec.describe Components::Repository do
       expect(result[:name]).to eq(component.name)
     end
 
-    it "raises Components::RecordNotFound when the component is not found" do
-      expect { repository.find(id: 123) }.to raise_error(Components::RecordNotFound)
+    it "raises ::App::Repositories::RecordNotFound when the component is not found" do
+      expect { repository.find(id: 123) }.to raise_error(::App::Repositories::RecordNotFound)
     end
   end
 
@@ -102,8 +102,8 @@ RSpec.describe Components::Repository do
       expect(result[:name]).to eq(params[:name])
     end
 
-    it "raises Components::RecordNotFound when the component is not found" do
-      expect { repository.update(id: 123, params: {name: "Saddle"}) }.to raise_error(Components::RecordNotFound)
+    it "raises ::App::Repositories::RecordNotFound when the component is not found" do
+      expect { repository.update(id: 123, params: {name: "Saddle"}) }.to raise_error(::App::Repositories::RecordNotFound)
     end
   end
 
@@ -118,8 +118,8 @@ RSpec.describe Components::Repository do
       expect { ::App::Records::Component.find(id) }.to raise_error(ActiveRecord::RecordNotFound)
     end
 
-    it "raises Components::RecordNotFound when the component is not found" do
-      expect { repository.delete(id: 123) }.to raise_error(Components::RecordNotFound)
+    it "raises ::App::Repositories::RecordNotFound when the component is not found" do
+      expect { repository.delete(id: 123) }.to raise_error(::App::Repositories::RecordNotFound)
     end
   end
 end

@@ -10,7 +10,7 @@ RSpec.describe ComponentAssignments::Controller do
       request_body = {"bike_id" => 1, "component_id" => 1}
       allow(request.body).to receive(:read).and_return(request_body.to_json)
 
-      allow_any_instance_of(ComponentAssignments::Repository).to receive(:create).and_return(true)
+      allow_any_instance_of(App::Repositories::ComponentAssignments).to receive(:create).and_return(true)
 
       response = controller.create(request)
 
@@ -34,7 +34,7 @@ RSpec.describe ComponentAssignments::Controller do
       request_body = {"bike_id" => 1, "component_id" => 1}
       allow(request.body).to receive(:read).and_return(request_body.to_json)
 
-      allow_any_instance_of(ComponentAssignments::Repository).to receive(:create).and_return(nil)
+      allow_any_instance_of(App::Repositories::ComponentAssignments).to receive(:create).and_return(nil)
 
       response = controller.create(request)
 
@@ -49,7 +49,7 @@ RSpec.describe ComponentAssignments::Controller do
       request_body = {"bike_id" => 1, "component_id" => 1}
       allow(request.body).to receive(:read).and_return(request_body.to_json)
 
-      allow_any_instance_of(ComponentAssignments::Repository).to receive(:delete).and_return(true)
+      allow_any_instance_of(App::Repositories::ComponentAssignments).to receive(:delete).and_return(true)
 
       response = controller.delete(request)
 
@@ -62,7 +62,7 @@ RSpec.describe ComponentAssignments::Controller do
       request_body = {"bike_id" => 1, "component_id" => 1}
       allow(request.body).to receive(:read).and_return(request_body.to_json)
 
-      allow_any_instance_of(ComponentAssignments::Repository).to receive(:delete).and_raise(ComponentAssignments::RecordNotFound)
+      allow_any_instance_of(App::Repositories::ComponentAssignments).to receive(:delete).and_raise(App::Repositories::RecordNotFound)
 
       response = controller.delete(request)
 
@@ -75,7 +75,7 @@ RSpec.describe ComponentAssignments::Controller do
       request_body = {"bike_id" => 1, "component_id" => 1}
       allow(request.body).to receive(:read).and_return(request_body.to_json)
 
-      allow_any_instance_of(ComponentAssignments::Repository).to receive(:delete).and_return(false)
+      allow_any_instance_of(App::Repositories::ComponentAssignments).to receive(:delete).and_return(false)
 
       response = controller.delete(request)
 

@@ -9,12 +9,12 @@ RSpec.describe Auth::Controller do
     let(:valid_token) { "valid_token" }
 
     before do
-      allow(Auth::Repository).to receive(:new).and_return(repository)
+      allow(App::Repositories::Auth).to receive(:new).and_return(repository)
       allow(Auth::JsonWebToken).to receive(:encode).with({account_id: valid_account.id}).and_return(valid_token)
     end
 
     context "when the account exists and authentication succeeds" do
-      let(:repository) { instance_double("Auth::Repository", find_by_email!: valid_account) }
+      let(:repository) { instance_double("App::Repositories::Auth", find_by_email!: valid_account) }
       let(:request) { instance_double("Rack::Request", body: double("body", read: '{"email": "account@example.com", "password": "secure_password"}')) }
 
       it "returns a success response with a valid token" do
@@ -29,7 +29,7 @@ RSpec.describe Auth::Controller do
     end
 
     context "when the account exists but authentication fails" do
-      let(:repository) { instance_double("Auth::Repository", find_by_email!: invalid_account) }
+      let(:repository) { instance_double("App::Repositories::Auth", find_by_email!: invalid_account) }
       let(:request) { instance_double("Rack::Request", body: double("body", read: '{"email": "account@example.com", "password": "wrong_password"}')) }
 
       it "returns an unauthorized response" do
@@ -40,11 +40,11 @@ RSpec.describe Auth::Controller do
     end
 
     context "when the account does not exist" do
-      let(:repository) { instance_double("Auth::Repository") }
+      let(:repository) { instance_double("App::Repositories::Auth") }
       let(:request) { instance_double("Rack::Request", body: double("body", read: '{"email": "non_existent@example.com", "password": "password"}')) }
 
       before do
-        allow(repository).to receive(:find_by_email!).and_raise(Auth::RecordNotFound)
+        allow(repository).to receive(:find_by_email!).and_raise(::App::Repositories::RecordNotFound)
       end
 
       it "returns an unauthorized response" do

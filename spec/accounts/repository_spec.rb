@@ -1,9 +1,9 @@
-require_relative "../../accounts/repository"
+require_relative "../../app/repositories/accounts"
 require_relative "../../app/records/account"
 require "active_record"
 
-RSpec.describe Accounts::Repository do
-  let(:repository) { Accounts::Repository.new }
+RSpec.describe App::Repositories::Accounts do
+  let(:repository) { App::Repositories::Accounts.new }
 
   before(:all) do
     ActiveRecord::Base.configurations = YAML.load_file("db/configuration.yml")
@@ -43,7 +43,7 @@ RSpec.describe Accounts::Repository do
       it "raises a RecordNotFound error" do
         non_existent_account_id = 12345
 
-        expect { repository.find(id: non_existent_account_id) }.to raise_error(Accounts::RecordNotFound)
+        expect { repository.find(id: non_existent_account_id) }.to raise_error(::App::Repositories::RecordNotFound)
       end
     end
   end
@@ -88,7 +88,7 @@ RSpec.describe Accounts::Repository do
         non_existent_account_id = 12345
         account_data = {email: "updated_account@example.com"}
 
-        expect { repository.update(id: non_existent_account_id, params: account_data) }.to raise_error(Accounts::RecordNotFound)
+        expect { repository.update(id: non_existent_account_id, params: account_data) }.to raise_error(::App::Repositories::RecordNotFound)
       end
     end
   end

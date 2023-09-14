@@ -1,4 +1,4 @@
-require_relative "./repository"
+require_relative "../app/repositories/auth"
 require_relative "./json_web_token"
 module Auth
   class Unauthorized < StandardError
@@ -12,9 +12,9 @@ module Auth
 
       begin
         decoded = Auth::JsonWebToken.decode(header)
-        Auth::Repository.new.find(id: decoded["account_id"])
+        ::App::Repositories::Auth.new.find(id: decoded["account_id"])
         decoded["account_id"]
-      rescue Auth::RecordNotFound
+      rescue ::App::Repositories::RecordNotFound
         raise Auth::Unauthorized
       rescue JWT::DecodeError
         raise Auth::Unauthorized

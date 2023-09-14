@@ -1,24 +1,25 @@
-require_relative "../app/records/component"
-require_relative "../app/models/component"
+require_relative "../records/component"
+require_relative "../models/component"
 require "active_record"
 require "date"
 
-module Components
+module App
+module Repositories
   class RecordNotFound < StandardError
   end
 
-  class Repository
+  class Components
     def all
-      ::App::Records::Component.all.map { |record| to_model(record).to_h }
+      Records::Component.all.map { |record| to_model(record).to_h }
     end
 
     def all_by_bikes(bike_id:)
-      assignment_table = ::App::Records::ComponentAssignment.arel_table
+      assignment_table = Records::ComponentAssignment.arel_table
 
-      ::App::Records::Component
+      Records::Component
         .joins(:component_assignments)
         .where(
-          ::App::Records::ComponentAssignment.arel_table[:bike_id].eq(bike_id)
+          Records::ComponentAssignment.arel_table[:bike_id].eq(bike_id)
             .and(assignment_table[:started_at].lteq(Time.now))
             .and(assignment_table[:ended_at].gteq(Time.now).or(assignment_table[:ended_at].eq(nil)))
         )
@@ -26,7 +27,7 @@ module Components
     end
 
     def create(name:, brand:, model:, weight:, notes:)
-      record = ::App::Records::Component.create(
+      record = Records::Component.create(
         name: name,
         brand: brand,
         model: model,
@@ -37,14 +38,14 @@ module Components
     end
 
     def find(id:)
-      record = ::App::Records::Component.find(id)
+      record = Records::Component.find(id)
       to_model(record).to_h
     rescue ActiveRecord::RecordNotFound
       raise RecordNotFound.new
     end
 
     def update(id:, params:)
-      record = ::App::Records::Component.find(id)
+      record = Records::Component.find(id)
       record.update(params)
       to_model(record).to_h
     rescue ActiveRecord::RecordNotFound
@@ -52,7 +53,7 @@ module Components
     end
 
     def delete(id:)
-      record = ::App::Records::Component.find(id)
+      record = Records::Component.find(id)
       record.destroy!
     rescue ActiveRecord::RecordNotFound
       raise RecordNotFound.new
@@ -61,7 +62,7 @@ module Components
     private
 
     def to_model(record)
-      ::App::Models::Component.new(
+      Models::Component.new(
         id: record.id,
         name: record.name,
         brand: record.brand,
@@ -76,4 +77,5 @@ module Components
       record.component_assignments.where(ended_at: nil).last&.bike&.id
     end
   end
+end
 end

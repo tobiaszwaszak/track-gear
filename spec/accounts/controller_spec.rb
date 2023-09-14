@@ -10,7 +10,7 @@ RSpec.describe Accounts::Controller do
     context "when the account data is valid" do
       it "creates a new account" do
         allow_any_instance_of(Accounts::Contract).to receive(:call).and_return(OpenStruct.new(success?: true))
-        allow_any_instance_of(Accounts::Repository).to receive(:create).and_return(true)
+        allow_any_instance_of(::App::Repositories::Accounts).to receive(:create).and_return(true)
 
         request = double("request", body: double("body", read: account_data))
 
@@ -40,7 +40,7 @@ RSpec.describe Accounts::Controller do
       let(:account) { {id: account_id, email: "account@example.com", password: "secure_password"} }
 
       it "returns the account data" do
-        allow_any_instance_of(Accounts::Repository).to receive(:find).with(id: account_id).and_return(account)
+        allow_any_instance_of(::App::Repositories::Accounts).to receive(:find).with(id: account_id).and_return(account)
 
         request = double("request")
 
@@ -54,7 +54,7 @@ RSpec.describe Accounts::Controller do
       let(:account_id) { 1 }
 
       it "returns a not found error" do
-        allow_any_instance_of(Accounts::Repository).to receive(:find).with(id: account_id).and_raise(Accounts::RecordNotFound)
+        allow_any_instance_of(::App::Repositories::Accounts).to receive(:find).with(id: account_id).and_raise(App::Repositories::RecordNotFound)
 
         request = double("request")
 
@@ -72,7 +72,7 @@ RSpec.describe Accounts::Controller do
     context "when the account data is valid and the account exists" do
       it "updates the account" do
         allow_any_instance_of(Accounts::Contract).to receive(:call).and_return(OpenStruct.new(account_data))
-        allow_any_instance_of(Accounts::Repository).to receive(:update).and_return(true)
+        allow_any_instance_of(::App::Repositories::Accounts).to receive(:update).and_return(true)
 
         request = double("request", body: double("body", read: account_data.to_json))
 
@@ -98,7 +98,7 @@ RSpec.describe Accounts::Controller do
     context "when the account does not exist" do
       it "returns a not found error" do
         allow_any_instance_of(Accounts::Contract).to receive(:call).and_return(OpenStruct.new(account_data))
-        allow_any_instance_of(Accounts::Repository).to receive(:update).and_raise(Accounts::RecordNotFound)
+        allow_any_instance_of(::App::Repositories::Accounts).to receive(:update).and_raise(App::Repositories::RecordNotFound)
 
         request = double("request", body: double("body", read: account_data.to_json))
 

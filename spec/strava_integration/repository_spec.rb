@@ -1,10 +1,10 @@
 require "rspec"
 require_relative "../../app/records/strava_credential"
-require_relative "../../strava_integration/repository"
+require_relative "../../app/repositories//strava_integrations"
 
-module StravaIntegration
-  describe Repository do
-    let(:repository) { Repository.new }
+module App::Repositories
+  describe StravaIntegrations do
+    let(:repository) { StravaIntegrations.new }
 
     before do
       ActiveRecord::Base.configurations = YAML.load_file("db/configuration.yml")

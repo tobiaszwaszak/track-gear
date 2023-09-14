@@ -1,5 +1,5 @@
 require "dry/validation"
-require_relative "./repository"
+require_relative "../app/repositories/accounts"
 
 module Accounts
   class Contract < Dry::Validation::Contract
@@ -9,7 +9,7 @@ module Accounts
     end
 
     rule(:email) do
-      key.failure("Email has to be unique") if Accounts::Repository.new.find_by_email(value).present?
+      key.failure("Email has to be unique") if ::App::Repositories::Accounts.new.find_by_email(value).present?
     end
   end
 end
