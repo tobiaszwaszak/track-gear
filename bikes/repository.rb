@@ -1,5 +1,5 @@
 require_relative "../app/records/bike"
-require_relative "./model"
+require_relative "../app/models/bike"
 require "active_record"
 
 module Bikes
@@ -41,7 +41,7 @@ module Bikes
     private
 
     def to_model(record)
-      Bikes::Model.new(
+      ::App::Models::Bike.new(
         id: record.id,
         name: record.name,
         brand: record.brand,

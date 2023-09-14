@@ -1,5 +1,5 @@
 require_relative "../app/records/account"
-require_relative "./model"
+require_relative "../app/models/account"
 require "active_record"
 
 module Accounts
@@ -44,7 +44,7 @@ module Accounts
     end
 
     def to_model(record)
-      Accounts::Model.new(
+      ::App::Models::Account.new(
         id: record.id,
         email: record.email
       )

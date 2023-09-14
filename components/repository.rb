@@ -1,5 +1,5 @@
 require_relative "../app/records/component"
-require_relative "./model"
+require_relative "../app/models/component"
 require "active_record"
 require "date"
 
@@ -61,7 +61,7 @@ module Components
     private
 
     def to_model(record)
-      Components::Model.new(
+      ::App::Models::Component.new(
         id: record.id,
         name: record.name,
         brand: record.brand,
