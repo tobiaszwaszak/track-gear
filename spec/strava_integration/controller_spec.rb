@@ -3,7 +3,7 @@ require "strava-ruby-client"
 require "jwt"
 require "ostruct"
 require_relative "../../app/records/strava_credential"
-require_relative "../../strava_integration/controller"
+require_relative "../../app/controllers/strava_integrations"
 
 class MockOAuthResponse
   attr_reader :access_token, :refresh_token
@@ -14,8 +14,8 @@ class MockOAuthResponse
   end
 end
 
-describe StravaIntegration::Controller do
-  let(:controller) { StravaIntegration::Controller.new }
+describe App::Controllers::StravaIntegrations do
+  let(:controller) { App::Controllers::StravaIntegrations.new }
 
   before do
     allow(::Strava::OAuth::Client).to receive(:new).and_return(double)

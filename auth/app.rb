@@ -1,4 +1,4 @@
-require_relative "controller"
+require_relative "../app/controllers/auth"
 module Auth
   class App
     def call(env)
@@ -8,7 +8,7 @@ module Auth
       when "/auth"
         case request.request_method
         when "POST"
-          Controller.new.create(request)
+          ::App::Controllers::Auth.new.create(request)
         else
           [405, {"Content-Type" => "text/plain"}, ["Method Not Allowed"]]
         end

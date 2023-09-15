@@ -1,8 +1,8 @@
 require "json"
-require_relative "./../../accounts/controller"
+require_relative "./../../app/controllers/accounts"
 
-RSpec.describe Accounts::Controller do
-  let(:controller) { Accounts::Controller.new }
+RSpec.describe App::Controllers::Accounts do
+  let(:controller) { App::Controllers::Accounts.new }
 
   describe "#create" do
     let(:account_data) { {"email" => "account@example.com", "password" => "secure_password"}.to_json }

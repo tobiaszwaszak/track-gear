@@ -1,4 +1,4 @@
-require_relative "controller"
+require_relative "../app/controllers/accounts"
 module Accounts
   class App
     def call(env)
@@ -8,9 +8,9 @@ module Accounts
       when "/accounts"
         case request.request_method
         when "GET"
-          Controller.new.index(request)
+          ::App::Controllers::Accounts.new.index(request)
         when "POST"
-          Controller.new.create(request)
+          ::App::Controllers::Accounts.new.create(request)
         else
           [405, {"Content-Type" => "text/plain"}, ["Method Not Allowed"]]
         end
@@ -18,9 +18,9 @@ module Accounts
         account_id = $1.to_i
         case request.request_method
         when "GET"
-          Controller.new.read(request, account_id)
+          ::App::Controllers::Accounts.new.read(request, account_id)
         when "PUT"
-          Controller.new.update(request, account_id)
+          ::App::Controllers::Accounts.new.update(request, account_id)
         else
           [405, {"Content-Type" => "text/plain"}, ["Method Not Allowed"]]
         end

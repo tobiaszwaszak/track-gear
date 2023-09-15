@@ -1,4 +1,4 @@
-require_relative "controller"
+require_relative "../app/controllers/bikes"
 module Bikes
   class App
     def call(env)
@@ -6,13 +6,13 @@ module Bikes
 
       case request.path_info
       when "/"
-        Controller.new.index(request)
+        ::App::Controllers::Bikes.new.index(request)
       when "/bikes"
         case request.request_method
         when "GET"
-          Controller.new.index(request)
+          ::App::Controllers::Bikes.new.index(request)
         when "POST"
-          Controller.new.create(request)
+          ::App::Controllers::Bikes.new.create(request)
         else
           [405, {"Content-Type" => "text/plain"}, ["Method Not Allowed"]]
         end
@@ -20,11 +20,11 @@ module Bikes
         bike_id = $1.to_i
         case request.request_method
         when "GET"
-          Controller.new.read(request, bike_id)
+          ::App::Controllers::Bikes.new.read(request, bike_id)
         when "PUT"
-          Controller.new.update(request, bike_id)
+          ::App::Controllers::Bikes.new.update(request, bike_id)
         when "DELETE"
-          Controller.new.delete(request, bike_id)
+          ::App::Controllers::Bikes.new.delete(request, bike_id)
         else
           [405, {"Content-Type" => "text/plain"}, ["Method Not Allowed"]]
         end

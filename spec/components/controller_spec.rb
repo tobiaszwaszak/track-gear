@@ -1,9 +1,9 @@
 require "csv"
 require "json"
-require_relative "./../../components/controller"
+require_relative "./../../app/controllers/components"
 
-RSpec.describe Components::Controller do
-  let(:controller) { Components::Controller.new }
+RSpec.describe App::Controllers::Components do
+  let(:controller) { App::Controllers::Components.new }
 
   describe "#index" do
     it "returns the list of components" do

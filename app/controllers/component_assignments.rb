@@ -1,14 +1,15 @@
 require "active_record"
-require_relative "../app/repositories/component_assignments"
-require_relative "../app/contracts/component_assignment"
-module ComponentAssignments
-  class Controller
+require_relative "../repositories/component_assignments"
+require_relative "../contracts/component_assignment"
+module App
+module Controllers
+  class ComponentAssignments
     def create(request)
-      component_data = ::App::Contracts::ComponentAssignment.new.call(JSON.parse(request.body.read))
+      component_data = Contracts::ComponentAssignment.new.call(JSON.parse(request.body.read))
       if component_data.errors.to_h.any?
         [500, {"content-type" => "text/plain"}, ["Error creating component"]]
       else
-        component = ::App::Repositories::ComponentAssignments.new.create(
+        component = Repositories::ComponentAssignments.new.create(
           bike_id: component_data["bike_id"],
           component_id: component_data["component_id"]
         )
@@ -21,11 +22,11 @@ module ComponentAssignments
     end
 
     def delete(request)
-      component_data = ::App::Contracts::ComponentAssignment.new.call(JSON.parse(request.body.read))
+      component_data = Contracts::ComponentAssignment.new.call(JSON.parse(request.body.read))
       if component_data.errors.to_h.any?
         [500, {"content-type" => "text/plain"}, ["Error creating component"]]
       else
-        delete = ::App::Repositories::ComponentAssignments.new.delete(
+        delete = Repositories::ComponentAssignments.new.delete(
           bike_id: component_data["bike_id"],
           component_id: component_data["component_id"]
         )
@@ -35,8 +36,9 @@ module ComponentAssignments
           [500, {"content-type" => "text/plain"}, ["Error deleting component assignments"]]
         end
       end
-    rescue ::App::Repositories::RecordNotFound
+    rescue Repositories::RecordNotFound
       [404, {"content-type" => "text/plain"}, ["Not Found"]]
     end
   end
+end
 end

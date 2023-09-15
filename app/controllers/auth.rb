@@ -1,13 +1,15 @@
-require_relative "../app/records/account"
-require_relative "./json_web_token"
-require_relative "../app/repositories/auth"
-module Auth
-  class Controller
+require_relative "../records/account"
+require_relative "../../auth/json_web_token"
+require_relative "../repositories/auth"
+
+module App
+module Controllers
+  class Auth
     def create(request)
       params = JSON.parse(request.body.read)
-      account = ::App::Repositories::Auth.new.find_by_email!(params["email"])
+      account = Repositories::Auth.new.find_by_email!(params["email"])
       if account&.authenticate(params["password"])
-        token = Auth::JsonWebToken.encode(account_id: account.id)
+        token = ::Auth::JsonWebToken.encode(account_id: account.id)
         time = Time.now + 86400
         response = {
           token: token,
@@ -17,8 +19,9 @@ module Auth
       else
         [401, {"content-type" => "text/plain"}, ["Unauthorized"]]
       end
-    rescue ::App::Repositories::RecordNotFound
+    rescue Repositories::RecordNotFound
       [401, {"content-type" => "text/plain"}, ["Unauthorized"]]
     end
   end
+end
 end

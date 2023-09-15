@@ -8,7 +8,7 @@ RSpec.describe ComponentAssignments::App do
 
   describe "POST /component_assignments" do
     it "creates a new component assignment" do
-      allow_any_instance_of(ComponentAssignments::Controller).to receive(:create).and_return([201, {}, ["Create"]])
+      allow_any_instance_of(App::Controllers::ComponentAssignments).to receive(:create).and_return([201, {}, ["Create"]])
 
       post "/component_assignments", {}.to_json, "CONTENT_TYPE" => "application/json"
 
@@ -17,7 +17,7 @@ RSpec.describe ComponentAssignments::App do
     end
 
     it "returns an error when creating a component assignment fails" do
-      allow_any_instance_of(ComponentAssignments::Controller).to receive(:create).and_return([500, {}, ["Error creating component"]])
+      allow_any_instance_of(App::Controllers::ComponentAssignments).to receive(:create).and_return([500, {}, ["Error creating component"]])
 
       post "/component_assignments", {}.to_json, "CONTENT_TYPE" => "application/json"
 
@@ -28,7 +28,7 @@ RSpec.describe ComponentAssignments::App do
 
   describe "DELETE /component_assignments" do
     it "deletes the specified component assignment" do
-      allow_any_instance_of(ComponentAssignments::Controller).to receive(:delete).and_return([200, {}, ["Delete assignment"]])
+      allow_any_instance_of(App::Controllers::ComponentAssignments).to receive(:delete).and_return([200, {}, ["Delete assignment"]])
 
       delete "/component_assignments", {}.to_json, "CONTENT_TYPE" => "application/json"
 

@@ -1,9 +1,10 @@
 require "strava-ruby-client"
 require "jwt"
-require_relative "../app/repositories/strava_integrations"
+require_relative "../repositories/strava_integrations"
 
-module StravaIntegration
-  class Controller
+module App
+module Controllers
+  class StravaIntegrations
     def initialize
       @strava_oauth_client = ::Strava::OAuth::Client.new(
         client_id: ENV["STRAVA_CLIENT_ID"],
@@ -21,7 +22,7 @@ module StravaIntegration
 
       response = exchange_code_for_oauth_token(request.params["code"])
 
-      ::App::Repositories::StravaIntegrations.new.create_credentials(
+      Repositories::StravaIntegrations.new.create_credentials(
         access_token: response.access_token, refresh_token: response.refresh_token
       )
 
@@ -75,17 +76,17 @@ module StravaIntegration
 
     def update_tokens
       response = @strava_oauth_client.oauth_token(
-        refresh_token: ::App::Repositories::StravaIntegrations.new.get_refresh_token,
+        refresh_token: Repositories::StravaIntegrations.new.get_refresh_token,
         grant_type: "refresh_token"
       )
 
-      ::App::Repositories::StravaIntegrations.new.update_credentials(
+      Repositories::StravaIntegrations.new.update_credentials(
         access_token: response.access_token, refresh_token: response.refresh_token
       )
     end
 
     def fetch_all_activities
-      client = Strava::Api::Client.new(access_token: ::App::Repositories::StravaIntegrations.new.get_access_token)
+      client = Strava::Api::Client.new(access_token: Repositories::StravaIntegrations.new.get_access_token)
 
       page = 1
       all_activities = []
@@ -101,4 +102,5 @@ module StravaIntegration
       all_activities
     end
   end
+end
 end

@@ -1,4 +1,4 @@
-require_relative "controller"
+require_relative "../app/controllers/components"
 module Components
   class App
     def call(env)
@@ -6,13 +6,13 @@ module Components
 
       case request.path_info
       when "/"
-        Controller.new.index(request)
+        ::App::Controllers::Components.new.index(request)
       when "/components"
         case request.request_method
         when "GET"
-          Controller.new.index(request)
+          ::App::Controllers::Components.new.index(request)
         when "POST"
-          Controller.new.create(request)
+          ::App::Controllers::Components.new.create(request)
         else
           [405, {"Content-Type" => "text/plain"}, ["Method Not Allowed"]]
         end
@@ -20,11 +20,11 @@ module Components
         component_id = $1.to_i
         case request.request_method
         when "GET"
-          Controller.new.read(request, component_id)
+          ::App::Controllers::Components.new.read(request, component_id)
         when "PUT"
-          Controller.new.update(request, component_id)
+          ::App::Controllers::Components.new.update(request, component_id)
         when "DELETE"
-          Controller.new.delete(request, component_id)
+          ::App::Controllers::Components.new.delete(request, component_id)
         else
           [405, {"Content-Type" => "text/plain"}, ["Method Not Allowed"]]
         end

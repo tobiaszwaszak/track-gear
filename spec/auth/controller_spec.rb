@@ -1,7 +1,7 @@
-require_relative "../../auth/controller"
+require_relative "../../app/controllers/auth"
 require "json"
 
-RSpec.describe Auth::Controller do
+RSpec.describe App::Controllers::Auth do
   describe "#create" do
     let(:valid_account) { instance_double("Auth::Account", id: 1, email: "account@example.com", authenticate: true) }
     let(:invalid_account) { instance_double("Auth::Account", id: 2, email: "account@example.com", authenticate: false) }

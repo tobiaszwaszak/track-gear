@@ -1,8 +1,8 @@
 require "json"
-require_relative "./../../component_assignments/controller"
+require_relative "./../../app/controllers/component_assignments"
 
-RSpec.describe ComponentAssignments::Controller do
-  let(:controller) { ComponentAssignments::Controller.new }
+RSpec.describe App::Controllers::ComponentAssignments do
+  let(:controller) { App::Controllers::ComponentAssignments.new }
   let(:request) { instance_double("Rack::Request", body: StringIO.new) }
 
   describe "#create" do
