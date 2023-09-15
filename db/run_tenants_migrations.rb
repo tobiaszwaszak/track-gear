@@ -8,7 +8,7 @@ Dotenv.load(".env.test") if ENV["RACK_ENV"] == "test"
 ActiveRecord::Base.configurations = YAML.load_file("db/configuration.yml")
 ActiveRecord::Base.establish_connection(ENV["RACK_ENV"].to_sym)
 
-Db::Records::Account.find_each do |tenant|
+::App::Records::Account.find_each do |tenant|
   tenant_id = tenant.id
   db_config = {
     adapter: "sqlite3",

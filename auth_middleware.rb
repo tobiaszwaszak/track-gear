@@ -1,5 +1,5 @@
 require "rack"
-require_relative "auth/verify_and_set_account"
+require_relative "./app/services/auth/verify_and_set_account"
 class AuthMiddleware
   def initialize(app)
     @app = app
@@ -13,10 +13,10 @@ class AuthMiddleware
     return @app.call(env) if req.path.start_with?("/accounts") && req.request_method == "POST"
     return @app.call(env) if req.path.start_with?("/strava_integration/callback")
 
-    env["account_id"] = Auth::VerifyAndSetAccount.new.call(env)
+    env["account_id"] = App::Services::Auth::VerifyAndSetAccount.new.call(env)
 
     @app.call(env)
-  rescue Auth::Unauthorized
+  rescue App::Services::Auth::Unauthorized
     [401, {"content-type" => "text/plain"}, ["Unauthorized"]]
   end
 end
