@@ -1,5 +1,5 @@
-require_relative "../../app/services/auth/verify_and_set_account"
-require_relative "../../app/repositories/auth"
+require_relative "../../../app/services/auth/verify_and_set_account"
+require_relative "../../../app/repositories/auth"
 require "dotenv"
 
 Dotenv.load(".env.test")

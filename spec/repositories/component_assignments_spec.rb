@@ -4,6 +4,15 @@ require_relative "../../app/repositories/component_assignments"
 RSpec.describe App::Repositories::ComponentAssignments do
   let(:repository) { App::Repositories::ComponentAssignments.new }
 
+  before(:all) do
+    ActiveRecord::Base.configurations = YAML.load_file("db/configuration.yml")
+    ActiveRecord::Base.establish_connection(ENV["RACK_ENV"].to_sym)
+  end
+
+  after(:all) do
+    ActiveRecord::Base.remove_connection
+  end
+
   describe "#create" do
     it "creates a new component assignment" do
       bike = ::App::Records::Bike.create(name: "foo")

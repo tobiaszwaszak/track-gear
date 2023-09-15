@@ -4,6 +4,15 @@ require_relative "../../app/repositories/bikes"
 RSpec.describe App::Repositories::Bikes do
   let(:repository) { App::Repositories::Bikes.new }
 
+  before(:all) do
+    ActiveRecord::Base.configurations = YAML.load_file("db/configuration.yml")
+    ActiveRecord::Base.establish_connection(ENV["RACK_ENV"].to_sym)
+  end
+
+  after(:all) do
+    ActiveRecord::Base.remove_connection
+  end
+
   describe "#all" do
     it "returns all bikes" do
       bike1 = ::App::Records::Bike.create(name: "Mountain Bike")
