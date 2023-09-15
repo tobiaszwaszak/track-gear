@@ -1,10 +1,10 @@
-require_relative "../../auth/verify_and_set_account"
+require_relative "../../app/services/auth/verify_and_set_account"
 require_relative "../../app/repositories/auth"
 require "dotenv"
 
 Dotenv.load(".env.test")
 
-RSpec.describe Auth::VerifyAndSetAccount do
+RSpec.describe App::Services::Auth::VerifyAndSetAccount do
   before(:all) do
     ActiveRecord::Base.configurations = YAML.load_file("db/configuration.yml")
     ActiveRecord::Base.establish_connection(ENV["RACK_ENV"].to_sym)
@@ -15,7 +15,7 @@ RSpec.describe Auth::VerifyAndSetAccount do
   end
 
   let(:account) { ::App::Records::Account.create(email: "foo@bar.dev", password: "password") }
-  let(:valid_token) { Auth::JsonWebToken.encode(account_id: account.id) }
+  let(:valid_token) { App::Services::Auth::JsonWebToken.encode(account_id: account.id) }
   let(:invalid_token) { "invalid_token" }
 
   describe "#call" do
@@ -33,7 +33,7 @@ RSpec.describe Auth::VerifyAndSetAccount do
       let(:env) { {"HTTP_AUTHORIZATION" => "Bearer #{invalid_token}"} }
 
       it "raises Auth::Unauthorized" do
-        expect { subject.call(env) }.to raise_error(Auth::Unauthorized)
+        expect { subject.call(env) }.to raise_error(App::Services::Auth::Unauthorized)
       end
     end
 
@@ -41,7 +41,7 @@ RSpec.describe Auth::VerifyAndSetAccount do
       let(:env) { {} }
 
       it "raises Auth::Unauthorized" do
-        expect { subject.call(env) }.to raise_error(Auth::Unauthorized)
+        expect { subject.call(env) }.to raise_error(App::Services::Auth::Unauthorized)
       end
     end
 
@@ -49,11 +49,11 @@ RSpec.describe Auth::VerifyAndSetAccount do
       let(:env) { {"HTTP_AUTHORIZATION" => "Bearer invalid_token"} }
 
       before do
-        allow(Auth::JsonWebToken).to receive(:decode).and_raise(JWT::DecodeError)
+        allow(App::Services::Auth::JsonWebToken).to receive(:decode).and_raise(JWT::DecodeError)
       end
 
       it "raises Auth::Unauthorized" do
-        expect { subject.call(env) }.to raise_error(Auth::Unauthorized)
+        expect { subject.call(env) }.to raise_error(App::Services::Auth::Unauthorized)
       end
     end
 
@@ -65,7 +65,7 @@ RSpec.describe Auth::VerifyAndSetAccount do
       end
 
       it "raises Auth::Unauthorized" do
-        expect { subject.call(env) }.to raise_error(Auth::Unauthorized)
+        expect { subject.call(env) }.to raise_error(App::Services::Auth::Unauthorized)
       end
     end
   end

@@ -10,7 +10,7 @@ RSpec.describe App::Controllers::Auth do
 
     before do
       allow(App::Repositories::Auth).to receive(:new).and_return(repository)
-      allow(Auth::JsonWebToken).to receive(:encode).with({account_id: valid_account.id}).and_return(valid_token)
+      allow(App::Services::Auth::JsonWebToken).to receive(:encode).with({account_id: valid_account.id}).and_return(valid_token)
     end
 
     context "when the account exists and authentication succeeds" do

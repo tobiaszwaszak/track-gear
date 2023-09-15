@@ -1,7 +1,7 @@
 require "jwt"
-require_relative "../../auth/json_web_token"
+require_relative "../../app/services/auth/json_web_token"
 
-RSpec.describe Auth::JsonWebToken do
+RSpec.describe App::Services::Auth::JsonWebToken do
   let(:payload) { {account_id: 1} }
   let(:secret_key) { "test_secret_key" }
 
@@ -16,7 +16,7 @@ RSpec.describe Auth::JsonWebToken do
     it "encodes the payload with an expiration time" do
       expect(JWT).to receive(:encode).with({account_id: 1, exp: expiration_time.to_i}, secret_key).and_return(encoded_token)
 
-      token = Auth::JsonWebToken.encode(payload, expiration_time)
+      token = App::Services::Auth::JsonWebToken.encode(payload, expiration_time)
 
       expect(token).to eq(encoded_token)
     end
@@ -25,7 +25,7 @@ RSpec.describe Auth::JsonWebToken do
       default_expiration_time = Time.now + 24.hours
       expect(JWT).to receive(:encode).with({account_id: 1, exp: default_expiration_time.to_i}, secret_key).and_return(encoded_token)
 
-      token = Auth::JsonWebToken.encode(payload)
+      token = App::Services::Auth::JsonWebToken.encode(payload)
 
       expect(token).to eq(encoded_token)
     end
@@ -38,7 +38,7 @@ RSpec.describe Auth::JsonWebToken do
     it "decodes the token and returns the payload as a HashWithIndifferentAccess" do
       expect(JWT).to receive(:decode).with(encoded_token, secret_key).and_return([decoded_payload])
 
-      payload = Auth::JsonWebToken.decode(encoded_token)
+      payload = App::Services::Auth::JsonWebToken.decode(encoded_token)
 
       expect(payload).to be_a(HashWithIndifferentAccess)
       expect(payload).to eq(decoded_payload.with_indifferent_access)

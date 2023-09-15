@@ -5,7 +5,7 @@ Dotenv.load(".env.test")
 require "byebug"
 require_relative "../auth_middleware"
 require_relative "../app/repositories/auth"
-require_relative "../auth/json_web_token"
+require_relative "../app/services/auth/json_web_token"
 require_relative "../app/repositories/accounts"
 
 RSpec.describe AuthMiddleware do
@@ -47,7 +47,7 @@ RSpec.describe AuthMiddleware do
       it "calls Auth::VerifyAndSetAccount" do
         account = App::Repositories::Accounts.new.create(email: "foo@.bar.dev", password: "password")
         account_id = account[:id]
-        jwt_token = Auth::JsonWebToken.encode(account_id: account_id)
+        jwt_token = App::Services::Auth::JsonWebToken.encode(account_id: account_id)
 
         header "Authorization", "Bearer #{jwt_token}"
         get "/accounts/#{account_id}"
@@ -72,7 +72,7 @@ RSpec.describe AuthMiddleware do
 
       it "returns 401 Unauthorized for non-existing accounts" do
         invalid_account_id = 9999
-        jwt_token = Auth::JsonWebToken.encode(account_id: invalid_account_id)
+        jwt_token = App::Services::Auth::JsonWebToken.encode(account_id: invalid_account_id)
 
         header "Authorization", "Bearer #{jwt_token}"
         get "/accounts/1"
