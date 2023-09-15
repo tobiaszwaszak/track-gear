@@ -1,6 +1,7 @@
-require_relative "../app/controllers/component_assignments"
-module ComponentAssignments
-  class App
+require_relative "../controllers/component_assignments"
+module App
+  module Routers
+class ComponentAssignments
     def call(env)
       request = Rack::Request.new(env)
 
@@ -8,9 +9,9 @@ module ComponentAssignments
       when "/component_assignments"
         case request.request_method
         when "POST"
-          ::App::Controllers::ComponentAssignments.new.create(request)
+          Controllers::ComponentAssignments.new.create(request)
         when "DELETE"
-          ::App::Controllers::ComponentAssignments.new.delete(request)
+          Controllers::ComponentAssignments.new.delete(request)
         else
           [405, {"Content-Type" => "text/plain"}, ["Method Not Allowed"]]
         end
@@ -19,4 +20,5 @@ module ComponentAssignments
       end
     end
   end
+end
 end

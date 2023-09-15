@@ -1,13 +1,13 @@
 require "rack/test"
 require "json"
 
-require_relative "./../../bikes/app"
+require_relative "./../../app/routers/bikes"
 
-RSpec.describe Bikes::App do
+RSpec.describe App::Routers::Bikes do
   include Rack::Test::Methods
 
   def app
-    Bikes::App.new
+    App::Routers::Bikes.new
   end
 
   before do

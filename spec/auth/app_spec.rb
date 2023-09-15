@@ -1,11 +1,11 @@
-require_relative "../../auth/app"
+require_relative "../../app/routers/auth"
 require "rack/test"
 
-RSpec.describe Auth::App do
+RSpec.describe App::Routers::Auth do
   include Rack::Test::Methods
 
   def app
-    Auth::App.new
+    App::Routers::Auth.new
   end
 
   before do

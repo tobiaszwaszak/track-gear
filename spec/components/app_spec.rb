@@ -1,13 +1,13 @@
 require "rack/test"
 require "json"
 require "byebug"
-require_relative "./../../components/app"
+require_relative "./../../app/routers/components"
 
-RSpec.describe Components::App do
+RSpec.describe App::Routers::Components do
   include Rack::Test::Methods
 
   def app
-    Components::App.new
+    App::Routers::Components.new
   end
 
   before do

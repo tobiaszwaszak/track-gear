@@ -20,7 +20,7 @@ RSpec.describe MyApp do
 
   describe "GET /bikes" do
     it "calls Bikes::App" do
-      expect_any_instance_of(Bikes::App).to receive(:call).and_call_original
+      expect_any_instance_of(App::Routers::Bikes).to receive(:call).and_call_original
       get "/bikes", {}
     end
   end
@@ -30,14 +30,14 @@ RSpec.describe MyApp do
       bike = ::App::Records::Bike.create(name: "foo")
       component = ::App::Records::Component.create(name: "bar")
 
-      expect_any_instance_of(ComponentAssignments::App).to receive(:call).and_call_original
+      expect_any_instance_of(App::Routers::ComponentAssignments).to receive(:call).and_call_original
       post "/component_assignments", {bike_id: bike.id, component_id: component.id}.to_json
     end
   end
 
   describe "GET /accounts/1" do
     it "calls Accounts::App" do
-      expect_any_instance_of(Accounts::App).to receive(:call).and_call_original
+      expect_any_instance_of(App::Routers::Accounts).to receive(:call).and_call_original
       get "/accounts/1"
     end
   end

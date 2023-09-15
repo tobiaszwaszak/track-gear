@@ -1,18 +1,19 @@
-require_relative "../app/controllers/components"
-module Components
-  class App
+require_relative "../controllers/components"
+module App
+module Routers
+  class Components
     def call(env)
       request = Rack::Request.new(env)
 
       case request.path_info
       when "/"
-        ::App::Controllers::Components.new.index(request)
+        Controllers::Components.new.index(request)
       when "/components"
         case request.request_method
         when "GET"
-          ::App::Controllers::Components.new.index(request)
+          Controllers::Components.new.index(request)
         when "POST"
-          ::App::Controllers::Components.new.create(request)
+          Controllers::Components.new.create(request)
         else
           [405, {"Content-Type" => "text/plain"}, ["Method Not Allowed"]]
         end
@@ -20,11 +21,11 @@ module Components
         component_id = $1.to_i
         case request.request_method
         when "GET"
-          ::App::Controllers::Components.new.read(request, component_id)
+          Controllers::Components.new.read(request, component_id)
         when "PUT"
-          ::App::Controllers::Components.new.update(request, component_id)
+          Controllers::Components.new.update(request, component_id)
         when "DELETE"
-          ::App::Controllers::Components.new.delete(request, component_id)
+          Controllers::Components.new.delete(request, component_id)
         else
           [405, {"Content-Type" => "text/plain"}, ["Method Not Allowed"]]
         end
@@ -33,4 +34,5 @@ module Components
       end
     end
   end
+end
 end

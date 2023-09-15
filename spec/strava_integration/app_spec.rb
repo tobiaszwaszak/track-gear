@@ -1,8 +1,8 @@
 require "rspec"
 require "rack/test"
-require_relative "../../strava_integration/app"
+require_relative "../../app/routers/strava_integrations"
 
-describe StravaIntegration::App do
+describe App::Routers::StravaIntegrations do
   include Rack::Test::Methods
   let(:strava_oauth_double) { instance_double("Strava::OAuth::Client", authorize_url: spy, oauth_token: spy) }
   let(:repository_double) do
@@ -17,7 +17,7 @@ describe StravaIntegration::App do
   let(:strava_api_double) { instance_double("Strava::Api::Client", athlete_activities: []) }
 
   def app
-    StravaIntegration::App.new
+    App::Routers::StravaIntegrations.new
   end
 
   before(:each) do

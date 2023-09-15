@@ -1,7 +1,7 @@
 require "rack/test"
-require_relative "../../component_assignments/app"
+require_relative "../../app/routers/component_assignments"
 
-RSpec.describe ComponentAssignments::App do
+RSpec.describe App::Routers::ComponentAssignments do
   include Rack::Test::Methods
 
   let(:app) { described_class.new }
