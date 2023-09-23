@@ -10,10 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 9) do
+ActiveRecord::Schema[7.0].define(version: 10) do
   create_table "accounts", force: :cascade do |t|
     t.string "email", null: false
     t.string "password_digest", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "activities", force: :cascade do |t|
+    t.float "distance"
+    t.integer "time"
+    t.string "external_id"
+    t.datetime "activity_date"
+    t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -49,9 +59,8 @@ ActiveRecord::Schema[7.0].define(version: 9) do
     t.text "notes"
   end
 
-  create_table "strava_credentials", force: :cascade do |t|
-    t.string "access_token"
-    t.string "refresh_token"
+  create_table "tests", force: :cascade do |t|
+    t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
