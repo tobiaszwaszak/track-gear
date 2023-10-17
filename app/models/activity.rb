@@ -1,6 +1,6 @@
 module App
   module Models
-    class Bike < Data.define(:distance, :time, :external_id, :activity_date, :name)
+    class Activity < Data.define(:id, :distance, :time, :external_id, :activity_date, :name, :commute, :sport_type)
     end
   end
 end

@@ -6,6 +6,8 @@ class CreateActivities < ActiveRecord::Migration[7.0]
       t.string "external_id"
       t.datetime "activity_date"
       t.string "name"
+      t.boolean "commute"
+      t.string "sport_type"
 
       t.timestamps
     end

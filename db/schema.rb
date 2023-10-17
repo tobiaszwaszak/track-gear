@@ -24,6 +24,8 @@ ActiveRecord::Schema[7.0].define(version: 10) do
     t.string "external_id"
     t.datetime "activity_date"
     t.string "name"
+    t.boolean "commute"
+    t.string "sport_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
