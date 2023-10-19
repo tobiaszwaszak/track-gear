@@ -1,4 +1,5 @@
 require_relative "../records/bike"
+require_relative "../records/activity"
 require_relative "../models/bike"
 require "active_record"
 
@@ -12,8 +13,16 @@ module App
         Records::Bike.all.map { |record| to_model(record).to_h }
       end
 
-      def create(name:, brand:, model:, weight:, notes:)
-        record = Records::Bike.create(name: name, brand: brand, model: model, weight: weight, notes: notes)
+      def create(name:, brand:, model:, weight:, notes:, commute:, sport_type:)
+        record = Records::Bike.create(
+          name: name,
+          brand: brand,
+          model: model,
+          weight: weight,
+          notes: notes,
+          commute: commute,
+          sport_type: sport_type
+        )
         to_model(record).to_h
       end
 
@@ -48,8 +57,31 @@ module App
           brand: record.brand,
           model: record.model,
           weight: record.weight,
-          notes: record.notes
+          notes: record.notes,
+          sport_type: record.sport_type,
+          commute: record.commute,
+          distance: calculate_distance(record),
+          time: calculate_time(record)
         )
+      end
+
+      def calculate_distance(record)
+        (Records::Activity.where(commute: record.commute, sport_type: record.sport_type).sum(:distance) / 1000).round(2).to_s + " KM"
+      end
+
+      def calculate_time(record)
+        seconds = Records::Activity.where(commute: record.commute, sport_type: record.sport_type).sum(:time)
+        humanize(seconds)
+      end
+
+      def humanize(secs)
+        [[60, :seconds], [60, :minutes], [Float::INFINITY, :hours]].map { |count, name|
+          if secs > 0
+            secs, n = secs.divmod(count)
+
+            "#{n.to_i} #{name}" unless n.to_i == 0
+          end
+        }.compact.reverse.join(" ")
       end
     end
   end

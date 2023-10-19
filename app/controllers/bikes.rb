@@ -21,7 +21,9 @@ module App
             brand: bike_data["brand"],
             model: bike_data["model"],
             weight: bike_data["weight"],
-            notes: bike_data["notes"]
+            notes: bike_data["notes"],
+            sport_type: bike_data["sport_type"],
+            commute: bike_data["commute"]
           )
           if bike
             [201, {"content-type" => "text/plain"}, ["Create"]]
