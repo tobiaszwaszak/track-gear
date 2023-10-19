@@ -69,12 +69,46 @@ module App
           model: record.model,
           weight: record.weight,
           notes: record.notes,
-          bike_id: last_bike_id(record)
+          bike_id: last_bike_id(record),
+          distance: calculate_distance(record),
+          time: calculate_time(record)
         )
       end
 
       def last_bike_id(record)
         record.component_assignments.where(ended_at: nil).last&.bike&.id
+      end
+
+      def calculate_distance(record)
+        total_distance = 0
+        record.component_assignments.each do |ca|
+          activity_query = Records::Activity.where(commute: ca.bike.commute, sport_type: ca.bike.sport_type)
+          activity_query = activity_query.where("activity_date >= ?", ca.started_at)
+          activity_query = activity_query.where("activity_date <= ?", ca.ended_at) if ca.ended_at
+          total_distance += activity_query.sum(:distance)
+        end
+        (total_distance / 1000).round(2).to_s + " KM"
+      end
+
+      def calculate_time(record)
+        total_time = 0
+        record.component_assignments.each do |ca|
+          activity_query = Records::Activity.where(commute: ca.bike.commute, sport_type: ca.bike.sport_type)
+          activity_query = activity_query.where("activity_date >= ?", ca.started_at)
+          activity_query = activity_query.where("activity_date <= ?", ca.ended_at) if ca.ended_at
+          total_time += activity_query.sum(:time)
+        end
+        humanize(total_time)
+      end
+
+      def humanize(secs)
+        [[60, :seconds], [60, :minutes], [Float::INFINITY, :hours]].map { |count, name|
+          if secs > 0
+            secs, n = secs.divmod(count)
+
+            "#{n.to_i} #{name}" unless n.to_i == 0
+          end
+        }.compact.reverse.join(" ")
       end
     end
   end
