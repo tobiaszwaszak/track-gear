@@ -1,5 +1,6 @@
 require_relative "../repositories/strava_integrations"
 require_relative "../repositories/activities"
+require "strava-ruby-client"
 
 module App
   class SyncStravaActivities
