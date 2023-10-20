@@ -9,8 +9,8 @@ module App
           Controllers::StravaIntegrations.new.authorize(request)
         elsif request.path.include?("/callback") && request.request_method == "GET"
           Controllers::StravaIntegrations.new.callback(request)
-        elsif request.path.include?("/get_activities") && request.request_method == "GET"
-          Controllers::StravaIntegrations.new.get_activities(request)
+        elsif request.path.include?("/sync_activities") && request.request_method == "GET"
+          Controllers::StravaIntegrations.new.sync_activities(request)
         else
           [404, {"Content-Type" => "text/plain"}, ["Not Found"]]
         end

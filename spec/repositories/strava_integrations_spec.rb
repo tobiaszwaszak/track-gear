@@ -11,6 +11,10 @@ module App::Repositories
       ActiveRecord::Base.establish_connection(ENV["RACK_ENV"].to_sym)
     end
 
+    after(:all) do
+      ActiveRecord::Base.remove_connection
+    end
+
     describe "#create_credentials" do
       it "creates Strava credentials with access and refresh tokens" do
         access_token = "test_access_token"
@@ -19,6 +23,7 @@ module App::Repositories
         repository.create_credentials(access_token: access_token, refresh_token: refresh_token)
 
         credential = ::App::Records::StravaCredential.last
+
         expect(credential.access_token).to eq(access_token)
         expect(credential.refresh_token).to eq(refresh_token)
       end

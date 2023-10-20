@@ -1,6 +1,7 @@
 require "strava-ruby-client"
 require "jwt"
 require_relative "../repositories/strava_integrations"
+require_relative "../services/sync_strava_activities"
 
 module App
   module Controllers
@@ -29,11 +30,10 @@ module App
         [302, {"Location" => "/"}, []]
       end
 
-      def get_activities(request)
-        update_tokens
-        activities = fetch_all_activities
+      def sync_activities(request)
+        SyncStravaActivities.new.call
 
-        [200, {"content-type" => "application/json"}, [activities.to_json]]
+        [200, {"content-type" => "application/json"}, []]
       end
 
       private
@@ -72,34 +72,6 @@ module App
       def establish_db_connection(tenant_id)
         db_file = "#{ENV["DB_DIRECTORY"]}#{ENV["RACK_ENV"]}_#{tenant_id}.sqlite3"
         ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: db_file)
-      end
-
-      def update_tokens
-        response = @strava_oauth_client.oauth_token(
-          refresh_token: Repositories::StravaIntegrations.new.get_refresh_token,
-          grant_type: "refresh_token"
-        )
-
-        Repositories::StravaIntegrations.new.update_credentials(
-          access_token: response.access_token, refresh_token: response.refresh_token
-        )
-      end
-
-      def fetch_all_activities
-        client = Strava::Api::Client.new(access_token: Repositories::StravaIntegrations.new.get_access_token)
-
-        page = 1
-        all_activities = []
-
-        loop do
-          activities = client.athlete_activities(page: page)
-          activities.each { |activity| all_activities << activity.to_h }
-          break if activities.empty?
-
-          page += 1
-        end
-
-        all_activities
       end
     end
   end

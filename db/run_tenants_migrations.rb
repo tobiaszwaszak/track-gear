@@ -1,6 +1,6 @@
 require "active_record"
 require "dotenv"
-require_relative "./records/account"
+require_relative "../app/records/account"
 
 Dotenv.load(".env.development") if ENV["RACK_ENV"] == "development"
 Dotenv.load(".env.test") if ENV["RACK_ENV"] == "test"
