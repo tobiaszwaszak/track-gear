@@ -4,7 +4,7 @@ module App
   module Repositories
     class StravaIntegrations
       def create_credentials(access_token:, refresh_token:)
-        Records::StravaCredential.create(
+        Records::StravaCredential.create!(
           access_token: access_token,
           refresh_token: refresh_token
         )

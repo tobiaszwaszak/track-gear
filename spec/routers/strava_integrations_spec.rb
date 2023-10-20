@@ -46,9 +46,9 @@ describe App::Routers::StravaIntegrations do
   end
 
   it "returns avtivities from strava" do
-    get "/get_activities"
+    get "/sync_activities"
 
     expect(last_response.status).to eq(200)
-    expect(JSON.parse(last_response.body)).to eq([])
+    expect(last_response.body).to eq ""
   end
 end

@@ -63,8 +63,9 @@ ActiveRecord::Schema[7.0].define(version: 11) do
     t.text "notes"
   end
 
-  create_table "tests", force: :cascade do |t|
-    t.string "name"
+  create_table "strava_credentials", force: :cascade do |t|
+    t.string "access_token"
+    t.string "refresh_token"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
