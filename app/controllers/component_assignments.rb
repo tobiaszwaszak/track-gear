@@ -11,7 +11,9 @@ module App
         else
           component = Repositories::ComponentAssignments.new.create(
             bike_id: component_data["bike_id"],
-            component_id: component_data["component_id"]
+            component_id: component_data["component_id"],
+            started_at: component_data["started_at"],
+            ended_at: component_data["ended_at"]
           )
           if component
             [201, {"content-type" => "text/plain"}, ["Create"]]
