@@ -40,5 +40,41 @@ RSpec.describe App::Contracts::ComponentAssignment do
       expect(result).to be_failure
       expect(result.errors.to_h).to eq({component_id: ["must be an integer"]})
     end
+
+    it "pass when started_at is an datetime" do
+      params = {bike_id: 1, component_id: 2, started_at: "2023-10-24 07:29:24"}
+      expect(contract.call(params)).to be_success
+    end
+
+    it "pass when started_at is empty" do
+      params = {bike_id: 1, component_id: 2, started_at: ""}
+      expect(contract.call(params)).to be_success
+    end
+
+    it "fails when started_at is not an datetime" do
+      params = {bike_id: 1, component_id: 2, started_at: "just string"}
+      result = contract.call(params)
+
+      expect(result).to be_failure
+      expect(result.errors.to_h).to eq({started_at: ["must be a date time"]})
+    end
+
+    it "pass when ended_at is an datetime" do
+      params = {bike_id: 1, component_id: 2, ended_at: "2023-10-24 07:29:24"}
+      expect(contract.call(params)).to be_success
+    end
+
+    it "pass when ended_at is empty" do
+      params = {bike_id: 1, component_id: 2, ended_at: ""}
+      expect(contract.call(params)).to be_success
+    end
+
+    it "fails when ended_at is not an datetime" do
+      params = {bike_id: 1, component_id: 2, ended_at: "just string"}
+      result = contract.call(params)
+
+      expect(result).to be_failure
+      expect(result.errors.to_h).to eq({ended_at: ["must be a date time"]})
+    end
   end
 end

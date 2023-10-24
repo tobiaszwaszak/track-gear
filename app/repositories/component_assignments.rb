@@ -7,13 +7,21 @@ module App
     end
 
     class ComponentAssignments
-      def create(bike_id:, component_id:)
-        Records::ComponentAssignment.create(bike_id: bike_id, component_id: component_id, started_at: Time.now)
+      def create(bike_id:, component_id:, started_at:, ended_at:)
+        started_at = Time.now if started_at.blank?
+
+        Records::ComponentAssignment.create(
+          bike_id: bike_id,
+          component_id: component_id,
+          started_at: started_at,
+          ended_at: ended_at
+        )
       end
 
-      def delete(bike_id:, component_id:)
+      def delete(bike_id:, component_id:, ended_at:)
+        ended_at = Time.now if ended_at.blank?
         assignment = Records::ComponentAssignment.find_by!(bike_id:, component_id:, ended_at: nil)
-        assignment.update(ended_at: Time.now)
+        assignment.update(ended_at: ended_at)
       rescue ActiveRecord::RecordNotFound
         raise RecordNotFound.new
       end
