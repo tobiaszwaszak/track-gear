@@ -19,6 +19,9 @@ With the track-gear, you can easily log and monitor the status of your bike's co
 - Start the application with the command `rackup`.
 - Open your web browser and visit http://localhost:9292 to access the app.
 
+# API documentation
+https://documenter.getpostman.com/view/268922/2s9YRCXX4p
+
 # Testing
 The track-gear includes a comprehensive suite of tests to ensure the quality and reliability of the application. The tests are written using RSpec. To run the tests, execute the following command:
 ```
