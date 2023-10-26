@@ -4,6 +4,7 @@ require_relative "../records/bike_sport_type"
 require_relative "../records/sport_type"
 require_relative "../models/bike"
 require "active_record"
+require "byebug"
 module App
   module Repositories
     class RecordNotFound < StandardError
@@ -59,9 +60,14 @@ module App
           weight: record.weight,
           notes: record.notes,
           commute: record.commute,
+          sport_types: map_sport_types(record),
           distance: calculate_distance(record),
           time: calculate_time(record)
         )
+      end
+
+      def map_sport_types(record)
+        record.sport_types.map(&:name) if record.sport_types
       end
 
       def calculate_distance(record)
