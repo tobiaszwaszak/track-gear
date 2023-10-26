@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 11) do
+ActiveRecord::Schema[7.0].define(version: 14) do
   create_table "accounts", force: :cascade do |t|
     t.string "email", null: false
     t.string "password_digest", null: false
@@ -25,9 +25,18 @@ ActiveRecord::Schema[7.0].define(version: 11) do
     t.datetime "activity_date"
     t.string "name"
     t.boolean "commute"
-    t.string "sport_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "sport_type_id"
+  end
+
+  create_table "bike_sport_types", force: :cascade do |t|
+    t.integer "bike_id"
+    t.integer "sport_type_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bike_id"], name: "index_bike_sport_types_on_bike_id"
+    t.index ["sport_type_id"], name: "index_bike_sport_types_on_sport_type_id"
   end
 
   create_table "bikes", force: :cascade do |t|
@@ -63,6 +72,12 @@ ActiveRecord::Schema[7.0].define(version: 11) do
     t.text "notes"
   end
 
+  create_table "sport_types", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "strava_credentials", force: :cascade do |t|
     t.string "access_token"
     t.string "refresh_token"
@@ -70,6 +85,8 @@ ActiveRecord::Schema[7.0].define(version: 11) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "bike_sport_types", "bikes"
+  add_foreign_key "bike_sport_types", "sport_types"
   add_foreign_key "component_assignments", "bikes"
   add_foreign_key "component_assignments", "components"
 end

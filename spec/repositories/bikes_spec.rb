@@ -29,7 +29,7 @@ RSpec.describe App::Repositories::Bikes do
     it "creates a new bike" do
       name = "Mountain Bike"
 
-      result = repository.create(name: name, brand: nil, model: nil, weight: nil, notes: nil, commute: nil, sport_type: nil)
+      result = repository.create(name: name, brand: nil, model: nil, weight: nil, notes: nil, commute: nil)
 
       expect(result[:id]).to be_a(Integer)
       expect(result[:name]).to eq(name)

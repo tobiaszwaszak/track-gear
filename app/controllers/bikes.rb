@@ -1,5 +1,4 @@
 require "json"
-require "byebug"
 require_relative "../repositories/bikes"
 require_relative "../contracts/bike"
 
@@ -22,7 +21,6 @@ module App
             model: bike_data["model"],
             weight: bike_data["weight"],
             notes: bike_data["notes"],
-            sport_type: bike_data["sport_type"],
             commute: bike_data["commute"]
           )
           if bike

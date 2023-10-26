@@ -1,5 +1,7 @@
 require_relative "../records/bike"
 require_relative "../records/activity"
+require_relative "../records/bike_sport_type"
+require_relative "../records/sport_type"
 require_relative "../models/bike"
 require "active_record"
 
@@ -13,15 +15,14 @@ module App
         Records::Bike.all.map { |record| to_model(record).to_h }
       end
 
-      def create(name:, brand:, model:, weight:, notes:, commute:, sport_type:)
+      def create(name:, brand:, model:, weight:, notes:, commute:)
         record = Records::Bike.create(
           name: name,
           brand: brand,
           model: model,
           weight: weight,
           notes: notes,
-          commute: commute,
-          sport_type: sport_type
+          commute: commute
         )
         to_model(record).to_h
       end
@@ -58,7 +59,6 @@ module App
           model: record.model,
           weight: record.weight,
           notes: record.notes,
-          sport_type: record.sport_type,
           commute: record.commute,
           distance: calculate_distance(record),
           time: calculate_time(record)
@@ -66,11 +66,11 @@ module App
       end
 
       def calculate_distance(record)
-        (Records::Activity.where(commute: record.commute, sport_type: record.sport_type).sum(:distance) / 1000).round(2).to_s + " KM"
+        (Records::Activity.where(commute: record.commute, sport_type: record.sport_types).sum(:distance) / 1000).round(2).to_s + " KM"
       end
 
       def calculate_time(record)
-        seconds = Records::Activity.where(commute: record.commute, sport_type: record.sport_type).sum(:time)
+        seconds = Records::Activity.where(commute: record.commute, sport_type: record.sport_types).sum(:time)
         humanize(seconds)
       end
 

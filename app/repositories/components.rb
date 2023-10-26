@@ -1,5 +1,7 @@
 require_relative "../records/component"
 require_relative "../models/component"
+require_relative "../records/bike_sport_type"
+require_relative "../records/sport_type"
 require "active_record"
 require "date"
 
@@ -82,7 +84,7 @@ module App
       def calculate_distance(record)
         total_distance = 0
         record.component_assignments.each do |ca|
-          activity_query = Records::Activity.where(commute: ca.bike.commute, sport_type: ca.bike.sport_type)
+          activity_query = Records::Activity.where(commute: ca.bike.commute, sport_type: ca.bike.sport_types)
           activity_query = activity_query.where("activity_date >= ?", ca.started_at)
           activity_query = activity_query.where("activity_date <= ?", ca.ended_at) if ca.ended_at
           total_distance += activity_query.sum(:distance)
@@ -93,7 +95,7 @@ module App
       def calculate_time(record)
         total_time = 0
         record.component_assignments.each do |ca|
-          activity_query = Records::Activity.where(commute: ca.bike.commute, sport_type: ca.bike.sport_type)
+          activity_query = Records::Activity.where(commute: ca.bike.commute, sport_type: ca.bike.sport_types)
           activity_query = activity_query.where("activity_date >= ?", ca.started_at)
           activity_query = activity_query.where("activity_date <= ?", ca.ended_at) if ca.ended_at
           total_time += activity_query.sum(:time)

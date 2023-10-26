@@ -2,8 +2,9 @@ require "active_record"
 
 module App
   module Records
-    class Activity < ActiveRecord::Base
+    class BikeSportType < ActiveRecord::Base
       belongs_to :sport_type
+      belongs_to :bike
     end
   end
 end

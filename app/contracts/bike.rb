@@ -9,7 +9,6 @@ module App
         optional(:weight).maybe(:float)
         optional(:notes).maybe(:string)
         optional(:commute).maybe(:string)
-        optional(:sport_type).maybe(:string)
       end
     end
   end
