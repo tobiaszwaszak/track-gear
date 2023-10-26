@@ -4,7 +4,6 @@ require_relative "../records/bike_sport_type"
 require_relative "../records/sport_type"
 require_relative "../models/bike"
 require "active_record"
-
 module App
   module Repositories
     class RecordNotFound < StandardError

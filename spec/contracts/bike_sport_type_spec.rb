@@ -5,7 +5,7 @@ RSpec.describe App::Contracts::BikeSportType do
   subject(:contract) { described_class.new }
 
   describe "with valid parameters" do
-    let(:valid_params) { { bike_id: 1, sport_type_id: 2 } }
+    let(:valid_params) { {bike_id: 1, sport_type_id: 2} }
 
     it "is valid" do
       result = contract.call(valid_params)
@@ -14,7 +14,7 @@ RSpec.describe App::Contracts::BikeSportType do
   end
 
   describe "with missing bike_id" do
-    let(:invalid_params) { { bike_id: nil, sport_type_id: 2 } }
+    let(:invalid_params) { {bike_id: nil, sport_type_id: 2} }
 
     it "is invalid" do
       result = contract.call(invalid_params)
@@ -24,7 +24,7 @@ RSpec.describe App::Contracts::BikeSportType do
   end
 
   describe "with missing sport_type_id" do
-    let(:invalid_params) { { bike_id: 1, sport_type_id: nil } }
+    let(:invalid_params) { {bike_id: 1, sport_type_id: nil} }
 
     it "is invalid" do
       result = contract.call(invalid_params)
@@ -34,7 +34,7 @@ RSpec.describe App::Contracts::BikeSportType do
   end
 
   describe "with non-integer bike_id" do
-    let(:invalid_params) { { bike_id: "not_an_integer", sport_type_id: 2 } }
+    let(:invalid_params) { {bike_id: "not_an_integer", sport_type_id: 2} }
 
     it "is invalid" do
       result = contract.call(invalid_params)
@@ -44,7 +44,7 @@ RSpec.describe App::Contracts::BikeSportType do
   end
 
   describe "with non-integer sport_type_id" do
-    let(:invalid_params) { { bike_id: 1, sport_type_id: "not_an_integer" } }
+    let(:invalid_params) { {bike_id: 1, sport_type_id: "not_an_integer"} }
 
     it "is invalid" do
       result = contract.call(invalid_params)

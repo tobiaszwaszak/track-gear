@@ -1,7 +1,7 @@
 require_relative "../../app/records/activity"
 require_relative "../../app/records/sport_type"
 
-class AddSportTypeToActivity< ActiveRecord::Migration[7.0]
+class AddSportTypeToActivity < ActiveRecord::Migration[7.0]
   def change
     add_column :activities, :sport_type_id, :integer
 

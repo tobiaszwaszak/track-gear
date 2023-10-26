@@ -5,7 +5,7 @@ RSpec.describe App::Contracts::SportType do
   subject(:contract) { described_class.new }
 
   describe "with valid parameters" do
-    let(:valid_params) { { name: "Football" } }
+    let(:valid_params) { {name: "Football"} }
 
     it "is valid" do
       result = contract.call(valid_params)
@@ -14,7 +14,7 @@ RSpec.describe App::Contracts::SportType do
   end
 
   describe "with missing name" do
-    let(:invalid_params) { { name: nil } }
+    let(:invalid_params) { {name: nil} }
 
     it "is invalid" do
       result = contract.call(invalid_params)
@@ -24,7 +24,7 @@ RSpec.describe App::Contracts::SportType do
   end
 
   describe "with empty name" do
-    let(:invalid_params) { { name: "" } }
+    let(:invalid_params) { {name: ""} }
 
     it "is invalid" do
       result = contract.call(invalid_params)

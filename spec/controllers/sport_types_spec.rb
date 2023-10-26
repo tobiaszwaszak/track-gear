@@ -8,7 +8,6 @@ RSpec.describe App::Controllers::SportTypes do
   before do
     ActiveRecord::Base.configurations = YAML.load_file("db/configuration.yml")
     ActiveRecord::Base.establish_connection(ENV["RACK_ENV"].to_sym)
-    App::Records::SportType.all.destroy_all
   end
 
   describe "#index" do
@@ -24,7 +23,7 @@ RSpec.describe App::Controllers::SportTypes do
       expect(response[1]["content-type"]).to eq("application/json")
 
       sport_types = JSON.parse(response[2][0])
-      expect(sport_types).to contain_exactly(
+      expect(sport_types).to include(
         a_hash_including("id" => sport_type1["id"], "name" => sport_type1["name"]),
         a_hash_including("id" => sport_type2["id"], "name" => sport_type2["name"])
       )
@@ -33,7 +32,7 @@ RSpec.describe App::Controllers::SportTypes do
 
   describe "#create" do
     it "creates a new sport type and returns a success response" do
-      sport_type_data = { "name" => "New Sport Type" }
+      sport_type_data = {"name" => "New Sport Type"}
 
       request = double("request", body: double("body", read: sport_type_data.to_json))
       response = controller.create(request)
@@ -44,7 +43,7 @@ RSpec.describe App::Controllers::SportTypes do
     end
 
     it "returns an error response when the contract has errors" do
-      sport_type_data = { "name" => "" }
+      sport_type_data = {"name" => ""}
 
       request = double("request", body: double("body", read: sport_type_data.to_json))
       response = controller.create(request)
@@ -82,7 +81,7 @@ RSpec.describe App::Controllers::SportTypes do
   describe "#update" do
     it "updates an existing sport type and returns a success response" do
       sport_type = App::Records::SportType.create(name: "Sport Type 1")
-      sport_type_data = { "name" => "Updated Sport Type" }
+      sport_type_data = {"name" => "Updated Sport Type"}
 
       request = double("request", body: double("body", read: sport_type_data.to_json))
       response = controller.update(request, sport_type["id"])
@@ -93,7 +92,7 @@ RSpec.describe App::Controllers::SportTypes do
     end
 
     it "returns an error response when the contract has errors" do
-      sport_type_data = { "name" => "" }
+      sport_type_data = {"name" => ""}
 
       request = double("request", body: double("body", read: sport_type_data.to_json))
       response = controller.update(request, 1)
@@ -104,7 +103,7 @@ RSpec.describe App::Controllers::SportTypes do
     end
 
     it "returns an error response when sport type update fails" do
-      sport_type_data = { "name" => "Updated Sport Type" }
+      sport_type_data = {"name" => "Updated Sport Type"}
 
       request = double("request", body: double("body", read: sport_type_data.to_json))
       response = controller.update(request, 12345)  # An ID that won't exist

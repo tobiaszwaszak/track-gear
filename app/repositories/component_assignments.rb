@@ -20,7 +20,7 @@ module App
 
       def delete(bike_id:, component_id:, ended_at:)
         ended_at = Time.now if ended_at.blank?
-        assignment = Records::ComponentAssignment.find_by!(bike_id:, component_id:, ended_at: nil)
+        assignment = Records::ComponentAssignment.find_by!(bike_id: bike_id, component_id: component_id, ended_at: nil)
         assignment.update(ended_at: ended_at)
       rescue ActiveRecord::RecordNotFound
         raise RecordNotFound.new

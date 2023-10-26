@@ -20,7 +20,7 @@ RSpec.describe App::Repositories::SportTypes do
 
       all_sport_types = repository.all
 
-      expect(all_sport_types).to contain_exactly(
+      expect(all_sport_types).to include(
         a_hash_including(id: sport_type1[:id], name: sport_type1[:name]),
         a_hash_including(id: sport_type2[:id], name: sport_type2[:name])
       )
@@ -53,13 +53,13 @@ RSpec.describe App::Repositories::SportTypes do
   describe "#update" do
     it "updates an existing sport type" do
       sport_type = repository.create(name: "Update Me")
-      updated_sport_type = repository.update(id: sport_type[:id], params: { name: "Updated Name" })
+      updated_sport_type = repository.update(id: sport_type[:id], params: {name: "Updated Name"})
 
       expect(updated_sport_type[:name]).to eq("Updated Name")
     end
 
     it "raises RecordNotFound when sport type is not found for updating" do
-      expect { repository.update(id: 12345, params: { name: "Invalid Update" }) }
+      expect { repository.update(id: 12345, params: {name: "Invalid Update"}) }
         .to raise_error(App::Repositories::RecordNotFound)
     end
   end

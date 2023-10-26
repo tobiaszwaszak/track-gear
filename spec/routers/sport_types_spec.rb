@@ -1,4 +1,3 @@
-
 require "rack/test"
 require_relative "../../app/routers/sport_types"
 
