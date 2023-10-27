@@ -6,6 +6,9 @@ require "./app/routers/component_assignments"
 require "./app/routers/accounts"
 require "./app/routers/auth"
 require "./app/routers/strava_integrations"
+require "./app/routers/sport_types"
+require "./app/routers/bike_sport_types"
+
 class MyApp
   def call(env)
     req = Rack::Request.new(env)
@@ -21,6 +24,10 @@ class MyApp
       App::Routers::Auth.new.call(env)
     elsif req.path.start_with?("/strava_integration")
       App::Routers::StravaIntegrations.new.call(env)
+    elsif req.path.start_with?("/sport_types")
+      App::Routers::SportTypes.new.call(env)
+    elsif req.path.start_with?("/bike_sport_types")
+      App::Routers::BikeSportTypes.new.call(env)
     else
       case req.path
       when "/"
