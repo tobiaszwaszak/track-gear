@@ -16,4 +16,13 @@ RSpec.configure do |config|
   end
 
   config.shared_context_metadata_behavior = :apply_to_host_groups
+
+  config.before(:all) do
+    ActiveRecord::Base.configurations = YAML.load_file("db/configuration.yml")
+    ActiveRecord::Base.establish_connection(ENV["RACK_ENV"].to_sym)
+  end
+
+  config.after(:all) do
+    ActiveRecord::Base.remove_connection
+  end
 end

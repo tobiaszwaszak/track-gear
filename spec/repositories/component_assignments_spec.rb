@@ -7,15 +7,6 @@ RSpec.describe App::Repositories::ComponentAssignments do
   let!(:component) { ::App::Records::Component.create(name: "bar") }
   let!(:assignment) { repository.create(bike_id: bike.id, component_id: component.id, started_at: nil, ended_at: nil) }
 
-  before(:all) do
-    ActiveRecord::Base.configurations = YAML.load_file("db/configuration.yml")
-    ActiveRecord::Base.establish_connection(ENV["RACK_ENV"].to_sym)
-  end
-
-  after(:all) do
-    ActiveRecord::Base.remove_connection
-  end
-
   describe "#create" do
     it "creates a new component assignment" do
       expect(assignment.bike_id).to eq(bike.id)

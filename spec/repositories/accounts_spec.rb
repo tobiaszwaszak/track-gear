@@ -3,15 +3,6 @@ require_relative "../spec_helper"
 RSpec.describe App::Repositories::Accounts do
   let(:repository) { App::Repositories::Accounts.new }
 
-  before(:all) do
-    ActiveRecord::Base.configurations = YAML.load_file("db/configuration.yml")
-    ActiveRecord::Base.establish_connection(ENV["RACK_ENV"].to_sym)
-  end
-
-  after(:all) do
-    ActiveRecord::Base.remove_connection
-  end
-
   before { ::App::Records::Account.delete_all }
 
   describe "#create" do

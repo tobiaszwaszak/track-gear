@@ -7,15 +7,6 @@ RSpec.describe App::Repositories::BikeSportTypes do
   let!(:sport_type) { ::App::Records::SportType.create(name: "bar") }
   let!(:bike_sport_type) { repository.create(bike_id: bike.id, sport_type_id: sport_type.id) }
 
-  before(:all) do
-    ActiveRecord::Base.configurations = YAML.load_file("db/configuration.yml")
-    ActiveRecord::Base.establish_connection(ENV["RACK_ENV"].to_sym)
-  end
-
-  after(:all) do
-    ActiveRecord::Base.remove_connection
-  end
-
   describe "#create" do
     it "creates a new bike sport type" do
       expect(bike_sport_type.bike_id).to eq(bike.id)

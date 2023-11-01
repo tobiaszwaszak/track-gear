@@ -1,15 +1,6 @@
 require_relative "../spec_helper"
 
 RSpec.describe App::Repositories::Components do
-  before(:all) do
-    ActiveRecord::Base.configurations = YAML.load_file("db/configuration.yml")
-    ActiveRecord::Base.establish_connection(ENV["RACK_ENV"].to_sym)
-  end
-
-  after(:all) do
-    ActiveRecord::Base.remove_connection
-  end
-
   let(:repository) { App::Repositories::Components.new }
 
   describe "#all" do

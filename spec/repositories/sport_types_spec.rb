@@ -3,15 +3,6 @@ require_relative "../spec_helper"
 RSpec.describe App::Repositories::SportTypes do
   let(:repository) { described_class.new }
 
-  before(:all) do
-    ActiveRecord::Base.configurations = YAML.load_file("db/configuration.yml")
-    ActiveRecord::Base.establish_connection(ENV["RACK_ENV"].to_sym)
-  end
-
-  after(:all) do
-    ActiveRecord::Base.remove_connection
-  end
-
   describe "#all" do
     it "returns a list of sport types" do
       sport_type1 = repository.create(name: "Test Sport Type 1")

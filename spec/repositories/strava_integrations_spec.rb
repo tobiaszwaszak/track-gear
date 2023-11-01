@@ -4,15 +4,6 @@ module App::Repositories
   describe StravaIntegrations do
     let(:repository) { StravaIntegrations.new }
 
-    before do
-      ActiveRecord::Base.configurations = YAML.load_file("db/configuration.yml")
-      ActiveRecord::Base.establish_connection(ENV["RACK_ENV"].to_sym)
-    end
-
-    after(:all) do
-      ActiveRecord::Base.remove_connection
-    end
-
     describe "#create_credentials" do
       it "creates Strava credentials with access and refresh tokens" do
         access_token = "test_access_token"
