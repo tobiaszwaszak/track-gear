@@ -1,5 +1,4 @@
-require "json"
-require_relative "./../../app/controllers/bike_sport_types"
+require_relative "../spec_helper"
 
 RSpec.describe App::Controllers::BikeSportTypes do
   let(:controller) { App::Controllers::BikeSportTypes.new }

@@ -1,9 +1,4 @@
-require_relative "../../app/records/bike"
-require_relative "../../app/records/component"
-require_relative "../../app/records/component_assignment"
-
-require_relative "../../app/repositories/bikes"
-require_relative "../../app/repositories/components"
+require_relative "../spec_helper"
 
 RSpec.describe App::Repositories::Components do
   before(:all) do

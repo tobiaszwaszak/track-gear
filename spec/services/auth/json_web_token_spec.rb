@@ -1,5 +1,4 @@
-require "jwt"
-require_relative "../../../app/services/auth/json_web_token"
+require_relative "../../spec_helper"
 
 RSpec.describe App::Services::Auth::JsonWebToken do
   let(:payload) { {account_id: 1} }

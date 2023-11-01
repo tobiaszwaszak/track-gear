@@ -1,6 +1,4 @@
-require "rack/test"
-require "json"
-require_relative "../app"
+require_relative "spec_helper"
 
 RSpec.describe MyApp do
   include Rack::Test::Methods

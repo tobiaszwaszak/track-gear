@@ -1,5 +1,4 @@
-require_relative "../../app/records/bike"
-require_relative "../../app/repositories/bikes"
+require_relative "../spec_helper"
 
 RSpec.describe App::Repositories::Bikes do
   let(:repository) { App::Repositories::Bikes.new }

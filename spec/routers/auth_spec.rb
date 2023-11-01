@@ -1,5 +1,4 @@
-require_relative "../../app/routers/auth"
-require "rack/test"
+require_relative "../spec_helper"
 
 RSpec.describe App::Routers::Auth do
   include Rack::Test::Methods

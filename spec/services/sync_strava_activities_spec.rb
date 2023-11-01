@@ -1,8 +1,4 @@
-require_relative "../../app/services/sync_strava_activities"
-require "strava-ruby-client"
-require "dotenv"
-
-Dotenv.load(".env.test")
+require_relative "../spec_helper"
 
 describe App::SyncStravaActivities do
   let(:strava_integrations_repo) { instance_double("App::Repositories::StravaIntegrations", get_refresh_token: spy) }

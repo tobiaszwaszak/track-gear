@@ -1,5 +1,4 @@
-require "rack/test"
-require_relative "../../app/routers/component_assignments"
+require_relative "../spec_helper"
 
 RSpec.describe App::Routers::ComponentAssignments do
   include Rack::Test::Methods

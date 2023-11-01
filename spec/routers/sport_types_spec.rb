@@ -1,5 +1,4 @@
-require "rack/test"
-require_relative "../../app/routers/sport_types"
+require_relative "../spec_helper"
 
 RSpec.describe App::Routers::SportTypes do
   include Rack::Test::Methods

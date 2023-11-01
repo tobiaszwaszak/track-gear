@@ -1,7 +1,4 @@
-require "dry/validation"
-require_relative "./../../app/contracts/account"
-
-require_relative "./../../app/repositories/accounts"
+require_relative "../spec_helper"
 
 RSpec.describe App::Contracts::Account do
   subject(:contract) { described_class.new }

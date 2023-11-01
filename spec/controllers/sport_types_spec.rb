@@ -1,6 +1,4 @@
-require_relative "../../app/controllers/sport_types"
-require_relative "../../app/repositories/sport_types"
-require_relative "../../app/contracts/sport_type"
+require_relative "../spec_helper"
 
 RSpec.describe App::Controllers::SportTypes do
   let(:controller) { described_class.new }

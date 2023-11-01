@@ -1,12 +1,4 @@
-require "rack"
-require "rack/test"
-require "dotenv"
-Dotenv.load(".env.test")
-require "byebug"
-require_relative "../auth_middleware"
-require_relative "../app/repositories/auth"
-require_relative "../app/services/auth/json_web_token"
-require_relative "../app/repositories/accounts"
+require_relative "spec_helper"
 
 RSpec.describe AuthMiddleware do
   include Rack::Test::Methods

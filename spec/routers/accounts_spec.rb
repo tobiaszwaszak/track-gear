@@ -1,6 +1,4 @@
-require "rack/test"
-require "json"
-require_relative "./../../app/routers/accounts"
+require_relative "../spec_helper"
 
 RSpec.describe App::Routers::Accounts do
   include Rack::Test::Methods

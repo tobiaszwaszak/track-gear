@@ -1,6 +1,4 @@
-require_relative "../../app/repositories/accounts"
-require_relative "../../app/records/account"
-require "active_record"
+require_relative "../spec_helper"
 
 RSpec.describe App::Repositories::Accounts do
   let(:repository) { App::Repositories::Accounts.new }

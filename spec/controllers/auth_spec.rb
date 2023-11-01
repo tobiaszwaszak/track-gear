@@ -1,5 +1,4 @@
-require_relative "../../app/controllers/auth"
-require "json"
+require_relative "../spec_helper"
 
 RSpec.describe App::Controllers::Auth do
   describe "#create" do

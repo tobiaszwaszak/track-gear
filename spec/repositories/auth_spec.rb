@@ -1,6 +1,4 @@
-require_relative "../../app/repositories/auth"
-require_relative "../../app/records/account"
-require "active_record"
+require_relative "../spec_helper"
 
 RSpec.describe App::Repositories::Auth do
   before(:all) do

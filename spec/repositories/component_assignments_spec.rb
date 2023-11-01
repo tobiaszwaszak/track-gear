@@ -1,8 +1,4 @@
-require_relative "../../app/records/component_assignment"
-require_relative "../../app/records/bike"
-require_relative "../../app/records/component"
-
-require_relative "../../app/repositories/component_assignments"
+require_relative "../spec_helper"
 
 RSpec.describe App::Repositories::ComponentAssignments do
   let(:repository) { App::Repositories::ComponentAssignments.new }

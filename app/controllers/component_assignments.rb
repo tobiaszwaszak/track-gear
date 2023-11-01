@@ -30,7 +30,8 @@ module App
         else
           delete = Repositories::ComponentAssignments.new.delete(
             bike_id: component_data["bike_id"],
-            component_id: component_data["component_id"]
+            component_id: component_data["component_id"],
+            ended_at: component_data["ended_at"]
           )
           if delete
             [200, {"content-type" => "text/plain"}, ["Delete assignment"]]

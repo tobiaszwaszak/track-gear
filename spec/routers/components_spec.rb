@@ -1,7 +1,4 @@
-require "rack/test"
-require "json"
-require "byebug"
-require_relative "./../../app/routers/components"
+require_relative "../spec_helper"
 
 RSpec.describe App::Routers::Components do
   include Rack::Test::Methods

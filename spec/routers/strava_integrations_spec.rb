@@ -1,6 +1,4 @@
-require "rspec"
-require "rack/test"
-require_relative "../../app/routers/strava_integrations"
+require_relative "../spec_helper"
 
 describe App::Routers::StravaIntegrations do
   include Rack::Test::Methods

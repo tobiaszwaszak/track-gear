@@ -1,6 +1,4 @@
-require "csv"
-require "json"
-require_relative "./../../app//controllers/bikes"
+require_relative "../spec_helper"
 
 RSpec.describe App::Controllers::Bikes do
   let(:controller) { App::Controllers::Bikes.new }

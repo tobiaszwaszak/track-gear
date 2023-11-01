@@ -1,5 +1,4 @@
-require "json"
-require_relative "./../../app/controllers/component_assignments"
+require_relative "../spec_helper"
 
 RSpec.describe App::Controllers::ComponentAssignments do
   let(:controller) { App::Controllers::ComponentAssignments.new }

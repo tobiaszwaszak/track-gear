@@ -1,5 +1,12 @@
-RSpec.configure do |config|
+require 'bundler/setup'
+Bundler.require
 
+Dir["./*.rb"].each {|file| require file }
+Dir["./app/**/*.rb"].each {|file| require file }
+
+Dotenv.load(".env.test")
+
+RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
   end

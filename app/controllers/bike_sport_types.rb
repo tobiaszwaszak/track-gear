@@ -29,7 +29,7 @@ module App
         else
           delete = Repositories::BikeSportTypes.new.delete(
             bike_id: bike_sport_type_data["bike_id"],
-            component_id: bike_sport_type_data["component_id"]
+            sport_type_id: bike_sport_type_data["sport_type_id"]
           )
           if delete
             [200, {"content-type" => "text/plain"}, ["Delete assignment"]]

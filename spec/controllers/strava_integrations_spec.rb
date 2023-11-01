@@ -1,9 +1,4 @@
-require "rspec"
-require "strava-ruby-client"
-require "jwt"
-require "ostruct"
-require_relative "../../app/controllers/strava_integrations"
-
+require_relative "../spec_helper"
 class MockOAuthResponse
   attr_reader :access_token, :refresh_token
 

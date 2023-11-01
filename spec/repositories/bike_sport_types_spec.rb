@@ -1,8 +1,4 @@
-require_relative "../../app/records/bike_sport_type"
-require_relative "../../app/records/bike"
-require_relative "../../app/records/sport_type"
-
-require_relative "../../app/repositories/bike_sport_types"
+require_relative "../spec_helper"
 
 RSpec.describe App::Repositories::BikeSportTypes do
   let(:repository) { App::Repositories::BikeSportTypes.new }

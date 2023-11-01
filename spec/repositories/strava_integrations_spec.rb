@@ -1,6 +1,4 @@
-require "rspec"
-require_relative "../../app/records/strava_credential"
-require_relative "../../app/repositories//strava_integrations"
+require_relative "../spec_helper"
 
 module App::Repositories
   describe StravaIntegrations do

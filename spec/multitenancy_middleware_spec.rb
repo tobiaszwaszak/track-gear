@@ -1,7 +1,4 @@
-require "rack"
-require "rack/test"
-require "tempfile"
-require_relative "../multitenancy_middleware"
+require_relative "spec_helper"
 
 RSpec.describe MultitenancyMiddleware do
   include Rack::Test::Methods
