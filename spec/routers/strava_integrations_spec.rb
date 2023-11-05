@@ -2,6 +2,7 @@ require_relative "../spec_helper"
 
 describe App::Routers::StravaIntegrations do
   include Rack::Test::Methods
+
   let(:strava_oauth_double) { instance_double("Strava::OAuth::Client", authorize_url: spy, oauth_token: spy) }
   let(:repository_double) do
     instance_double(

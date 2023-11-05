@@ -7,12 +7,8 @@ RSpec.describe App::Routers::Bikes do
     App::Routers::Bikes.new
   end
 
-  before do
-    ActiveRecord::Base.configurations = YAML.load_file("db/configuration.yml")
-    ActiveRecord::Base.establish_connection(ENV["RACK_ENV"].to_sym)
-  end
-
   let(:bike_data) { {name: "Mountain Bike"}.to_json }
+  let(:bike) { App::Records::Bike.create(name: "Mountain Bike") }
 
   it "creates a new bike" do
     post "/bikes", bike_data
@@ -22,8 +18,6 @@ RSpec.describe App::Routers::Bikes do
   end
 
   it "reads a bike with the given id" do
-    bike = ::App::Records::Bike.create(name: "Mountain Bike")
-
     get "/bikes/#{bike.id}"
 
     expect(last_response.status).to eq(200)
@@ -31,8 +25,6 @@ RSpec.describe App::Routers::Bikes do
   end
 
   it "updates a bike with the given id" do
-    bike = ::App::Records::Bike.create(name: "Mountain Bike")
-
     put "/bikes/#{bike.id}", bike_data
 
     expect(last_response.status).to eq(200)
@@ -40,8 +32,6 @@ RSpec.describe App::Routers::Bikes do
   end
 
   it "deletes a bike with the given id" do
-    bike = ::App::Records::Bike.create(name: "Mountain Bike")
-
     delete "/bikes/#{bike.id}"
 
     expect(last_response.status).to eq(200)

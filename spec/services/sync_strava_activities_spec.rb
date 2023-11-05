@@ -23,10 +23,14 @@ describe App::SyncStravaActivities do
   end
 
   describe "#update_tokens" do
-    it "should update tokens and save them to the repository" do
-      response = double("Strava OAuth Response", access_token: "new_access_token", refresh_token: "new_refresh_token")
+    let(:response) { double("Strava OAuth Response", access_token: "new_access_token", refresh_token: "new_refresh_token") }
+
+    before do
       allow(strava_integrations_repo).to receive(:get_refresh_token).and_return("current_refresh_token")
       allow(strava_oauth_client).to receive(:oauth_token).and_return(response)
+    end
+
+    it "should update tokens and save them to the repository" do
       expect(strava_integrations_repo).to receive(:update_credentials).with(
         access_token: "new_access_token",
         refresh_token: "new_refresh_token"
@@ -36,11 +40,9 @@ describe App::SyncStravaActivities do
   end
 
   describe "#sync_all_activities" do
-    it "should sync activities from Strava API" do
-      access_token = "test_access_token"
-      allow(strava_integrations_repo).to receive(:get_access_token).and_return(access_token)
-
-      activities = [
+    let(:access_token) { "test_access_token" }
+    let(:activities) do
+      [
         {
           "id" => 1,
           "distance" => 10.0,
@@ -51,7 +53,13 @@ describe App::SyncStravaActivities do
           "sport_type" => "Running"
         }
       ]
+    end
 
+    before do
+      allow(strava_integrations_repo).to receive(:get_access_token).and_return(access_token)
+    end
+
+    it "should sync activities from Strava API" do
       expect(strava_api_client).to receive(:athlete_activities).with(page: 1).and_return(activities)
       expect(activities_repo).to receive(:find_by_external_id).with(1).and_return(nil)
       expect(activities_repo).to receive(:create).with(

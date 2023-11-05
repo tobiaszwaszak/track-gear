@@ -2,6 +2,7 @@ require_relative "../spec_helper"
 
 RSpec.describe App::Controllers::Auth do
   describe "#create" do
+    subject(:response) {App::Controllers::Auth.new.create(request) }
     let(:valid_account) { instance_double("Auth::Account", id: 1, email: "account@example.com", authenticate: true) }
     let(:invalid_account) { instance_double("Auth::Account", id: 2, email: "account@example.com", authenticate: false) }
 
@@ -17,8 +18,6 @@ RSpec.describe App::Controllers::Auth do
       let(:request) { instance_double("Rack::Request", body: double("body", read: '{"email": "account@example.com", "password": "secure_password"}')) }
 
       it "returns a success response with a valid token" do
-        response = subject.create(request)
-
         expect(response).to eq([
           201,
           {"content-type" => "text/plain"},
@@ -32,8 +31,6 @@ RSpec.describe App::Controllers::Auth do
       let(:request) { instance_double("Rack::Request", body: double("body", read: '{"email": "account@example.com", "password": "wrong_password"}')) }
 
       it "returns an unauthorized response" do
-        response = subject.create(request)
-
         expect(response).to eq([401, {"content-type" => "text/plain"}, ["Unauthorized"]])
       end
     end
@@ -47,8 +44,6 @@ RSpec.describe App::Controllers::Auth do
       end
 
       it "returns an unauthorized response" do
-        response = subject.create(request)
-
         expect(response).to eq([401, {"content-type" => "text/plain"}, ["Unauthorized"]])
       end
     end

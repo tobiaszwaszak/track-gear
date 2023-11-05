@@ -2,82 +2,65 @@ require_relative "../spec_helper"
 
 RSpec.describe App::Repositories::Accounts do
   let(:repository) { App::Repositories::Accounts.new }
+  let(:email) { "account@example.com"}
+  let(:password) { "secure_password" }
+  let(:account) { repository.create(email: email, password: password) }
 
-  before { ::App::Records::Account.delete_all }
+  before { App::Records::Account.delete_all }
 
   describe "#create" do
+    subject(:created_account) { repository.create(email: email, password: password) }
+
     it "creates a new account" do
-      email = "account@example.com"
-      password = "secure_password"
-
-      created_account = repository.create(email: email, password: password)
-
       expect(created_account[:email]).to eq(email)
       expect(created_account[:id]).not_to be_nil
     end
   end
 
   describe "#find" do
-    context "when the account exists" do
-      it "returns the account data" do
-        account = repository.create(email: "account@example.com", password: "secure_password")
+    subject(:find_account) {repository.find(id: account[:id])}
 
-        found_account = repository.find(id: account[:id])
-
-        expect(found_account).to eq(account)
-      end
+    it "returns the account data" do
+      expect(find_account).to eq(account)
     end
 
     context "when the account does not exist" do
       it "raises a RecordNotFound error" do
-        non_existent_account_id = 12345
-
-        expect { repository.find(id: non_existent_account_id) }.to raise_error(::App::Repositories::RecordNotFound)
+        expect { repository.find(id: 12345) }.to raise_error(::App::Repositories::RecordNotFound)
       end
     end
   end
 
   describe "#find_by_email" do
+    before { account}
+
     context "when the account with the given email exists" do
       it "returns the account data" do
-        email = "account@example.com"
-        account = repository.create(email: email, password: "secure_password")
-
-        found_account = repository.find_by_email(email)
-
-        expect(found_account).to eq(account)
+        expect(repository.find_by_email(email)).to eq(account)
       end
     end
 
     context "when the account with the given email does not exist" do
       it "returns nil" do
-        non_existent_email = "non_existent@example.com"
-
-        found_account = repository.find_by_email(non_existent_email)
-
-        expect(found_account).to be_nil
+        expect(repository.find_by_email("non_existent@example.com")).to be_nil
       end
     end
   end
 
   describe "#update" do
-    context "when the account exists" do
-      it "updates the account data" do
-        account = repository.create(email: "account@example.com", password: "secure_password")
-        updated_data = {email: "updated_account@example.com", password: "updated_password"}
+    subject(:update_account) { repository.update(id: request_account, params: updated_data) }
+    let(:request_account) { account[:id] }
+    let(:updated_data) { {email: "updated_account@example.com", password: "updated_password"} }
 
-        updated_account = repository.update(id: account[:id], params: updated_data)
-
-        expect(updated_account).to eq({id: account[:id], email: "updated_account@example.com"})
-      end
+    it "updates the account data" do
+      expect(update_account).to eq({id: account[:id], email: "updated_account@example.com"})
     end
 
     context "when the account does not exist" do
-      it "raises a RecordNotFound error" do
-        non_existent_account_id = 12345
-        account_data = {email: "updated_account@example.com"}
+      let(:request_account) { 12345 }
 
-        expect { repository.update(id: non_existent_account_id, params: account_data) }.to raise_error(::App::Repositories::RecordNotFound)
+      it "raises a RecordNotFound error" do
+        expect { update_account }.to raise_error(::App::Repositories::RecordNotFound)
       end
     end
   end

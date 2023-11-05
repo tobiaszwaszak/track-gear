@@ -2,115 +2,114 @@ require_relative "../spec_helper"
 
 RSpec.describe App::Repositories::Components do
   let(:repository) { App::Repositories::Components.new }
+  let(:bike) { App::Records::Bike.create(name: "Test Bike") }
+  let(:component1) { App::Records::Component.create(name: "Handlebar") }
+  let(:component2) { App::Records::Component.create(name: "Saddle") }
 
   describe "#all" do
+    before do
+      component1
+      component2
+    end
+
     it "returns all components" do
-      component1 = ::App::Records::Component.create(name: "Handlebar")
-      component2 = ::App::Records::Component.create(name: "Saddle")
-
-      result = repository.all
-
-      expect(result.map { |item| item[:id] }).to include(component1.id, component2.id)
-      expect(result.map { |item| item[:name] }).to include("Handlebar", "Saddle")
+      expect(repository.all.map { |item| item[:id] }).to include(component1.id, component2.id)
+      expect(repository.all.map { |item| item[:name] }).to include("Handlebar", "Saddle")
     end
   end
 
   describe "#all_by_bikes" do
+    subject(:components) { repository.all_by_bikes(bike_id: bike.id) }
     let(:today) { Date.today }
 
+    before do
+      App::Records::ComponentAssignment.create(bike: bike, component: component1, started_at: today - 2.days, ended_at: today + 2.days)
+      App::Records::ComponentAssignment.create(bike: bike, component: component2, started_at: today - 5.days, ended_at: today - 3.days)
+    end
+
     it "returns all components assigned to a specific bike and currently valid" do
-      bike = ::App::Records::Bike.create(name: "Test Bike")
-      component1 = ::App::Records::Component.create(name: "Component 1")
-      component2 = ::App::Records::Component.create(name: "Component 2")
-      ::App::Records::ComponentAssignment.create(bike: bike, component: component1, started_at: today - 2.days, ended_at: today + 2.days)
-      ::App::Records::ComponentAssignment.create(bike: bike, component: component2, started_at: today - 5.days, ended_at: today - 3.days)
-
-      components = repository.all_by_bikes(bike_id: bike.id)
-
       expect(components).to be_an(Array)
       expect(components.length).to eq(1)
 
-      component = components.first
-      expect(component).to include(
+      expect(components.first).to include(
         id: component1.id,
         name: component1.name
       )
     end
 
-    it "returns an empty array when no components are assigned to the bike" do
-      bike = ::App::Records::Bike.create(name: "Test Bike")
+    context do
+      before do
+        App::Records::ComponentAssignment.all.delete_all
+      end
 
-      components = repository.all_by_bikes(bike_id: bike.id)
-
-      expect(components).to be_an(Array)
-      expect(components).to be_empty
+      it "returns an empty array when no components are assigned to the bike" do
+        expect(components).to be_an(Array)
+        expect(components).to be_empty
+      end
     end
 
-    it "returns an empty array when no valid assignments exist for the bike" do
-      bike = ::App::Records::Bike.create(name: "Test Bike")
-      component1 = ::App::Records::Component.create(name: "Component 1")
-      ::App::Records::ComponentAssignment.create(bike: bike, component: component1, started_at: today - 5.days, ended_at: today - 3.days)
+    context "when no valid assignments exist for the bike" do
+      before do
+        App::Records::ComponentAssignment.all.delete_all
+        ::App::Records::ComponentAssignment.create(bike: bike, component: component1, started_at: today - 5.days, ended_at: today - 3.days)
+      end
 
-      components = repository.all_by_bikes(bike_id: bike.id)
-
-      expect(components).to be_an(Array)
-      expect(components).to be_empty
+      it "returns an empty array " do
+        expect(components).to be_an(Array)
+        expect(components).to be_empty
+      end
     end
   end
 
   describe "#create" do
+    subject(:result) { repository.create(name: name, brand: nil, model: nil, weight: nil, notes: nil) }
+    let(:name) { "Handlebar" }
+
     it "creates a new component" do
-      name = "Handlebar"
-
-      result = repository.create(name: name, brand: nil, model: nil, weight: nil, notes: nil)
-
       expect(result[:id]).to be_a(Integer)
       expect(result[:name]).to eq(name)
     end
   end
 
   describe "#find" do
+    subject(:result) { repository.find(id: component1.id) }
+
     it "finds a component by id" do
-      component = ::App::Records::Component.create(name: "Handlebar")
-
-      result = repository.find(id: component.id)
-
-      expect(result[:id]).to eq(component.id)
-      expect(result[:name]).to eq(component.name)
+      expect(result[:id]).to eq(component1.id)
+      expect(result[:name]).to eq(component1.name)
     end
 
-    it "raises ::App::Repositories::RecordNotFound when the component is not found" do
-      expect { repository.find(id: 123) }.to raise_error(::App::Repositories::RecordNotFound)
+    context "when the component is not found" do
+      it "raises ::App::Repositories::RecordNotFound " do
+        expect { repository.find(id: 123) }.to raise_error(::App::Repositories::RecordNotFound)
+      end
     end
   end
 
   describe "#update" do
+    subject(:result) { repository.update(id: id, params: params) }
+    let(:id) { component1.id }
+    let(:params) {{name: "Saddle"}}
+
     it "updates a component with the given id and params" do
-      component = ::App::Records::Component.create(name: "Handlebar")
-
-      id = component.id
-      params = {name: "Saddle"}
-
-      result = repository.update(id: id, params: params)
-
       expect(result[:id]).to eq(id)
       expect(result[:name]).to eq(params[:name])
     end
 
-    it "raises ::App::Repositories::RecordNotFound when the component is not found" do
-      expect { repository.update(id: 123, params: {name: "Saddle"}) }.to raise_error(::App::Repositories::RecordNotFound)
+    context "when the component is not found" do
+      let(:id) {12345}
+
+      it "raises ::App::Repositories::RecordNotFound" do
+        expect { result }.to raise_error(::App::Repositories::RecordNotFound)
+      end
     end
   end
 
   describe "#delete" do
     it "deletes a component with the given id" do
-      component = ::App::Records::Component.create(name: "Handlebar")
+      repository.delete(id: component1.id)
 
-      id = component.id
-
-      repository.delete(id: id)
-
-      expect { ::App::Records::Component.find(id) }.to raise_error(ActiveRecord::RecordNotFound)
+      expect { ::App::Records::Component.find(component1.id ) }.to raise_error(ActiveRecord::RecordNotFound)
     end
 
     it "raises ::App::Repositories::RecordNotFound when the component is not found" do

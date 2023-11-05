@@ -6,29 +6,37 @@ RSpec.describe App::Routers::BikeSportTypes do
   let(:app) { described_class.new }
 
   describe "POST /bike_sport_types" do
-    it "creates a new bike sport type" do
+    before do
       allow_any_instance_of(App::Controllers::BikeSportTypes).to receive(:create).and_return([201, {}, ["Create"]])
+    end
 
+    it "creates a new bike sport type" do
       post "/bike_sport_types", {}.to_json, "CONTENT_TYPE" => "application/json"
 
       expect(last_response.status).to eq(201)
       expect(last_response.body).to eq("Create")
     end
 
-    it "returns an error when creating a bike sport type fails" do
-      allow_any_instance_of(App::Controllers::BikeSportTypes).to receive(:create).and_return([500, {}, ["Error creating component"]])
+    context "when creating a bike sport type fails" do
+      before do
+        allow_any_instance_of(App::Controllers::BikeSportTypes).to receive(:create).and_return([500, {}, ["Error creating component"]])
+      end
 
-      post "/bike_sport_types", {}.to_json, "CONTENT_TYPE" => "application/json"
+      it "returns an error" do
+        post "/bike_sport_types", {}.to_json, "CONTENT_TYPE" => "application/json"
 
-      expect(last_response.status).to eq(500)
-      expect(last_response.body).to eq("Error creating component")
+        expect(last_response.status).to eq(500)
+        expect(last_response.body).to eq("Error creating component")
+      end
     end
   end
 
   describe "DELETE /bike_sport_types" do
-    it "deletes the specified bike sport type" do
+    before do
       allow_any_instance_of(App::Controllers::BikeSportTypes).to receive(:delete).and_return([200, {}, ["Delete assignment"]])
+    end
 
+    it "deletes the specified bike sport type" do
       delete "/bike_sport_types", {}.to_json, "CONTENT_TYPE" => "application/json"
 
       expect(last_response.status).to eq(200)

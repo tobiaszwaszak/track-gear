@@ -7,11 +7,6 @@ RSpec.describe App::Routers::SportTypes do
     App::Routers::SportTypes.new
   end
 
-  before do
-    ActiveRecord::Base.configurations = YAML.load_file("db/configuration.yml")
-    ActiveRecord::Base.establish_connection(ENV["RACK_ENV"].to_sym)
-  end
-
   describe "GET /" do
     it "responds with a 200 status code" do
       get "/"
@@ -36,28 +31,28 @@ RSpec.describe App::Routers::SportTypes do
   end
 
   describe "GET /sport_types/:id" do
-    it "responds with a 200 status code" do
-      sport_type = ::App::Records::SportType.create(name: "example")
+    let(:sport_type) { App::Records::SportType.create(name: "example") }
 
+    it "responds with a 200 status code" do
       get "/sport_types/#{sport_type.id}"
       expect(last_response.status).to eq(200)
     end
   end
 
   describe "PUT /sport_types/:id" do
-    it "responds with a 200 status code" do
-      sport_type = ::App::Records::SportType.create(name: "example")
-      sport_type_data = {name: "example"}.to_json
+    let(:sport_type) {::App::Records::SportType.create(name: "example")}
+    let(:sport_type_data) { {name: "example"}.to_json }
 
+    it "responds with a 200 status code" do
       put "/sport_types/#{sport_type.id}", sport_type_data
       expect(last_response.status).to eq(200)
     end
   end
 
   describe "DELETE /sport_types/:id" do
-    it "responds with a 200 status code" do
-      sport_type = ::App::Records::SportType.create(name: "example")
+    let(:sport_type) {::App::Records::SportType.create(name: "example")}
 
+    it "responds with a 200 status code" do
       delete "/sport_types/#{sport_type.id}"
       expect(last_response.status).to eq(200)
     end

@@ -9,9 +9,9 @@ RSpec.describe App::Services::Auth::JsonWebToken do
   end
 
   describe ".encode" do
-    let(:expiration_time) { 24.hours.from_now }
+    let(:expiration_time) { 12.hours.from_now }
     let(:encoded_token) { "encoded_token" }
-
+    let(:default_expiration_time) { 24.hours.from_now }
     it "encodes the payload with an expiration time" do
       expect(JWT).to receive(:encode).with({account_id: 1, exp: expiration_time.to_i}, secret_key).and_return(encoded_token)
 
@@ -21,7 +21,6 @@ RSpec.describe App::Services::Auth::JsonWebToken do
     end
 
     it "encodes the payload with the default expiration time" do
-      default_expiration_time = Time.now + 24.hours
       expect(JWT).to receive(:encode).with({account_id: 1, exp: default_expiration_time.to_i}, secret_key).and_return(encoded_token)
 
       token = App::Services::Auth::JsonWebToken.encode(payload)

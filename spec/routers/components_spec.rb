@@ -7,13 +7,8 @@ RSpec.describe App::Routers::Components do
     App::Routers::Components.new
   end
 
-  before do
-    ActiveRecord::Base.configurations = YAML.load_file("db/configuration.yml")
-    ActiveRecord::Base.establish_connection(ENV["RACK_ENV"].to_sym)
-    ::App::Records::Component.create(name: "some part")
-  end
-
   let(:component_data) { {name: "some part"}.to_json }
+  let(:component) { App::Records::Component.create(name: "some part") }
 
   it "creates a new bike" do
     post "/components", component_data
@@ -23,7 +18,6 @@ RSpec.describe App::Routers::Components do
   end
 
   it "reads a bike with the given id" do
-    component = ::App::Records::Component.create(name: "some part")
     get "/components/#{component.id}"
 
     expect(last_response.status).to eq(200)
@@ -31,7 +25,6 @@ RSpec.describe App::Routers::Components do
   end
 
   it "updates a bike with the given id" do
-    component = ::App::Records::Component.create(name: "some part")
     put "/components/#{component.id}", component_data
 
     expect(last_response.status).to eq(200)
@@ -39,8 +32,6 @@ RSpec.describe App::Routers::Components do
   end
 
   it "deletes a bike with the given id" do
-    component = ::App::Records::Component.create(name: "some part")
-
     delete "/components/#{component.id}"
 
     expect(last_response.status).to eq(200)

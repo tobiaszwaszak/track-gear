@@ -11,6 +11,7 @@ RSpec.describe MultitenancyMiddleware do
   end
 
   let(:tenant_id) { "test_tenant" }
+  let(:connection) { ActiveRecord::Base.connection_pool }
 
   context "when the account_id is present in the request" do
     it "establishes a connection to the tenant-specific database" do
@@ -19,7 +20,6 @@ RSpec.describe MultitenancyMiddleware do
 
         get "/", {}, {"account_id" => tenant_id}
 
-        connection = ActiveRecord::Base.connection_pool
         expect(connection).not_to be_nil
         expect(connection.db_config.database).to eq(db_path)
         expect(last_response.status).to eq(200)
@@ -32,7 +32,6 @@ RSpec.describe MultitenancyMiddleware do
     it "establishes a connection to the default database" do
       get "/"
 
-      connection = ActiveRecord::Base.connection_pool
       expect(connection).not_to be_nil
       expect(connection.db_config.database).to eq("db/test.sqlite3")
       expect(last_response.status).to eq(200)
