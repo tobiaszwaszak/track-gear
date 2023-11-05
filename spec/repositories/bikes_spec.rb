@@ -21,7 +21,7 @@ RSpec.describe App::Repositories::Bikes do
   end
 
   describe "#create" do
-    subject(:result) {repository.create(name: name, brand: nil, model: nil, weight: nil, notes: nil, commute: nil) }
+    subject(:result) { repository.create(name: name, brand: nil, model: nil, weight: nil, notes: nil, commute: nil) }
     let(:name) { "Mountain Bike" }
 
     it "creates a new bike" do

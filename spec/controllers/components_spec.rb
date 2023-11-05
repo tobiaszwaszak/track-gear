@@ -18,7 +18,7 @@ RSpec.describe App::Controllers::Components do
 
   describe "#create" do
     subject(:response) { controller.create(request) }
-    let(:request) { double("request", body: double("body", read: {"name" => "New Component", "description" => "New Description"}.to_json))  }
+    let(:request) { double("request", body: double("body", read: {"name" => "New Component", "description" => "New Description"}.to_json)) }
 
     before do
       allow_any_instance_of(App::Repositories::Components).to receive(:create).and_return([{id: 1, name: "New Component", description: "New Description"}])
@@ -52,7 +52,7 @@ RSpec.describe App::Controllers::Components do
 
   describe "#update" do
     subject(:response) { controller.update(request, 1) }
-    let(:request) { double("request", body: double("body", read: {"id" => 1, "name" => "Updated Component", "description" => "Updated Description"}.to_json))}
+    let(:request) { double("request", body: double("body", read: {"id" => 1, "name" => "Updated Component", "description" => "Updated Description"}.to_json)) }
 
     before do
       allow_any_instance_of(App::Repositories::Components).to receive(:update).and_return(true)

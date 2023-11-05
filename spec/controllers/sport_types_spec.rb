@@ -29,7 +29,7 @@ RSpec.describe App::Controllers::SportTypes do
   describe "#create" do
     let(:response) { controller.create(request) }
     let(:sport_type_data) { {"name" => "New Sport Type"} }
-    let(:request) {double("request", body: double("body", read: sport_type_data.to_json))  }
+    let(:request) { double("request", body: double("body", read: sport_type_data.to_json)) }
 
     it "creates a new sport type and returns a success response" do
       expect(response[0]).to eq(201)
@@ -51,7 +51,7 @@ RSpec.describe App::Controllers::SportTypes do
   describe "#read" do
     subject(:response) { controller.read(request, request_id) }
     let(:request_id) { sport_type["id"] }
-    let(:sport_type) { App::Records::SportType.create(name: "Sport Type 1")}
+    let(:sport_type) { App::Records::SportType.create(name: "Sport Type 1") }
     let(:request) { double("request") }
     before do
       sport_type

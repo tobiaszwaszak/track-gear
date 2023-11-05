@@ -89,7 +89,7 @@ RSpec.describe App::Repositories::Components do
   describe "#update" do
     subject(:result) { repository.update(id: id, params: params) }
     let(:id) { component1.id }
-    let(:params) {{name: "Saddle"}}
+    let(:params) { {name: "Saddle"} }
 
     it "updates a component with the given id and params" do
       expect(result[:id]).to eq(id)
@@ -97,7 +97,7 @@ RSpec.describe App::Repositories::Components do
     end
 
     context "when the component is not found" do
-      let(:id) {12345}
+      let(:id) { 12345 }
 
       it "raises ::App::Repositories::RecordNotFound" do
         expect { result }.to raise_error(::App::Repositories::RecordNotFound)
@@ -109,7 +109,7 @@ RSpec.describe App::Repositories::Components do
     it "deletes a component with the given id" do
       repository.delete(id: component1.id)
 
-      expect { ::App::Records::Component.find(component1.id ) }.to raise_error(ActiveRecord::RecordNotFound)
+      expect { ::App::Records::Component.find(component1.id) }.to raise_error(ActiveRecord::RecordNotFound)
     end
 
     it "raises ::App::Repositories::RecordNotFound when the component is not found" do

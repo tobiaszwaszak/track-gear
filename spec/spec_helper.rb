@@ -1,14 +1,13 @@
-require 'bundler/setup'
+require "bundler/setup"
 Bundler.require
 
-Dir["./*.rb"].each {|file| require file }
-Dir["./app/**/*.rb"].each {|file| require file }
+Dir["./*.rb"].each { |file| require file }
+Dir["./app/**/*.rb"].each { |file| require file }
 
 Dotenv.load(".env.test")
 
-require 'simplecov'
+require "simplecov"
 SimpleCov.start
-
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|

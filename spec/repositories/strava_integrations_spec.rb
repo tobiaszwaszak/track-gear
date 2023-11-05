@@ -6,7 +6,6 @@ module App::Repositories
     let(:access_token) { "test_access_token" }
     let(:refresh_token) { "test_refresh_token" }
 
-
     before do
       repository.create_credentials(access_token: access_token, refresh_token: refresh_token)
     end
@@ -32,8 +31,8 @@ module App::Repositories
     end
 
     describe "#update_credentials" do
-      let(:updated_access_token) { "updated_access_token"}
-      let(:updated_refresh_token) {"updated_refresh_token" }
+      let(:updated_access_token) { "updated_access_token" }
+      let(:updated_refresh_token) { "updated_refresh_token" }
       let(:updated_credential) { App::Records::StravaCredential.last }
 
       before do

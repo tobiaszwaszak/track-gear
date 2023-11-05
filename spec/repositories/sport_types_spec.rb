@@ -20,7 +20,7 @@ RSpec.describe App::Repositories::SportTypes do
   end
 
   describe "#create" do
-    subject(:new_sport_type) { repository.create(name: "New Sport Type")}
+    subject(:new_sport_type) { repository.create(name: "New Sport Type") }
 
     it "creates a new sport type" do
       expect(new_sport_type[:name]).to eq("New Sport Type")
@@ -29,7 +29,7 @@ RSpec.describe App::Repositories::SportTypes do
 
   describe "#find" do
     subject(:find_sport_type) { repository.find(id: request_id) }
-    let(:request_id) { sport_type1[:id]}
+    let(:request_id) { sport_type1[:id] }
 
     it "finds an existing sport type by ID" do
       expect(find_sport_type).to include(
@@ -63,7 +63,7 @@ RSpec.describe App::Repositories::SportTypes do
   end
 
   describe "#delete" do
-    subject(:delete) {repository.delete(id: request_id) }
+    subject(:delete) { repository.delete(id: request_id) }
     let(:request_id) { sport_type1[:id] }
 
     it "deletes an existing sport type" do

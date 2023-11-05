@@ -16,7 +16,7 @@ RSpec.describe App::Controllers::Bikes do
   end
 
   describe "#create" do
-    subject(:response) {controller.create(request)}
+    subject(:response) { controller.create(request) }
     let(:request) { double("request", body: double("body", read: {name: "Mountain Bike"}.to_json)) }
 
     before do

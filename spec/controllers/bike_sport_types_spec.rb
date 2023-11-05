@@ -49,7 +49,7 @@ RSpec.describe App::Controllers::BikeSportTypes do
   end
 
   describe "#delete" do
-    subject(:response) { controller.delete(request)}
+    subject(:response) { controller.delete(request) }
     let(:request_body) { {"bike_id" => 1, "sport_type_id" => 1} }
     before do
       allow(request.body).to receive(:read).and_return(request_body.to_json)
@@ -89,7 +89,7 @@ RSpec.describe App::Controllers::BikeSportTypes do
     end
 
     context "when contract validation fails" do
-      let(:request_body) { {"bike_id" => 1, "sport_type_id" => nil}}
+      let(:request_body) { {"bike_id" => 1, "sport_type_id" => nil} }
       before do
         allow(request.body).to receive(:read).and_return(request_body.to_json)
       end

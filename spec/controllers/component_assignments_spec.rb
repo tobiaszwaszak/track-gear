@@ -9,7 +9,7 @@ RSpec.describe App::Controllers::ComponentAssignments do
   end
 
   describe "#create" do
-    subject(:response) {controller.create(request) }
+    subject(:response) { controller.create(request) }
     let(:request_body) { {"bike_id" => 1, "component_id" => 1} }
     before do
       allow_any_instance_of(App::Repositories::ComponentAssignments).to receive(:create).and_return(true)
@@ -22,7 +22,7 @@ RSpec.describe App::Controllers::ComponentAssignments do
     end
 
     context "when contract validation fails" do
-      let(:request_body) {{"bike_id" => 1, "component_id" => nil} }
+      let(:request_body) { {"bike_id" => 1, "component_id" => nil} }
 
       it "returns an error" do
         expect(response[0]).to eq(500)
@@ -32,7 +32,7 @@ RSpec.describe App::Controllers::ComponentAssignments do
     end
 
     context "when Repository create method fails" do
-      let(:request_body) {{"bike_id" => 1, "component_id" => 1}}
+      let(:request_body) { {"bike_id" => 1, "component_id" => 1} }
 
       before do
         allow_any_instance_of(App::Repositories::ComponentAssignments).to receive(:create).and_return(nil)
@@ -48,7 +48,7 @@ RSpec.describe App::Controllers::ComponentAssignments do
 
   describe "#delete" do
     subject(:response) { controller.delete(request) }
-    let(:request_body) {{"bike_id" => 1, "component_id" => 1}}
+    let(:request_body) { {"bike_id" => 1, "component_id" => 1} }
 
     before do
       allow_any_instance_of(App::Repositories::ComponentAssignments).to receive(:delete).and_return(true)

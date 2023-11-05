@@ -21,7 +21,7 @@ RSpec.describe App::Contracts::ComponentAssignment do
     end
 
     context "when component_id is missing" do
-      let(:params) {{bike_id: 1} }
+      let(:params) { {bike_id: 1} }
 
       it "fails" do
         result = contract.call(params)
@@ -31,7 +31,7 @@ RSpec.describe App::Contracts::ComponentAssignment do
     end
 
     context " when bike_id is not an integer" do
-      let(:params) {{bike_id: "not_an_integer", component_id: 2}}
+      let(:params) { {bike_id: "not_an_integer", component_id: 2} }
 
       it "fails" do
         result = contract.call(params)
@@ -41,7 +41,7 @@ RSpec.describe App::Contracts::ComponentAssignment do
     end
 
     context "when component_id is not an integer" do
-      let(:params) { {bike_id: 1, component_id: "not_an_integer"}  }
+      let(:params) { {bike_id: 1, component_id: "not_an_integer"} }
 
       it "fails" do
         result = contract.call(params)
@@ -51,7 +51,7 @@ RSpec.describe App::Contracts::ComponentAssignment do
     end
 
     context "when started_at is an datetime" do
-      let(:paams) {{bike_id: 1, component_id: 2, started_at: "2023-10-24 07:29:24"}}
+      let(:paams) { {bike_id: 1, component_id: 2, started_at: "2023-10-24 07:29:24"} }
 
       it "pass" do
         expect(contract.call(params)).to be_success
@@ -77,7 +77,7 @@ RSpec.describe App::Contracts::ComponentAssignment do
     end
 
     context "when ended_at is an datetime" do
-      let(:params) {{bike_id: 1, component_id: 2, ended_at: "2023-10-24 07:29:24"} }
+      let(:params) { {bike_id: 1, component_id: 2, ended_at: "2023-10-24 07:29:24"} }
 
       it "pass" do
         expect(contract.call(params)).to be_success
@@ -85,7 +85,7 @@ RSpec.describe App::Contracts::ComponentAssignment do
     end
 
     context "when ended_at is empty" do
-      let(:params) {{bike_id: 1, component_id: 2, ended_at: ""}}
+      let(:params) { {bike_id: 1, component_id: 2, ended_at: ""} }
 
       it "pass" do
         expect(contract.call(params)).to be_success
@@ -93,7 +93,7 @@ RSpec.describe App::Contracts::ComponentAssignment do
     end
 
     context "when ended_at is not an datetime" do
-      let(:params) {{bike_id: 1, component_id: 2, ended_at: "just string"} }
+      let(:params) { {bike_id: 1, component_id: 2, ended_at: "just string"} }
 
       it "fails" do
         result = contract.call(params)

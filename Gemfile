@@ -25,4 +25,4 @@ gem "bcrypt"
 gem "jwt"
 
 gem "strava-ruby-client"
-gem 'simplecov', require: false
+gem "simplecov", require: false

@@ -2,7 +2,7 @@ require_relative "../spec_helper"
 
 RSpec.describe App::Repositories::Accounts do
   let(:repository) { App::Repositories::Accounts.new }
-  let(:email) { "account@example.com"}
+  let(:email) { "account@example.com" }
   let(:password) { "secure_password" }
   let(:account) { repository.create(email: email, password: password) }
 
@@ -18,7 +18,7 @@ RSpec.describe App::Repositories::Accounts do
   end
 
   describe "#find" do
-    subject(:find_account) {repository.find(id: account[:id])}
+    subject(:find_account) { repository.find(id: account[:id]) }
 
     it "returns the account data" do
       expect(find_account).to eq(account)
@@ -32,7 +32,7 @@ RSpec.describe App::Repositories::Accounts do
   end
 
   describe "#find_by_email" do
-    before { account}
+    before { account }
 
     context "when the account with the given email exists" do
       it "returns the account data" do

@@ -2,7 +2,7 @@ require_relative "../spec_helper"
 
 RSpec.describe App::Controllers::Auth do
   describe "#create" do
-    subject(:response) {App::Controllers::Auth.new.create(request) }
+    subject(:response) { App::Controllers::Auth.new.create(request) }
     let(:valid_account) { instance_double("Auth::Account", id: 1, email: "account@example.com", authenticate: true) }
     let(:invalid_account) { instance_double("Auth::Account", id: 2, email: "account@example.com", authenticate: false) }
 

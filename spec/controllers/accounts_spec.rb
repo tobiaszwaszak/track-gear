@@ -4,7 +4,7 @@ RSpec.describe App::Controllers::Accounts do
   let(:controller) { App::Controllers::Accounts.new }
 
   describe "#create" do
-    subject(:response) {controller.create(request)}
+    subject(:response) { controller.create(request) }
     let(:account_data) { {"email" => "account@example.com", "password" => "secure_password"}.to_json }
     let(:request) { double("request", body: double("body", read: account_data)) }
 
@@ -20,7 +20,7 @@ RSpec.describe App::Controllers::Accounts do
     end
 
     context "when the account data is invalid" do
-      let(:error_message) {"Some error message" }
+      let(:error_message) { "Some error message" }
 
       before do
         allow_any_instance_of(::App::Contracts::Account).to receive(:call).and_return(OpenStruct.new(success?: false, errors: {email: [error_message]}))
@@ -34,7 +34,7 @@ RSpec.describe App::Controllers::Accounts do
 
   describe "#read" do
     subject(:response) { controller.read(request, account_id) }
-    let(:request) {double("request") }
+    let(:request) { double("request") }
 
     context "when the account exists" do
       let(:account_id) { 1 }
@@ -63,10 +63,10 @@ RSpec.describe App::Controllers::Accounts do
   end
 
   describe "#update" do
-    subject(:response) {controller.update(request, account_id) }
+    subject(:response) { controller.update(request, account_id) }
     let(:account_id) { 1 }
     let(:account_data) { {"email" => "account@example.com", "password" => "secure_password"} }
-    let(:request) { double("request", body: double("body", read: account_data.to_json))    }
+    let(:request) { double("request", body: double("body", read: account_data.to_json)) }
 
     context "when the account data is valid and the account exists" do
       before do
