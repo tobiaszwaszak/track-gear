@@ -25,3 +25,6 @@ gem "bcrypt"
 gem "jwt"
 
 gem "strava-ruby-client"
+gem "simplecov", require: false
+
+gem 'database_cleaner-active_record'

@@ -25,6 +25,7 @@ ActiveRecord::Schema[7.0].define(version: 14) do
     t.datetime "activity_date"
     t.string "name"
     t.boolean "commute"
+    t.string "old_sport_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "sport_type_id"

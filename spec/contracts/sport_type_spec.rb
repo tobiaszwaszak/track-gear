@@ -1,5 +1,4 @@
-require "dry/validation"
-require_relative "../../app/contracts/sport_type"
+require_relative "../spec_helper"
 
 RSpec.describe App::Contracts::SportType do
   subject(:contract) { described_class.new }

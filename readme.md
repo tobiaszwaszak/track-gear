@@ -25,7 +25,7 @@ https://documenter.getpostman.com/view/268922/2s9YRCXX4p
 # Testing
 The track-gear includes a comprehensive suite of tests to ensure the quality and reliability of the application. The tests are written using RSpec. To run the tests, execute the following command:
 ```
-RACK_ENV=test rspec
+bundle exec rspec
 ```
 This command will trigger the execution of both unit tests and integration tests.
 

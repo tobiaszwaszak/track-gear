@@ -1,12 +1,4 @@
-require "rack"
-require "rack/test"
-require "dotenv"
-Dotenv.load(".env.test")
-require "byebug"
-require_relative "../auth_middleware"
-require_relative "../app/repositories/auth"
-require_relative "../app/services/auth/json_web_token"
-require_relative "../app/repositories/accounts"
+require_relative "spec_helper"
 
 RSpec.describe AuthMiddleware do
   include Rack::Test::Methods
@@ -44,11 +36,11 @@ RSpec.describe AuthMiddleware do
     end
 
     context "when accessing /accounts/1" do
-      it "calls Auth::VerifyAndSetAccount" do
-        account = App::Repositories::Accounts.new.create(email: "foo@.bar.dev", password: "password")
-        account_id = account[:id]
-        jwt_token = App::Services::Auth::JsonWebToken.encode(account_id: account_id)
+      let(:account) { App::Repositories::Accounts.new.create(email: "foo@.bar.dev", password: "password") }
+      let(:account_id) { account[:id] }
+      let(:jwt_token) { App::Services::Auth::JsonWebToken.encode(account_id: account_id) }
 
+      it "calls Auth::VerifyAndSetAccount" do
         header "Authorization", "Bearer #{jwt_token}"
         get "/accounts/#{account_id}"
 
@@ -70,15 +62,16 @@ RSpec.describe AuthMiddleware do
         expect(last_response.body).to eq("Unauthorized")
       end
 
-      it "returns 401 Unauthorized for non-existing accounts" do
-        invalid_account_id = 9999
-        jwt_token = App::Services::Auth::JsonWebToken.encode(account_id: invalid_account_id)
+      context "when account not exist" do
+        let(:account_id) { 9999 }
 
-        header "Authorization", "Bearer #{jwt_token}"
-        get "/accounts/1"
+        it "returns 401 Unauthorized for non-existing accounts" do
+          header "Authorization", "Bearer #{jwt_token}"
+          get "/accounts/1"
 
-        expect(last_response).to be_unauthorized
-        expect(last_response.body).to eq("Unauthorized")
+          expect(last_response).to be_unauthorized
+          expect(last_response.body).to eq("Unauthorized")
+        end
       end
     end
 

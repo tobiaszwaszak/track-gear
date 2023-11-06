@@ -1,21 +1,10 @@
-require "rack/test"
-require "json"
-require_relative "../app"
+require_relative "spec_helper"
 
 RSpec.describe MyApp do
   include Rack::Test::Methods
 
   def app
     MyApp.new
-  end
-
-  before(:all) do
-    ActiveRecord::Base.configurations = YAML.load_file("db/configuration.yml")
-    ActiveRecord::Base.establish_connection(ENV["RACK_ENV"].to_sym)
-  end
-
-  after(:all) do
-    ActiveRecord::Base.remove_connection
   end
 
   describe "GET /bikes" do
@@ -26,10 +15,10 @@ RSpec.describe MyApp do
   end
 
   describe "POST /component_assignments" do
-    it "calls ComponentAssignments::App" do
-      bike = ::App::Records::Bike.create(name: "foo")
-      component = ::App::Records::Component.create(name: "bar")
+    let(:bike) { App::Records::Bike.create(name: "foo") }
+    let(:component) { App::Records::Component.create(name: "bar") }
 
+    it "calls ComponentAssignments::App" do
       expect_any_instance_of(App::Routers::ComponentAssignments).to receive(:call).and_call_original
       post "/component_assignments", {bike_id: bike.id, component_id: component.id}.to_json
     end

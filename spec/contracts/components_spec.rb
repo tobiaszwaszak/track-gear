@@ -1,4 +1,4 @@
-require_relative "../../app/contracts/component"
+require_relative "../spec_helper"
 
 RSpec.describe App::Contracts::Component do
   subject(:contract) { described_class.new }

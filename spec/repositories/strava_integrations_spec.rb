@@ -1,29 +1,18 @@
-require "rspec"
-require_relative "../../app/records/strava_credential"
-require_relative "../../app/repositories//strava_integrations"
+require_relative "../spec_helper"
 
 module App::Repositories
   describe StravaIntegrations do
     let(:repository) { StravaIntegrations.new }
+    let(:access_token) { "test_access_token" }
+    let(:refresh_token) { "test_refresh_token" }
 
     before do
-      ActiveRecord::Base.configurations = YAML.load_file("db/configuration.yml")
-      ActiveRecord::Base.establish_connection(ENV["RACK_ENV"].to_sym)
+      repository.create_credentials(access_token: access_token, refresh_token: refresh_token)
     end
-
-    after(:all) do
-      ActiveRecord::Base.remove_connection
-    end
-
     describe "#create_credentials" do
+      let(:credential) { App::Records::StravaCredential.last }
+
       it "creates Strava credentials with access and refresh tokens" do
-        access_token = "test_access_token"
-        refresh_token = "test_refresh_token"
-
-        repository.create_credentials(access_token: access_token, refresh_token: refresh_token)
-
-        credential = ::App::Records::StravaCredential.last
-
         expect(credential.access_token).to eq(access_token)
         expect(credential.refresh_token).to eq(refresh_token)
       end
@@ -31,35 +20,26 @@ module App::Repositories
 
     describe "#get_access_token" do
       it "returns the access token from the latest Strava credential" do
-        test_access_token = "test_access_token"
-        test_refresh_token = "test_refresh_token"
-        repository.create_credentials(access_token: test_access_token, refresh_token: test_refresh_token)
-
-        expect(repository.get_access_token).to eq(test_access_token)
+        expect(repository.get_access_token).to eq(access_token)
       end
     end
 
     describe "#get_refresh_token" do
       it "returns the refresh token from the latest Strava credential" do
-        test_access_token = "test_access_token"
-        test_refresh_token = "test_refresh_token"
-        repository.create_credentials(access_token: test_access_token, refresh_token: test_refresh_token)
-
-        expect(repository.get_refresh_token).to eq(test_refresh_token)
+        expect(repository.get_refresh_token).to eq(refresh_token)
       end
     end
 
     describe "#update_credentials" do
-      it "updates the access and refresh tokens of the latest Strava credential" do
-        initial_access_token = "initial_access_token"
-        initial_refresh_token = "initial_refresh_token"
-        repository.create_credentials(access_token: initial_access_token, refresh_token: initial_refresh_token)
+      let(:updated_access_token) { "updated_access_token" }
+      let(:updated_refresh_token) { "updated_refresh_token" }
+      let(:updated_credential) { App::Records::StravaCredential.last }
 
-        updated_access_token = "updated_access_token"
-        updated_refresh_token = "updated_refresh_token"
+      before do
         repository.update_credentials(access_token: updated_access_token, refresh_token: updated_refresh_token)
+      end
 
-        updated_credential = ::App::Records::StravaCredential.last
+      it "updates the access and refresh tokens of the latest Strava credential" do
         expect(updated_credential.access_token).to eq(updated_access_token)
         expect(updated_credential.refresh_token).to eq(updated_refresh_token)
       end

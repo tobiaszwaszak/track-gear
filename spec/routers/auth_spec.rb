@@ -1,5 +1,4 @@
-require_relative "../../app/routers/auth"
-require "rack/test"
+require_relative "../spec_helper"
 
 RSpec.describe App::Routers::Auth do
   include Rack::Test::Methods
@@ -8,16 +7,13 @@ RSpec.describe App::Routers::Auth do
     App::Routers::Auth.new
   end
 
-  before do
-    ActiveRecord::Base.configurations = YAML.load_file("db/configuration.yml")
-    ActiveRecord::Base.establish_connection(ENV["RACK_ENV"].to_sym)
-  end
-
   describe "POST /auth" do
     context "when creating a new authentication" do
-      it "returns a success response" do
+      before do
         ::App::Records::Account.create(email: "foo@bar.dev", password: "secure_password")
+      end
 
+      it "returns a success response" do
         post "/auth", {email: "foo@bar.dev", password: "secure_password"}.to_json
 
         expect(last_response.status).to eq(201)

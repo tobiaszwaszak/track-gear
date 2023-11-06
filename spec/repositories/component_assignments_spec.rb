@@ -1,8 +1,4 @@
-require_relative "../../app/records/component_assignment"
-require_relative "../../app/records/bike"
-require_relative "../../app/records/component"
-
-require_relative "../../app/repositories/component_assignments"
+require_relative "../spec_helper"
 
 RSpec.describe App::Repositories::ComponentAssignments do
   let(:repository) { App::Repositories::ComponentAssignments.new }
@@ -10,15 +6,6 @@ RSpec.describe App::Repositories::ComponentAssignments do
   let!(:bike) { ::App::Records::Bike.create(name: "foo") }
   let!(:component) { ::App::Records::Component.create(name: "bar") }
   let!(:assignment) { repository.create(bike_id: bike.id, component_id: component.id, started_at: nil, ended_at: nil) }
-
-  before(:all) do
-    ActiveRecord::Base.configurations = YAML.load_file("db/configuration.yml")
-    ActiveRecord::Base.establish_connection(ENV["RACK_ENV"].to_sym)
-  end
-
-  after(:all) do
-    ActiveRecord::Base.remove_connection
-  end
 
   describe "#create" do
     it "creates a new component assignment" do

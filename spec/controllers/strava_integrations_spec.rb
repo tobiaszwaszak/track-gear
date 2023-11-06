@@ -1,9 +1,4 @@
-require "rspec"
-require "strava-ruby-client"
-require "jwt"
-require "ostruct"
-require_relative "../../app/controllers/strava_integrations"
-
+require_relative "../spec_helper"
 class MockOAuthResponse
   attr_reader :access_token, :refresh_token
 
@@ -31,32 +26,30 @@ describe App::Controllers::StravaIntegrations do
   end
 
   describe "#authorize" do
-    it "returns a redirect URL" do
-      request = double(env: {"account_id" => 123})
-
+    subject(:result) { controller.authorize(request) }
+    let(:request) { double(env: {"account_id" => 123}) }
+    before do
       allow(JWT).to receive(:encode).and_return("user_token")
+    end
 
+    it "returns a redirect URL" do
       expect(controller).to receive(:redirect_to_strava_authorize_url).with("user_token").and_return([302, {"Location" => "https://www.strava.com/oauth/authorize"}, []])
-
-      result = controller.authorize(request)
-
       expect(result[0]).to eq(302)
       expect(result[1]["Location"]).to include("https://www.strava.com/oauth/authorize")
     end
   end
 
   describe "#callback" do
+    subject(:result) { controller.callback(request) }
     let(:request) { double(params: {"code" => "authorization_code"}) }
+
     before do
       allow_any_instance_of(App::Repositories::StravaIntegrations).to receive(:create_credentials).and_return({id: 1, access_token: "foo", refresh_token: "bar"})
+      allow(JWT).to receive(:decode).and_return([{"account_id" => 123}])
     end
 
     it "exchanges the code for an OAuth token and creates a Strava credential" do
-      allow(JWT).to receive(:decode).and_return([{"account_id" => 123}])
-
       expect(controller).to receive(:exchange_code_for_oauth_token).with("authorization_code").and_return(MockOAuthResponse.new("access_token", "refresh_token"))
-
-      result = controller.callback(request)
 
       expect(result[0]).to eq(302)
       expect(result[1]["Location"]).to eq("/")
@@ -72,13 +65,12 @@ describe App::Controllers::StravaIntegrations do
   end
 
   describe "#sync_activities" do
+    subject(:result) { controller.sync_activities(double) }
     before do
       allow_any_instance_of(App::SyncStravaActivities).to receive(:call).and_return(true)
     end
 
     it "returns a 200 status code and JSON content type" do
-      result = controller.sync_activities(double)
-
       expect(result[0]).to eq(200)
       expect(result[1]["content-type"]).to eq("application/json")
     end

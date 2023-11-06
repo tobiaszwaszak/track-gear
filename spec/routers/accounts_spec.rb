@@ -1,6 +1,4 @@
-require "rack/test"
-require "json"
-require_relative "./../../app/routers/accounts"
+require_relative "../spec_helper"
 
 RSpec.describe App::Routers::Accounts do
   include Rack::Test::Methods
@@ -9,11 +7,7 @@ RSpec.describe App::Routers::Accounts do
     App::Routers::Accounts.new
   end
 
-  before do
-    ActiveRecord::Base.configurations = YAML.load_file("db/configuration.yml")
-    ActiveRecord::Base.establish_connection(ENV["RACK_ENV"].to_sym)
-    ::App::Records::Account.delete_all
-  end
+  let(:account) { App::Records::Account.create!(email: "foo@bar.dev", password: "123456") }
 
   it "creates a new accounts" do
     post "/accounts", {email: "foo@bar.dev", password: "123456"}.to_json
@@ -23,7 +17,6 @@ RSpec.describe App::Routers::Accounts do
   end
 
   it "reads a accounts with the given id" do
-    account = ::App::Records::Account.create(email: "foo@bar.dev", password: "123456")
     get "/accounts/#{account.id}"
 
     expect(last_response.status).to eq(200)
@@ -31,7 +24,6 @@ RSpec.describe App::Routers::Accounts do
   end
 
   it "updates a accounts with the given id" do
-    account = ::App::Records::Account.create(email: "foo@bar.dev", password: "password")
     put "/accounts/#{account.id}", {email: "foofoo@bar.dev", password: "123456"}.to_json
 
     expect(last_response.status).to eq(200)

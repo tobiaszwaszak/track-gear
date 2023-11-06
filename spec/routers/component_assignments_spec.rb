@@ -1,5 +1,4 @@
-require "rack/test"
-require_relative "../../app/routers/component_assignments"
+require_relative "../spec_helper"
 
 RSpec.describe App::Routers::ComponentAssignments do
   include Rack::Test::Methods
@@ -7,29 +6,37 @@ RSpec.describe App::Routers::ComponentAssignments do
   let(:app) { described_class.new }
 
   describe "POST /component_assignments" do
-    it "creates a new component assignment" do
+    before do
       allow_any_instance_of(App::Controllers::ComponentAssignments).to receive(:create).and_return([201, {}, ["Create"]])
+    end
 
+    it "creates a new component assignment" do
       post "/component_assignments", {}.to_json, "CONTENT_TYPE" => "application/json"
 
       expect(last_response.status).to eq(201)
       expect(last_response.body).to eq("Create")
     end
 
-    it "returns an error when creating a component assignment fails" do
-      allow_any_instance_of(App::Controllers::ComponentAssignments).to receive(:create).and_return([500, {}, ["Error creating component"]])
+    context "when creating a component assignment fails" do
+      before do
+        allow_any_instance_of(App::Controllers::ComponentAssignments).to receive(:create).and_return([500, {}, ["Error creating component"]])
+      end
 
-      post "/component_assignments", {}.to_json, "CONTENT_TYPE" => "application/json"
+      it "returns an error" do
+        post "/component_assignments", {}.to_json, "CONTENT_TYPE" => "application/json"
 
-      expect(last_response.status).to eq(500)
-      expect(last_response.body).to eq("Error creating component")
+        expect(last_response.status).to eq(500)
+        expect(last_response.body).to eq("Error creating component")
+      end
     end
   end
 
   describe "DELETE /component_assignments" do
-    it "deletes the specified component assignment" do
+    before do
       allow_any_instance_of(App::Controllers::ComponentAssignments).to receive(:delete).and_return([200, {}, ["Delete assignment"]])
+    end
 
+    it "deletes the specified component assignment" do
       delete "/component_assignments", {}.to_json, "CONTENT_TYPE" => "application/json"
 
       expect(last_response.status).to eq(200)

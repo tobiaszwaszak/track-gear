@@ -67,7 +67,7 @@ module App
       end
 
       def map_sport_types(record)
-        record.sport_types.map(&:name) if record.sport_types
+        record.sport_types&.map(&:name)
       end
 
       def calculate_distance(record)
