@@ -25,7 +25,23 @@ RSpec.configure do |config|
     ActiveRecord::Base.establish_connection(ENV["RACK_ENV"].to_sym)
   end
 
+  config.before(:each) do
+    DatabaseCleaner.strategy = :truncation
+    DatabaseCleaner.clean_with(:deletion)
+  rescue ActiveRecord::ConnectionNotEstablished
+    next
+  end
+
+  config.around(:each) do |example|
+    DatabaseCleaner.cleaning do
+      example.run
+    end
+  rescue ActiveRecord::ConnectionNotEstablished
+    next
+  end
+
   config.after(:all) do
     ActiveRecord::Base.remove_connection
   end
 end
+

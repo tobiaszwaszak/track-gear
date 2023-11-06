@@ -37,12 +37,12 @@ RSpec.describe App::Repositories::Components do
       )
     end
 
-    context do
+    context "when no components are assigned to the bike" do
       before do
         App::Records::ComponentAssignment.all.delete_all
       end
 
-      it "returns an empty array when no components are assigned to the bike" do
+      it "returns an empty array" do
         expect(components).to be_an(Array)
         expect(components).to be_empty
       end
@@ -51,7 +51,7 @@ RSpec.describe App::Repositories::Components do
     context "when no valid assignments exist for the bike" do
       before do
         App::Records::ComponentAssignment.all.delete_all
-        ::App::Records::ComponentAssignment.create(bike: bike, component: component1, started_at: today - 5.days, ended_at: today - 3.days)
+        App::Records::ComponentAssignment.create(bike: bike, component: component1, started_at: today - 5.days, ended_at: today - 3.days)
       end
 
       it "returns an empty array " do

@@ -6,8 +6,6 @@ RSpec.describe App::Repositories::Accounts do
   let(:password) { "secure_password" }
   let(:account) { repository.create(email: email, password: password) }
 
-  before { App::Records::Account.delete_all }
-
   describe "#create" do
     subject(:created_account) { repository.create(email: email, password: password) }
 

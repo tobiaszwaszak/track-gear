@@ -4,10 +4,6 @@ RSpec.describe App::Contracts::Account do
   subject(:contract) { described_class.new }
 
   describe "validation" do
-    before do
-      ::App::Records::Account.destroy_all
-    end
-
     let(:params) { {email: "account@example.com", password: "secure_password"} }
 
     it "is valid with valid attributes" do

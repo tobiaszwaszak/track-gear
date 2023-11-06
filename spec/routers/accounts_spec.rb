@@ -7,11 +7,7 @@ RSpec.describe App::Routers::Accounts do
     App::Routers::Accounts.new
   end
 
-  let(:account) { App::Records::Account.create(email: "foo@bar.dev", password: "123456") }
-
-  before do
-    ::App::Records::Account.delete_all
-  end
+  let(:account) { App::Records::Account.create!(email: "foo@bar.dev", password: "123456") }
 
   it "creates a new accounts" do
     post "/accounts", {email: "foo@bar.dev", password: "123456"}.to_json
